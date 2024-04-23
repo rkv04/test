@@ -8,6 +8,7 @@
 #include "employeemainwindow.h"
 #include "appdb.h"
 #include "context.h"
+#include "criticaldb.h"
 
 
 AuthorizationWindow::AuthorizationWindow(QWidget *parent)
@@ -15,13 +16,6 @@ AuthorizationWindow::AuthorizationWindow(QWidget *parent)
     , ui(new Ui::AuthorizationWindow)
 {
     ui->setupUi(this);
-
-    try {
-        AppDB::init();
-    }
-    catch(const QString& msg) {
-        QMessageBox::critical(this, "Tour operator", msg);
-    }
 
     connect(this->ui->regButton, SIGNAL(clicked(bool)), this, SLOT(regButtonClicked()));
     connect(this->ui->loginButton, SIGNAL(clicked(bool)), this, SLOT(loginButtonClicked()));
@@ -48,8 +42,8 @@ void AuthorizationWindow::loginButtonClicked() {
     try {
         idAndRole = db->login(phone, hash_password);
     }
-    catch(const QString& message) {
-        QMessageBox::warning(this, "Tour operator", message);
+    catch(const QString& msg) {
+        QMessageBox::warning(this, "Tour operator", msg);
         return;
     }
 

@@ -3,6 +3,7 @@
 
 #include <QSqlDatabase>
 #include <QPair>
+
 #include "client.h"
 
 class AppDB {

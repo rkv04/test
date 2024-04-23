@@ -1,5 +1,3 @@
-#include "appdb.h"
-
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QFile>
@@ -8,20 +6,22 @@
 #include <QStringList>
 #include <QPair>
 
+#include "criticaldb.h"
+#include "appdb.h"
 
 AppDB *AppDB::instance = nullptr;
 
 AppDB::AppDB() {
     QSqlDatabase app_db = QSqlDatabase::addDatabase("QSQLITE");
-    app_db.setDatabaseName("./app_db.db");
+    app_db.setDatabaseName("C:/Tour operator/build-tour_operator-Desktop_Qt_6_5_3_MinGW_64_bit-Debug/database/app_db.db");
 
     if (!app_db.open()) {
-        throw QString("Ошибка при открытии соединения с базой данных");
+        throw CriticalDB("Ошибка при открытии соединения с базой данных");
     }
 
-    QFile file("./db_script.sql");
+    QFile file("C:/Tour operator/build-tour_operator-Desktop_Qt_6_5_3_MinGW_64_bit-Debug/database/db_script.sql");
     if (!file.open(QIODevice::ReadOnly)) {
-        throw QString("Ошибка при открытии скрипта развёртывания базы данных");
+        throw CriticalDB("Ошибка при открытии скрипта развёртывания базы данных");
     }
     QTextStream ist(&file);
     QStringList scriptQueries = ist.readAll().split(';');
@@ -33,7 +33,7 @@ AppDB::AppDB() {
         }
         if (!query.exec(textQuery))
         {
-            throw query.lastError().databaseText();
+            throw CriticalDB(query.lastError().text());
         }
     }
 }
@@ -51,24 +51,24 @@ AppDB* AppDB::getInstance() {
     return instance;
 }
 
-void AppDB::addClient(Client &client) {
-    QSqlQuery query;
-    query.prepare("SELECT phone FROM Client WHERE phone = ?;");
-    query.bindValue(0, client.getPhone());
-    query.exec();
-    if (query.first()) {
-        throw QString("Пользователь с таким номером телефона уже существует");
-    }
-    query.prepare("INSERT INTO Client (phone, name, surname, patronymic, hash_password) VALUES (?, ?, ?, ?, ?);");
-    query.bindValue(0, client.getPhone());
-    query.bindValue(1, client.getName());
-    query.bindValue(2, client.getSurname());
-    query.bindValue(3, client.getPatronymic());
-    query.bindValue(4, client.getHashPassword());
-    if (!query.exec()) {
-        throw query.lastError().databaseText();
-    }
-}
+// void AppDB::addClient(Client &client) {
+//     QSqlQuery query;
+//     query.prepare("SELECT phone FROM Client WHERE phone = ?;");
+//     query.bindValue(0, client.getPhone());
+//     query.exec();
+//     if (query.first()) {
+//         throw QString("Пользователь с таким номером телефона уже существует");
+//     }
+//     query.prepare("INSERT INTO Client (phone, name, surname, patronymic, hash_password) VALUES (?, ?, ?, ?, ?);");
+//     query.bindValue(0, client.getPhone());
+//     query.bindValue(1, client.getName());
+//     query.bindValue(2, client.getSurname());
+//     query.bindValue(3, client.getPatronymic());
+//     query.bindValue(4, client.getHashPassword());
+//     if (!query.exec()) {
+//         throw CriticalDB(query.lastError().text());
+//     }
+// }
 
 QPair<int, int> AppDB::login(const QString phone, const QString hash_password) {
     QSqlQuery query;
@@ -77,7 +77,7 @@ QPair<int, int> AppDB::login(const QString phone, const QString hash_password) {
     query.bindValue(1, hash_password);
 
     if (!query.exec()) {
-        throw query.lastError().databaseText();
+        throw CriticalDB(query.lastError().databaseText());
     }
     if (query.first()) {
         QPair<int, int> idAndRole;
@@ -91,7 +91,7 @@ QPair<int, int> AppDB::login(const QString phone, const QString hash_password) {
     query.bindValue(1, hash_password);
 
     if (!query.exec()) {
-        throw query.lastError().databaseText();
+        throw CriticalDB(query.lastError().databaseText());
     }
     if (query.first()) {
         QPair<int, int> idAndRole;
@@ -111,7 +111,9 @@ QSqlQuery AppDB::getAllClients() {
                                 "amount_of_purchased_tickets AS 'Путёвок куплено',"
                                 "discount AS 'Скидка'"
                          "FROM Client;";
-    query.exec(text_query);
+    if (!query.exec(text_query)) {
+        throw CriticalDB(query.lastError().text());
+    }
     return query;
 }
 
@@ -130,7 +132,7 @@ QSqlQuery AppDB::getClientsByFilter(const QString &surname, const QString &name,
     query.bindValue(":pt", patronymic);
     query.bindValue(":ph", phone);
     if (!query.exec()) {
-        throw query.lastError().text();
+        throw CriticalDB(query.lastError().text());
     }
     return query;
 }

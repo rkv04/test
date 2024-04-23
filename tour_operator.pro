@@ -14,6 +14,7 @@ SOURCES += \
     addhotelwindow.cpp \
     addticketwindow.cpp \
     adminmainwindow.cpp \
+    app.cpp \
     appdb.cpp \
     authorizationwindow.cpp \
     citylistwindow.cpp \
@@ -21,6 +22,8 @@ SOURCES += \
     clientmainwindow.cpp \
     clientslistwindow.cpp \
     context.cpp \
+    criticaldb.cpp \
+    db.cpp \
     editcitywindow.cpp \
     edithotelwindow.cpp \
     editticketwindow.cpp \
@@ -33,6 +36,7 @@ SOURCES += \
     registrationwindow.cpp \
     ticketpurchasewindow.cpp \
     ticketslistwindow.cpp \
+    userservice.cpp \
     userslistwindow.cpp
 
 HEADERS += \
@@ -42,6 +46,7 @@ HEADERS += \
     addhotelwindow.h \
     addticketwindow.h \
     adminmainwindow.h \
+    app.h \
     appdb.h \
     authorizationwindow.h \
     citylistwindow.h \
@@ -49,6 +54,8 @@ HEADERS += \
     clientmainwindow.h \
     clientslistwindow.h \
     context.h \
+    criticaldb.h \
+    db.h \
     editcitywindow.h \
     edithotelwindow.h \
     editticketwindow.h \
@@ -59,6 +66,7 @@ HEADERS += \
     registrationwindow.h \
     ticketpurchasewindow.h \
     ticketslistwindow.h \
+    userservice.h \
     userslistwindow.h
 
 FORMS += \
