@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     try {
-        DB::init();
-        // App::init();
+        App *app = App::getInstance();
+        app->init();
     }
     catch(const CriticalDB &ex) {
         QMessageBox::critical(nullptr, "Tour operator", ex.what());

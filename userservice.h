@@ -1,9 +1,10 @@
 #ifndef USERSERVICE_H
 #define USERSERVICE_H
 
-#include "client.h"
+#include "user.h"
 
 #include <QSqlQuery>
+#include <QSharedPointer>
 
 class UserService
 {
@@ -16,11 +17,9 @@ public:
         admin
     };
 
-    Client getClientByPhone(const QString &phone);
-    QSqlQuery getClientsByFilter();
-    void addClient(Client &client);
-    void removeClientByID(); // or phone
-    bool checkClientExistsByPhone(const QString &phone);
+    QSharedPointer<User> getClientByPhone(const QString &phone);
+    QSharedPointer<User> getEmployeeByPhone(const QString &phone);
+    void addClient(User &client);
 
 private:
 

@@ -18,7 +18,6 @@ SOURCES += \
     appdb.cpp \
     authorizationwindow.cpp \
     citylistwindow.cpp \
-    client.cpp \
     clientmainwindow.cpp \
     clientslistwindow.cpp \
     context.cpp \
@@ -36,6 +35,7 @@ SOURCES += \
     registrationwindow.cpp \
     ticketpurchasewindow.cpp \
     ticketslistwindow.cpp \
+    user.cpp \
     userservice.cpp \
     userslistwindow.cpp
 
@@ -50,7 +50,6 @@ HEADERS += \
     appdb.h \
     authorizationwindow.h \
     citylistwindow.h \
-    client.h \
     clientmainwindow.h \
     clientslistwindow.h \
     context.h \
@@ -66,6 +65,7 @@ HEADERS += \
     registrationwindow.h \
     ticketpurchasewindow.h \
     ticketslistwindow.h \
+    user.h \
     userservice.h \
     userslistwindow.h
 

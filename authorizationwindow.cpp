@@ -1,14 +1,11 @@
 #include "authorizationwindow.h"
 #include "ui_authorizationwindow.h"
 
-#include <QCryptographicHash>
 #include <QMessageBox>
 
 #include "registrationwindow.h"
 #include "employeemainwindow.h"
-#include "appdb.h"
-#include "context.h"
-#include "criticaldb.h"
+#include "app.h"
 
 
 AuthorizationWindow::AuthorizationWindow(QWidget *parent)
@@ -35,28 +32,26 @@ void AuthorizationWindow::regButtonClicked() {
 void AuthorizationWindow::loginButtonClicked() {
     QString phone = this->ui->phoneEdit->text();
     QString password = this->ui->passwordEdit->text();
-    QByteArray hash_password = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
-    AppDB *db = AppDB::getInstance();
-    QPair<int, int> idAndRole;
+
+    App *app = App::getInstance();
+    QSharedPointer<User> user;
 
     try {
-        idAndRole = db->login(phone, hash_password);
+        user = app->login(phone, password);
     }
     catch(const QString& msg) {
         QMessageBox::warning(this, "Tour operator", msg);
         return;
     }
 
-    switch (idAndRole.second) {
+    switch (user->role) {
         case 0: {
-            Context::setContext(idAndRole.first);
             this->client_main_window = new ClientMainWindow();
             this->client_main_window->show();
             this->close();
             break;
         }
         case 1: {
-            Context::setContext(idAndRole.first);
             this->employee_main_window = new EmployeeMainWindow();
             this->employee_main_window->show();
             this->close();
@@ -66,5 +61,6 @@ void AuthorizationWindow::loginButtonClicked() {
             QMessageBox::information(this, "Tour operator", "Это администратор");
             break;
         }
+
     }
 }

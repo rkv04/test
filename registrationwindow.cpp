@@ -7,7 +7,6 @@
 #include <QRegularExpressionValidator>
 
 #include "app.h"
-#include "client.h"
 #include "context.h"
 #include "criticaldb.h"
 
@@ -53,19 +52,19 @@ void RegistrationWindow::regButtonClicked() {
     QString surname = this->ui->surnameEdit->text();
     QString patronymic = this->ui->patronymicEdit->text();
     QByteArray hash_password = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
-    Client client(phone, hash_password, name, surname, patronymic);
+    // User client(phone, hash_password, name, surname, patronymic);
 
-    try {
-        App *app = App::getInstance();
-        app->createClient(client);
-    }
-    catch(const QString &ex) {
-        QMessageBox::warning(this, "Tour operator", ex);
-        return;
-    }
+    // try {
+    //     App *app = App::getInstance();
+    //     app->createClient(client);
+    // }
+    // catch(const QString &ex) {
+    //     QMessageBox::warning(this, "Tour operator", ex);
+    //     return;
+    // }
 
-    QMessageBox::information(this, "Tour operator", "Вы успешно зарегистрированны");
-    emit successfulRegistration();
+    // QMessageBox::information(this, "Tour operator", "Вы успешно зарегистрированны");
+    // emit successfulRegistration();
 }
 
 void RegistrationWindow::toLoginWindow() {
