@@ -19,6 +19,7 @@ SOURCES += \
     authorizationwindow.cpp \
     citylistwindow.cpp \
     clientmainwindow.cpp \
+    clientmodel.cpp \
     clientslistwindow.cpp \
     context.cpp \
     criticaldb.cpp \
@@ -33,7 +34,6 @@ SOURCES += \
     account.cpp \
     myticketswindow.cpp \
     registrationwindow.cpp \
-    sqlquerymodel.cpp \
     ticketpurchasewindow.cpp \
     ticketslistwindow.cpp \
     user.cpp \
@@ -52,6 +52,7 @@ HEADERS += \
     authorizationwindow.h \
     citylistwindow.h \
     clientmainwindow.h \
+    clientmodel.h \
     clientslistwindow.h \
     context.h \
     criticaldb.h \
@@ -64,7 +65,6 @@ HEADERS += \
     hotelslistwindow.h \
     myticketswindow.h \
     registrationwindow.h \
-    sqlquerymodel.h \
     ticketpurchasewindow.h \
     ticketslistwindow.h \
     user.h \

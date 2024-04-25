@@ -16,7 +16,7 @@ public:
 
     void createClient(User &client);
     QSharedPointer<User> login(const QString &phone, const QString &password);
-    QSqlQuery getClientsList();
+    QVector<QSharedPointer<User>> getClientsList();
     void setDiscount(const int client_id, const int discount);
 
     // void createCity();

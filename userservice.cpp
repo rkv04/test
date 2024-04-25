@@ -3,6 +3,8 @@
 #include "criticaldb.h"
 
 #include <QSqlQuery>
+#include <QSqlRecord>
+#include <QVector>
 #include <QSqlError>
 #include <QSharedPointer>
 
@@ -31,17 +33,7 @@ QSharedPointer<User> UserService::getClientByPhone(const QString &phone) {
     if (!query.first()) {
         return nullptr;
     }
-    QSharedPointer<User> client = QSharedPointer<User>(new User());
-    client->id = query.value("id").toInt();
-    client->role = query.value("role").toInt();
-    client->phone = query.value("phone").toString();
-    client->password = query.value("hash_password").toString();
-    client->surname = query.value("surname").toString();
-    client->name = query.value("name").toString();
-    client->patronymic = query.value("patronymic").toString();
-    client->address = query.value("address").toString();
-    client->discount = query.value("discount").toInt();
-    client->amount_purchase_tickets = query.value("amount_of_purchased_tickets").toInt();
+    QSharedPointer<User> client = this->createClientByRow(query.record());
     return client;
 }
 
@@ -66,20 +58,13 @@ QSharedPointer<User> UserService::getEmployeeByPhone(const QString &phone) {
     return employee;
 }
 
-QSqlQuery UserService::getAllClients() {
+QVector<QSharedPointer<User>> UserService::getClientList() {
     QSqlQuery query;
-    QString text_query = "SELECT id, "
-                                "surname AS 'Фамилия',"
-                                "name AS 'Имя',"
-                                "patronymic AS 'Отчество',"
-                                "phone AS 'Телефон',"
-                                "amount_of_purchased_tickets AS 'Путёвок куплено',"
-                                "discount AS 'Скидка'"
-                         "FROM Client;";
+    QString text_query = "SELECT * FROM Client;";
     if (!query.exec(text_query)) {
         throw CriticalDB(query.lastError().text());
     }
-    return query;
+    return this->getClientListByQuery(query);
 }
 
 void UserService::setDiscountById(const int client_id, const int discount) {
@@ -90,4 +75,28 @@ void UserService::setDiscountById(const int client_id, const int discount) {
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
     }
+}
+
+QSharedPointer<User> UserService::createClientByRow(const QSqlRecord &record) {
+    QSharedPointer<User> client = QSharedPointer<User>(new User());
+    client->id = record.value("id").toInt();
+    client->role = record.value("role").toInt();
+    client->phone = record.value("phone").toString();
+    client->password = record.value("hash_password").toString();
+    client->surname = record.value("surname").toString();
+    client->name = record.value("name").toString();
+    client->patronymic = record.value("patronymic").toString();
+    client->address = record.value("address").toString();
+    client->discount = record.value("discount").toInt();
+    client->amount_purchase_tickets = record.value("amount_of_purchased_tickets").toInt();
+    return client;
+}
+
+QVector<QSharedPointer<User>> UserService::getClientListByQuery(QSqlQuery &query) {
+    QVector<QSharedPointer<User>> users;
+    while (query.next()) {
+        auto user = this->createClientByRow(query.record());
+        users.append(user);
+    }
+    return users;
 }

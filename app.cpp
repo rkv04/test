@@ -92,9 +92,9 @@ void App::createClient(User &client) {
 
 }
 
-QSqlQuery App::getClientsList() {
+QVector<QSharedPointer<User>> App::getClientsList() {
     try {
-        return this->user_service->getAllClients();
+        return this->user_service->getClientList();
     }
     catch(const CriticalDB &ex) {
         // TO DO writing in the log.txt

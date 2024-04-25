@@ -8,7 +8,6 @@
 
 #include "app.h"
 #include "apperror.h"
-#include "sqlquerymodel.h"
 
 ClientsListWindow::ClientsListWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -26,12 +25,12 @@ ClientsListWindow::ClientsListWindow(QWidget *parent)
 ClientsListWindow::~ClientsListWindow()
 {
     delete ui;
-    delete query_model;
+    delete client_model;
 }
 
 void ClientsListWindow::init() {
     App *app = App::getInstance();
-    QSqlQuery clients_list;
+    QVector<QSharedPointer<User>> clients_list;
     try {
         clients_list = app->getClientsList();
     }
@@ -42,11 +41,10 @@ void ClientsListWindow::init() {
         }
         return;
     }
-    this->query_model = new QSqlQueryModel(this);
-    query_model->setQuery(std::move(clients_list));
-    this->ui->tableView->setModel(query_model);
+    this->client_model = new ClientModel(this);
+    this->client_model->setClientList(clients_list);
     this->ui->tableView->resizeColumnsToContents();
-    this->ui->tableView->hideColumn(0);
+    this->ui->tableView->setModel(client_model);
 
     this->ui->comboBox->addItem("0%", QVariant(0));
     this->ui->comboBox->addItem("3%", QVariant(3));
@@ -79,9 +77,8 @@ void ClientsListWindow::onSaveButtonClicked() {
         return;
     }
     QModelIndex index = selected_rows.first();
-    int client_id = this->ui->tableView->model()->data(index).toInt();
+    int client_id = this->client_model->getClientIdByIndexRow(index.row());
     int discount = this->ui->comboBox->currentData().toInt();
-
     App *app = App::getInstance();
     try {
         app->setDiscount(client_id, discount);
@@ -92,22 +89,6 @@ void ClientsListWindow::onSaveButtonClicked() {
             exit(-1);
         }
     }
-    this->refreshModel();
-}
-
-void ClientsListWindow::refreshModel() {
-    App *app = App::getInstance();
-    QSqlQuery clients_list;
-    try {
-        clients_list = app->getClientsList();
-    }
-    catch(const AppError &ex) {
-        QMessageBox::critical(this, "Tour operator", ex.what());
-        if (ex.isFatal()) {
-            exit(-1);
-        }
-        return;
-    }
-    this->query_model->setQuery(std::move(clients_list));
-    this->ui->tableView->repaint();
+    this->client_model->refreshDiscountByIndex(index.row(), discount);
+    this->ui->tableView->viewport()->update();
 }
