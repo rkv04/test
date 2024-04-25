@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QSqlQueryModel>
 
+#include "sqlquerymodel.h"
+
 namespace Ui {
 class ClientsListWindow;
 }
@@ -18,9 +20,11 @@ public:
 
 private slots:
     void onFindButtonClicked();
+    void onSaveButtonClicked();
 
 private:
     void init();
+    void refreshModel();
     QSqlQueryModel *query_model;
     Ui::ClientsListWindow *ui;
 

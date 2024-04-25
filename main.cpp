@@ -7,8 +7,8 @@
 #include <QMessageBox>
 
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
+
     QApplication a(argc, argv);
 
     try {
@@ -23,4 +23,5 @@ int main(int argc, char *argv[])
     AuthorizationWindow w;
     w.show();
     return a.exec();
+
 }

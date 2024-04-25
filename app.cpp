@@ -2,6 +2,7 @@
 #include "db.h"
 #include "userservice.h"
 #include "criticaldb.h"
+#include "apperror.h"
 #include "user.h"
 #include "context.h"
 
@@ -32,57 +33,81 @@ void App::init() {
 }
 
 QSharedPointer<User> App::login(const QString &phone, const QString &password) {
-    QString hash_password = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
-    QSharedPointer<User> client = this->tryLoginAsClient(phone, password);
-    if (client != nullptr && client->hash_password == hash_password) {
+    auto client = this->tryLoginAsClient(phone, password);
+    if (client != nullptr) {
         Context::setContext(client->id);
         return client;
     }
-    QSharedPointer<User> employeee = this->tryLoginAsEmployee(phone, password);
-    if (employeee != nullptr && employeee->hash_password == hash_password) {
+    auto employeee = this->tryLoginAsEmployee(phone, password);
+    if (employeee != nullptr) {
         Context::setContext(employeee->id);
         return employeee;
     }
-    throw QString("Введён неверный логин или пароль");
+    throw AppError("Введён неверный логин или пароль", false);
 }
 
 QSharedPointer<User> App::tryLoginAsClient(const QString &phone, const QString &password) {
+    QString hash_password = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
     try {
-        QSharedPointer<User> client = this->user_service->getClientByPhone(phone);
-        return client;
+        auto client = this->user_service->getClientByPhone(phone);
+        if (client != nullptr && client->password == hash_password) {
+            return client;
+        }
+        return nullptr;
     }
     catch(const CriticalDB &ex) {
         // TO DO writing in the log.txt
-        QMessageBox::critical(nullptr, "Tour operator", ex.what());
-        exit(-1);
+        throw AppError("Критическая ошибка! См. log.txt", true);
     }
 }
 
 QSharedPointer<User> App::tryLoginAsEmployee(const QString &phone, const QString &password) {
+    QString hash_password = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
     try {
-        QSharedPointer<User> employee = this->user_service->getEmployeeByPhone(phone);
-        return employee;
+        auto employee = this->user_service->getEmployeeByPhone(phone);
+        if (employee != nullptr && employee->password == hash_password) {
+            return employee;
+        }
+        return nullptr;
     }
     catch(const CriticalDB &ex) {
         // TO DO writing in the log.txt
-        QMessageBox::critical(nullptr, "Tour operator", ex.what());
-        exit(-1);
+        throw AppError("Критическая ошибка! См. log.txt", true);
     }
 }
 
 
 void App::createClient(User &client) {
     if (this->user_service->getClientByPhone(client.phone) != nullptr) {
-        throw QString("Пользователь с таким номером телефона уже существует");
+        throw AppError("Пользователь с таким номером телефона уже существует", false);
     }
+    client.password = QCryptographicHash::hash(client.password.toUtf8(), QCryptographicHash::Sha256).toHex();
     try {
         this->user_service->addClient(client);
     }
     catch(const CriticalDB &ex) {
         // TO DO writing in the log.txt
-        QMessageBox::critical(nullptr, "Tour operator", ex.what());
-        exit(-1);
+        throw AppError("Критическая ошибка! См. log.txt", true);
     }
 
 }
 
+QSqlQuery App::getClientsList() {
+    try {
+        return this->user_service->getAllClients();
+    }
+    catch(const CriticalDB &ex) {
+        // TO DO writing in the log.txt
+        throw AppError("Критическая ошибка! См. log.txt", true);
+    }
+}
+
+void App::setDiscount(const int client_id, const int discount) {
+    try {
+        this->user_service->setDiscountById(client_id, discount);
+    }
+    catch(const CriticalDB &ex) {
+        // TO DO writing in the log.txt
+        throw AppError("Критическая ошибка! См. log.txt", true);
+    }
+}

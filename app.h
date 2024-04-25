@@ -16,6 +16,8 @@ public:
 
     void createClient(User &client);
     QSharedPointer<User> login(const QString &phone, const QString &password);
+    QSqlQuery getClientsList();
+    void setDiscount(const int client_id, const int discount);
 
     // void createCity();
     // void createHotel();

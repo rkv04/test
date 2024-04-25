@@ -15,7 +15,7 @@ SOURCES += \
     addticketwindow.cpp \
     adminmainwindow.cpp \
     app.cpp \
-    appdb.cpp \
+    apperror.cpp \
     authorizationwindow.cpp \
     citylistwindow.cpp \
     clientmainwindow.cpp \
@@ -33,6 +33,7 @@ SOURCES += \
     account.cpp \
     myticketswindow.cpp \
     registrationwindow.cpp \
+    sqlquerymodel.cpp \
     ticketpurchasewindow.cpp \
     ticketslistwindow.cpp \
     user.cpp \
@@ -47,7 +48,7 @@ HEADERS += \
     addticketwindow.h \
     adminmainwindow.h \
     app.h \
-    appdb.h \
+    apperror.h \
     authorizationwindow.h \
     citylistwindow.h \
     clientmainwindow.h \
@@ -63,6 +64,7 @@ HEADERS += \
     hotelslistwindow.h \
     myticketswindow.h \
     registrationwindow.h \
+    sqlquerymodel.h \
     ticketpurchasewindow.h \
     ticketslistwindow.h \
     user.h \

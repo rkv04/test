@@ -11,15 +11,11 @@ class UserService
 public:
     UserService();
 
-    enum class role {
-        client,
-        employee,
-        admin
-    };
-
     QSharedPointer<User> getClientByPhone(const QString &phone);
+    QSqlQuery getAllClients();
+    void setDiscountById(const int id_client, const int discount);
     QSharedPointer<User> getEmployeeByPhone(const QString &phone);
-    void addClient(User &client);
+    void addClient(const User &client);
 
 private:
 

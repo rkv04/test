@@ -2,13 +2,11 @@
 #include "ui_registrationwindow.h"
 
 #include <QMessageBox>
-#include <QCryptographicHash>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
 
 #include "app.h"
-#include "context.h"
-#include "criticaldb.h"
+#include "apperror.h"
 
 
 RegistrationWindow::RegistrationWindow(QWidget *parent)
@@ -26,7 +24,7 @@ RegistrationWindow::RegistrationWindow(QWidget *parent)
     this->phone_validator = new QRegularExpressionValidator(phone_exp, this);
     this->ui->phoneEdit->setValidator(phone_validator);
 
-    QRegularExpression text_exp("^[а-яА-Яa-zA-Z ]*$");
+    QRegularExpression text_exp("^[а-яА-Яa-zA-Z Ёё]*$");
     this->text_validator = new QRegularExpressionValidator(text_exp, this);
     this->ui->nameEdit->setValidator(text_validator);
     this->ui->surnameEdit->setValidator(text_validator);
@@ -47,24 +45,27 @@ void RegistrationWindow::regButtonClicked() {
         QMessageBox::warning(this, "Tour operator", "Введённые пароли не совпадают");
         return;
     }
-    QString phone = this->ui->phoneEdit->text();
-    QString name = this->ui->nameEdit->text();
-    QString surname = this->ui->surnameEdit->text();
-    QString patronymic = this->ui->patronymicEdit->text();
-    QByteArray hash_password = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
-    // User client(phone, hash_password, name, surname, patronymic);
+    User client;
+    client.phone = this->ui->phoneEdit->text();
+    client.name = this->ui->nameEdit->text();
+    client.surname = this->ui->surnameEdit->text();
+    client.patronymic = this->ui->patronymicEdit->text();
+    client.password = password;
 
-    // try {
-    //     App *app = App::getInstance();
-    //     app->createClient(client);
-    // }
-    // catch(const QString &ex) {
-    //     QMessageBox::warning(this, "Tour operator", ex);
-    //     return;
-    // }
+    try {
+        App *app = App::getInstance();
+        app->createClient(client);
+    }
+    catch(const AppError &ex) {
+        QMessageBox::critical(this, "Tour operator", ex.what());
+        if (ex.isFatal()) {
+            exit(-1);
+        }
+        return;
+    }
 
-    // QMessageBox::information(this, "Tour operator", "Вы успешно зарегистрированны");
-    // emit successfulRegistration();
+    QMessageBox::information(this, "Tour operator", "Вы успешно зарегистрированны");
+    emit successfulRegistration();
 }
 
 void RegistrationWindow::toLoginWindow() {

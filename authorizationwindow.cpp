@@ -6,6 +6,7 @@
 #include "registrationwindow.h"
 #include "employeemainwindow.h"
 #include "app.h"
+#include "apperror.h"
 
 
 AuthorizationWindow::AuthorizationWindow(QWidget *parent)
@@ -16,6 +17,7 @@ AuthorizationWindow::AuthorizationWindow(QWidget *parent)
 
     connect(this->ui->regButton, SIGNAL(clicked(bool)), this, SLOT(regButtonClicked()));
     connect(this->ui->loginButton, SIGNAL(clicked(bool)), this, SLOT(loginButtonClicked()));
+
 }
 
 AuthorizationWindow::~AuthorizationWindow()
@@ -39,8 +41,11 @@ void AuthorizationWindow::loginButtonClicked() {
     try {
         user = app->login(phone, password);
     }
-    catch(const QString& msg) {
-        QMessageBox::warning(this, "Tour operator", msg);
+    catch(const AppError &ex) {
+        QMessageBox::critical(this, "Tour operator", ex.what());
+        if (ex.isFatal()) {
+            exit(-1);
+        }
         return;
     }
 

@@ -10,7 +10,7 @@ public:
     int id;
     int role;
     QString phone;
-    QString hash_password;
+    QString password;
     QString name;
     QString surname;
     QString patronymic;

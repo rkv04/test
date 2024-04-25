@@ -6,7 +6,7 @@ User::User() {
     this->id = -1;
     this->role = -1;
     this->phone = QString();
-    this->hash_password = QString();
+    this->password = QString();
     this->surname = QString();
     this->name = QString();
     this->patronymic = QString();
