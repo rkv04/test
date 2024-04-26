@@ -12,12 +12,12 @@
 App* App::instance = nullptr;
 
 App::App() {
-    this->user_service = new UserService();
+    this->user_service = QSharedPointer<UserService>(new UserService());
+    this->city_service = QSharedPointer<CityService>(new CityService());
 }
 
-App::~App() {
-    delete user_service;
-}
+App::~App() {}
+
 
 App* App::getInstance() {
     if (instance == nullptr) {
@@ -115,6 +115,17 @@ void App::setDiscount(const int client_id, const int discount) {
 QVector<QSharedPointer<User>> App::getClientsListByFilter(const QMap<QString, QString> &filter) {
     try {
         return this->user_service->getClientsByFilter(filter);
+    }
+    catch(const CriticalDB &ex) {
+        // TO DO writing in the log.txt
+        throw AppError("Критическая ошибка! См. log.txt", true);
+    }
+}
+
+
+QVector<QSharedPointer<City>> App::getCityList() {
+    try {
+        return this->city_service->getCityList();
     }
     catch(const CriticalDB &ex) {
         // TO DO writing in the log.txt

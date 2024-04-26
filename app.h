@@ -4,7 +4,9 @@
 #include <QSharedPointer>
 
 #include "userservice.h"
+#include "cityservice.h"
 #include "user.h"
+#include "city.h"
 
 
 class App {
@@ -20,9 +22,7 @@ public:
     QVector<QSharedPointer<User>> getClientsListByFilter(const QMap<QString, QString> &filter);
     void setDiscount(const int client_id, const int discount);
 
-    // void createCity();
-    // void createHotel();
-    // void createTicket();
+    QVector<QSharedPointer<City>> getCityList();
 
 private:
     App();
@@ -32,7 +32,8 @@ private:
     QSharedPointer<User> tryLoginAsClient(const QString &phone, const QString &password);
     QSharedPointer<User> tryLoginAsEmployee(const QString &phone, const QString &password);
 
-    UserService *user_service;
+    QSharedPointer<UserService> user_service;
+    QSharedPointer<CityService> city_service;
 
 };
 

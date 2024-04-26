@@ -6,6 +6,7 @@
 #include <QSharedPointer>
 
 #include "addcitywindow.h"
+#include "citymodel.h"
 
 namespace Ui {
 class CityListWindow;
@@ -24,7 +25,7 @@ private slots:
 
 private:
     Ui::CityListWindow *ui;
-    QSqlQueryModel *query_model;
+    QSharedPointer<CityModel> city_model;
     AddCityWindow *add_city_window;
 };
 

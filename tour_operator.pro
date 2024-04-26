@@ -17,7 +17,10 @@ SOURCES += \
     app.cpp \
     apperror.cpp \
     authorizationwindow.cpp \
+    city.cpp \
     citylistwindow.cpp \
+    citymodel.cpp \
+    cityservice.cpp \
     clientmainwindow.cpp \
     clientmodel.cpp \
     clientslistwindow.cpp \
@@ -50,7 +53,10 @@ HEADERS += \
     app.h \
     apperror.h \
     authorizationwindow.h \
+    city.h \
     citylistwindow.h \
+    citymodel.h \
+    cityservice.h \
     clientmainwindow.h \
     clientmodel.h \
     clientslistwindow.h \
