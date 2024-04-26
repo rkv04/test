@@ -23,7 +23,7 @@ public:
 private:
 
     QVector<QSharedPointer<User>> clients;
-    const QStringList headers = {"Фамилия", "Имя", "Отчество", "Телефон", "Адрес", "Скидка", "Путёвок куплено"};
+    const QStringList headers = {"Фамилия", "Имя", "Отчество", "Телефон", "Адрес", "Путёвок куплено", "Скидка"};
 };
 
 #endif // CLIENTMODEL_H

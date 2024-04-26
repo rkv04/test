@@ -111,3 +111,13 @@ void App::setDiscount(const int client_id, const int discount) {
         throw AppError("Критическая ошибка! См. log.txt", true);
     }
 }
+
+QVector<QSharedPointer<User>> App::getClientsListByFilter(const QMap<QString, QString> &filter) {
+    try {
+        return this->user_service->getClientsByFilter(filter);
+    }
+    catch(const CriticalDB &ex) {
+        // TO DO writing in the log.txt
+        throw AppError("Критическая ошибка! См. log.txt", true);
+    }
+}

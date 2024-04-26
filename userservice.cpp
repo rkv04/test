@@ -33,7 +33,7 @@ QSharedPointer<User> UserService::getClientByPhone(const QString &phone) {
     if (!query.first()) {
         return nullptr;
     }
-    QSharedPointer<User> client = this->createClientByRow(query.record());
+    auto client = this->createClientByRow(query.record());
     return client;
 }
 
@@ -47,14 +47,7 @@ QSharedPointer<User> UserService::getEmployeeByPhone(const QString &phone) {
     if (!query.first()) {
         return nullptr;
     }
-    QSharedPointer<User> employee = QSharedPointer<User>(new User());
-    employee->id = query.value("id").toInt();
-    employee->role = query.value("role").toInt();
-    employee->phone = query.value("phone").toString();
-    employee->password = query.value("hash_password").toString();
-    employee->surname = query.value("surname").toString();
-    employee->name = query.value("name").toString();
-    employee->patronymic = query.value("patronymic").toString();
+    auto employee = this->createEmployeeByRow(query.record());
     return employee;
 }
 
@@ -62,6 +55,22 @@ QVector<QSharedPointer<User>> UserService::getClientList() {
     QSqlQuery query;
     QString text_query = "SELECT * FROM Client;";
     if (!query.exec(text_query)) {
+        throw CriticalDB(query.lastError().text());
+    }
+    return this->getClientListByQuery(query);
+}
+
+QVector<QSharedPointer<User>> UserService::getClientsByFilter(const QMap<QString, QString> &filter) {
+    QSqlQuery query;
+    query.prepare("SELECT * "
+                    "FROM Client "
+                    "WHERE (surname = :s OR :s = '') AND (name = :n OR :n = '') "
+                        "AND (patronymic = :pt OR :pt = '') AND (phone = :ph OR :ph = '');");
+    query.bindValue(":s", filter["surname"]);
+    query.bindValue(":n", filter["name"]);
+    query.bindValue(":pt", filter["patronymic"]);
+    query.bindValue(":ph", filter["phone"]);
+    if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
     }
     return this->getClientListByQuery(query);
@@ -78,7 +87,7 @@ void UserService::setDiscountById(const int client_id, const int discount) {
 }
 
 QSharedPointer<User> UserService::createClientByRow(const QSqlRecord &record) {
-    QSharedPointer<User> client = QSharedPointer<User>(new User());
+    auto client = QSharedPointer<User>(new User());
     client->id = record.value("id").toInt();
     client->role = record.value("role").toInt();
     client->phone = record.value("phone").toString();
@@ -90,6 +99,18 @@ QSharedPointer<User> UserService::createClientByRow(const QSqlRecord &record) {
     client->discount = record.value("discount").toInt();
     client->amount_purchase_tickets = record.value("amount_of_purchased_tickets").toInt();
     return client;
+}
+
+QSharedPointer<User> UserService::createEmployeeByRow(const QSqlRecord &record) {
+    auto employee = QSharedPointer<User>(new User());
+    employee->id = record.value("id").toInt();
+    employee->role = record.value("role").toInt();
+    employee->phone = record.value("phone").toString();
+    employee->password = record.value("hash_password").toString();
+    employee->surname = record.value("surname").toString();
+    employee->name = record.value("name").toString();
+    employee->patronymic = record.value("patronymic").toString();
+    return employee;
 }
 
 QVector<QSharedPointer<User>> UserService::getClientListByQuery(QSqlQuery &query) {

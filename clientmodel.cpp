@@ -26,9 +26,9 @@ QVariant ClientModel::data(const QModelIndex &index, int role) const {
             case 4:
                 return this->clients.at(index.row())->address;
             case 5:
-                return QString::number(this->clients.at(index.row())->discount) + "%";
-            case 6:
                 return this->clients.at(index.row())->amount_purchase_tickets;
+            case 6:
+                return QString::number(this->clients.at(index.row())->discount) + "%";
         }
     }
     return QVariant();
@@ -47,7 +47,9 @@ QVariant ClientModel::headerData(int section, Qt::Orientation orientation, int r
 }
 
 void ClientModel::setClientList(const QVector<QSharedPointer<User>> &clients) {
+    this->beginResetModel();
     this->clients = clients;
+    this->endResetModel();
 }
 
 int ClientModel::getClientIdByIndexRow(int row) {
