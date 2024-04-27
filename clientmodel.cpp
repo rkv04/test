@@ -29,7 +29,7 @@ QVariant ClientModel::data(const QModelIndex &index, int role) const {
                 return this->clients.at(index.row())->amount_purchase_tickets;
             case 6:
                 return QString::number(this->clients.at(index.row())->discount) + "%";
-        }
+            }
     }
     return QVariant();
 }
@@ -58,4 +58,5 @@ int ClientModel::getClientIdByIndexRow(int row) {
 
 void ClientModel::refreshDiscountByIndex(const int row, const int discount) {
     this->clients.at(row)->discount = discount;
+    emit layoutChanged();
 }

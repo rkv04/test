@@ -15,6 +15,9 @@ public:
     explicit ClientMainWindow(QWidget *parent = nullptr);
     ~ClientMainWindow();
 
+signals:
+    void logout();
+
 private:
     Ui::ClientMainWindow *ui;
 };

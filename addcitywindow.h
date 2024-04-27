@@ -2,6 +2,7 @@
 #define ADDCITYWINDOW_H
 
 #include <QDialog>
+#include "city.h"
 
 namespace Ui {
 class AddCityWindow;
@@ -14,6 +15,12 @@ class AddCityWindow : public QDialog
 public:
     explicit AddCityWindow(QWidget *parent = nullptr);
     ~AddCityWindow();
+
+private slots:
+    void onAddButtonClicked();
+
+signals:
+    void createdNewCity(const QSharedPointer<City> city);
 
 private:
     Ui::AddCityWindow *ui;

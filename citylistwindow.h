@@ -22,8 +22,10 @@ public:
 
 private slots:
     void onAddCityButtonClicked();
+    void addNewCity(const QSharedPointer<City> city);
 
 private:
+    void init();
     Ui::CityListWindow *ui;
     QSharedPointer<CityModel> city_model;
     AddCityWindow *add_city_window;

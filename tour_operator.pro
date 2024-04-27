@@ -32,6 +32,7 @@ SOURCES += \
     editticketwindow.cpp \
     employeedeletewindow.cpp \
     employeemainwindow.cpp \
+    hotel.cpp \
     hotelslistwindow.cpp \
     main.cpp \
     account.cpp \
@@ -68,6 +69,7 @@ HEADERS += \
     editticketwindow.h \
     employeedeletewindow.h \
     employeemainwindow.h \
+    hotel.h \
     hotelslistwindow.h \
     myticketswindow.h \
     registrationwindow.h \

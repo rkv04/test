@@ -22,6 +22,7 @@ public:
     QVector<QSharedPointer<User>> getClientsListByFilter(const QMap<QString, QString> &filter);
     void setDiscount(const int client_id, const int discount);
 
+    int createCity(const QSharedPointer<City> city);
     QVector<QSharedPointer<City>> getCityList();
 
 private:

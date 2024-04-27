@@ -49,6 +49,7 @@ void AuthorizationWindow::loginButtonClicked() {
         return;
     }
 
+
     switch (user->role) {
         case 0: {
             this->client_main_window = new ClientMainWindow();

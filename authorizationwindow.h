@@ -31,6 +31,7 @@ private slots:
 private:
     Ui::AuthorizationWindow *ui;
     RegistrationWindow *reg_window;
+
     ClientMainWindow *client_main_window;
     EmployeeMainWindow *employee_main_window;
     AdminMainWindow *admin_main_window;

@@ -122,6 +122,15 @@ QVector<QSharedPointer<User>> App::getClientsListByFilter(const QMap<QString, QS
     }
 }
 
+int App::createCity(const QSharedPointer<City> city) {
+    try {
+        return this->city_service->addCity(city);
+    }
+    catch(const CriticalDB &ex) {
+        // TO DO writing in the log.txt
+        throw AppError("Критическая ошибка! См. log.txt", true);
+    }
+}
 
 QVector<QSharedPointer<City>> App::getCityList() {
     try {

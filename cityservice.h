@@ -11,10 +11,12 @@ class CityService
 {
 public:
     CityService();
+    int addCity(const QSharedPointer<City> city);
     QVector<QSharedPointer<City>> getCityList();
 private:
     QSharedPointer<City> createCityByRow(const QSqlRecord &record);
     QVector<QSharedPointer<City>> getCityListByQuery(QSqlQuery &query);
+    int getIdLastAddedCity();
 };
 
 #endif // CITYSERVICE_H

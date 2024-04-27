@@ -22,6 +22,9 @@ public slots:
     void onClientListButtonClicked();
     void onCityListButtonClicked();
 
+signals:
+
+
 private:
     Ui::EmployeeMainWindow *ui;
     ClientsListWindow *client_list_window;

@@ -19,6 +19,11 @@ ClientsListWindow::ClientsListWindow(QWidget *parent)
     connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
     connect(this->ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(onSaveButtonClicked()));
 
+    this->init();
+
+}
+
+void ClientsListWindow::init() {
     App *app = App::getInstance();
     QVector<QSharedPointer<User>> clients_list;
     try {
@@ -31,9 +36,9 @@ ClientsListWindow::ClientsListWindow(QWidget *parent)
         }
         return;
     }
-    this->client_model = new ClientModel(this);
+    this->client_model = QSharedPointer<ClientModel>(new ClientModel());
     this->client_model->setClientList(clients_list);
-    this->ui->tableView->setModel(client_model);
+    this->ui->tableView->setModel(client_model.get());
 
     this->ui->tableView->resizeColumnsToContents();
     this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -42,13 +47,11 @@ ClientsListWindow::ClientsListWindow(QWidget *parent)
     this->ui->comboBox->addItem("3%", QVariant(3));
     this->ui->comboBox->addItem("5%", QVariant(5));
     this->ui->comboBox->addItem("10%", QVariant(10));
-
 }
 
 ClientsListWindow::~ClientsListWindow()
 {
     delete ui;
-    delete client_model;
 }
 
 void ClientsListWindow::onFindButtonClicked() {
@@ -90,5 +93,4 @@ void ClientsListWindow::onSaveButtonClicked() {
         }
     }
     this->client_model->refreshDiscountByIndex(index.row(), discount);
-    this->ui->tableView->viewport()->update();
 }

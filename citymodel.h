@@ -18,6 +18,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
     void setCityList(const QVector<QSharedPointer<City>> &cities);
+    void addCity(const QSharedPointer<City> city);
 
 private:
     QVector<QSharedPointer<City>> cities;

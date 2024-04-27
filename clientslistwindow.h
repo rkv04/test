@@ -25,7 +25,7 @@ private slots:
 private:
     void init();
     void refreshModel();
-    ClientModel *client_model;
+    QSharedPointer<ClientModel> client_model;
     Ui::ClientsListWindow *ui;
 
 };

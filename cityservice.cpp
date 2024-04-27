@@ -7,6 +7,27 @@
 
 CityService::CityService() {}
 
+int CityService::addCity(const QSharedPointer<City> city) {
+    QSqlQuery query;
+    query.prepare("INSERT INTO City (title, climate) VALUES (?, ?);");
+    query.bindValue(0, city->title);
+    query.bindValue(1, city->climate);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+    return this->getIdLastAddedCity();
+}
+
+int CityService::getIdLastAddedCity() {
+    QSqlQuery query;
+    QString text_query = "SELECT id FROM City ORDER BY id DESC LIMIT 1;";
+    if (!query.exec(text_query)) {
+        throw CriticalDB(query.lastError().text());
+    }
+    query.first();
+    return query.value("id").toInt();
+}
+
 QVector<QSharedPointer<City>> CityService::getCityList() {
     QSqlQuery query;
     QString text_query = "SELECT * FROM City;";

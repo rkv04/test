@@ -11,8 +11,10 @@ EmployeeMainWindow::EmployeeMainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(this->ui->clientListButton, SIGNAL(clicked(bool)), this, SLOT(onClientListButtonClicked()));
-    connect(this->ui->cityListButton, SIGNAL(clicked(bool)), this, SLOT(onCityListButtonClicked()));
+    connect(this->ui->clientListButton, SIGNAL(clicked(bool)),
+            this, SLOT(onClientListButtonClicked()));
+    connect(this->ui->cityListButton, SIGNAL(clicked(bool)),
+            this, SLOT(onCityListButtonClicked()));
 
 }
 

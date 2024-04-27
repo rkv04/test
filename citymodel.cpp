@@ -37,5 +37,12 @@ QVariant CityModel::headerData(int section, Qt::Orientation orientation, int rol
 }
 
 void CityModel::setCityList(const QVector<QSharedPointer<City>> &cities) {
+    this->beginResetModel();
     this->cities = cities;
+    this->endResetModel();
+}
+
+void CityModel::addCity(const QSharedPointer<City> city) {
+    this->cities.append(city);
+    emit layoutChanged();
 }
