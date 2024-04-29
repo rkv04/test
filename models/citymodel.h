@@ -21,6 +21,7 @@ public:
     void addCity(const QSharedPointer<City> city);
     void removeCityByIndexRow(const int row);
     QSharedPointer<City> getCityByIndexRow(const int row);
+    void updateCityByIndexRow(const int row, const QSharedPointer<City> updated_city);
 
 private:
     QVector<QSharedPointer<City>> cities;

@@ -5,6 +5,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
 INCLUDEPATH += \
+    ./app \
+    ./entities \
     ./windows \
     ./models \
     ./services \
@@ -20,33 +22,33 @@ SOURCES += \
     windows/addhotelwindow.cpp \
     windows/addticketwindow.cpp \
     windows/adminmainwindow.cpp \
-    app.cpp \
-    apperror.cpp \
+    app/app.cpp \
+    app/apperror.cpp \
     windows/authorizationwindow.cpp \
-    city.cpp \
+    entities/city.cpp \
     windows/citylistwindow.cpp \
     models/citymodel.cpp \
     services/cityservice.cpp \
     windows/clientmainwindow.cpp \
     models/clientmodel.cpp \
     windows/clientslistwindow.cpp \
-    context.cpp \
-    criticaldb.cpp \
-    db.cpp \
+    app/context.cpp \
+    app/criticaldb.cpp \
+    app/db.cpp \
     windows/editcitywindow.cpp \
     windows/edithotelwindow.cpp \
     windows/editticketwindow.cpp \
     windows/employeedeletewindow.cpp \
     windows/employeemainwindow.cpp \
-    hotel.cpp \
+    entities/hotel.cpp \
     windows/hotelslistwindow.cpp \
-    main.cpp \
+    app/main.cpp \
     windows/account.cpp \
     windows/myticketswindow.cpp \
     windows/registrationwindow.cpp \
     windows/ticketpurchasewindow.cpp \
     windows/ticketslistwindow.cpp \
-    user.cpp \
+    entities/user.cpp \
     services/userservice.cpp \
     windows/userslistwindow.cpp
 
@@ -57,31 +59,31 @@ HEADERS += \
     windows/addhotelwindow.h \
     windows/addticketwindow.h \
     windows/adminmainwindow.h \
-    app.h \
-    apperror.h \
+    app/app.h \
+    app/apperror.h \
     windows/authorizationwindow.h \
-    city.h \
+    entities/city.h \
     windows/citylistwindow.h \
     models/citymodel.h \
     services/cityservice.h \
     windows/clientmainwindow.h \
     ./models/clientmodel.h \
     windows/clientslistwindow.h \
-    context.h \
-    criticaldb.h \
-    db.h \
+    app/context.h \
+    app/criticaldb.h \
+    app/db.h \
     windows/editcitywindow.h \
     windows/edithotelwindow.h \
     windows/editticketwindow.h \
     windows/employeedeletewindow.h \
     windows/employeemainwindow.h \
-    hotel.h \
+    entities/hotel.h \
     windows/hotelslistwindow.h \
     windows/myticketswindow.h \
     windows/registrationwindow.h \
     windows/ticketpurchasewindow.h \
     windows/ticketslistwindow.h \
-    user.h \
+    entities/user.h \
     services/userservice.h \
     windows/userslistwindow.h
 

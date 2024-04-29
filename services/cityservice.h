@@ -13,6 +13,7 @@ public:
     CityService();
     int addCity(const QSharedPointer<City> city);
     void removeCityById(const int id);
+    void updateCity(const QSharedPointer<City> city);
     QVector<QSharedPointer<City>> getCityList();
 private:
     QSharedPointer<City> createCityByRow(const QSqlRecord &record);

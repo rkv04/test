@@ -15,7 +15,7 @@ CityListWindow::CityListWindow(QWidget *parent)
     ui->setupUi(this);
     connect(this->ui->addCityButton, SIGNAL(clicked(bool)), this, SLOT(onAddButtonClicked()));
     connect(this->ui->deleteCityButton, SIGNAL(clicked(bool)), this, SLOT(onDeleteButtonClicked()));
-
+    connect(this->ui->editCityButton, SIGNAL(clicked(bool)), this, SLOT(onEditButtonClicked()));
 
     this->init();
 
@@ -97,4 +97,31 @@ void CityListWindow::onDeleteButtonClicked() {
         return;
     }
     this->city_model->removeCityByIndexRow(selected_row);
+}
+
+void CityListWindow::onEditButtonClicked() {
+    QModelIndexList selected_indexes = this->ui->tableView->selectionModel()->selectedRows();
+    if (selected_indexes.isEmpty()) {
+        QMessageBox::warning(this, "Tour operator", "Для редактирования необходимо выделить нужную строку");
+        return;
+    }
+    int selected_row = selected_indexes.first().row();
+    QSharedPointer<City> city = this->city_model->getCityByIndexRow(selected_row);
+    this->edit_city_window = new EditCityWindow(this);
+    this->edit_city_window->setCity(city);
+    if (this->edit_city_window->exec() != EditCityWindow::Accepted) {
+        return;
+    }
+    App *app = App::getInstance();
+    try {
+        app->updateCity(city);
+    }
+    catch(const AppError &ex) {
+        QMessageBox::critical(this, "Tour operator", ex.what());
+        if (ex.isFatal()) {
+            exit(-1);
+        }
+        return;
+    }
+    this->city_model->updateCityByIndexRow(selected_row, city);
 }

@@ -151,3 +151,13 @@ void App::removeCity(const QSharedPointer<City> city) {
         throw AppError("Критическая ошибка! См. log.txt", true);
     }
 }
+
+void App::updateCity(const QSharedPointer<City> city) {
+    try {
+        this->city_service->updateCity(city);
+    }
+    catch(const CriticalDB &ex) {
+        // TO DO writing in the log.txt
+        throw AppError("Критическая ошибка! См. log.txt", true);
+    }
+}

@@ -27,6 +27,17 @@ void CityService::removeCityById(const int id) {
     }
 }
 
+void CityService::updateCity(const QSharedPointer<City> city) {
+    QSqlQuery query;
+    query.prepare("UPDATE City SET title = ?, climate = ? WHERE id = ?;");
+    query.bindValue(0, city->title);
+    query.bindValue(1, city->climate);
+    query.bindValue(2, city->id);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+}
+
 int CityService::getIdLastAddedCity() {
     QSqlQuery query;
     QString text_query = "SELECT id FROM City ORDER BY id DESC LIMIT 1;";

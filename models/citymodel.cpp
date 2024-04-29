@@ -55,3 +55,9 @@ void CityModel::removeCityByIndexRow(const int row_index) {
     this->cities.remove(row_index);
     emit layoutChanged();
 }
+
+void CityModel::updateCityByIndexRow(const int row, const QSharedPointer<City> updated_city) {
+    this->cities.at(row)->title = updated_city->title;
+    this->cities.at(row)->climate = updated_city->climate;
+    emit layoutChanged();
+}

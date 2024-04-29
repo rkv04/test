@@ -24,6 +24,7 @@ public:
 
     int createCity(const QSharedPointer<City> city);
     void removeCity(const QSharedPointer<City> city);
+    void updateCity(const QSharedPointer<City> city);
     QVector<QSharedPointer<City>> getCityList();
 
 private:
