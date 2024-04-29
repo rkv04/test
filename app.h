@@ -23,9 +23,11 @@ public:
     void setDiscount(const int client_id, const int discount);
 
     int createCity(const QSharedPointer<City> city);
+    void removeCity(const QSharedPointer<City> city);
     QVector<QSharedPointer<City>> getCityList();
 
 private:
+
     App();
     ~App();
     static App *instance;

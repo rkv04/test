@@ -18,6 +18,15 @@ int CityService::addCity(const QSharedPointer<City> city) {
     return this->getIdLastAddedCity();
 }
 
+void CityService::removeCityById(const int id) {
+    QSqlQuery query;
+    query.prepare("DELETE FROM City WHERE id = ?;");
+    query.bindValue(0, id);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+}
+
 int CityService::getIdLastAddedCity() {
     QSqlQuery query;
     QString text_query = "SELECT id FROM City ORDER BY id DESC LIMIT 1;";

@@ -4,103 +4,109 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
 
+INCLUDEPATH += \
+    ./windows \
+    ./models \
+    ./services \
+    ./gui \
+
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    addcitywindow.cpp \
-    addemployeewindow.cpp \
-    addhotelwindow.cpp \
-    addticketwindow.cpp \
-    adminmainwindow.cpp \
+    windows/addcitywindow.cpp \
+    windows/addemployeewindow.cpp \
+    windows/addhotelwindow.cpp \
+    windows/addticketwindow.cpp \
+    windows/adminmainwindow.cpp \
     app.cpp \
     apperror.cpp \
-    authorizationwindow.cpp \
+    windows/authorizationwindow.cpp \
     city.cpp \
-    citylistwindow.cpp \
-    citymodel.cpp \
-    cityservice.cpp \
-    clientmainwindow.cpp \
-    clientmodel.cpp \
-    clientslistwindow.cpp \
+    windows/citylistwindow.cpp \
+    models/citymodel.cpp \
+    services/cityservice.cpp \
+    windows/clientmainwindow.cpp \
+    models/clientmodel.cpp \
+    windows/clientslistwindow.cpp \
     context.cpp \
     criticaldb.cpp \
     db.cpp \
-    editcitywindow.cpp \
-    edithotelwindow.cpp \
-    editticketwindow.cpp \
-    employeedeletewindow.cpp \
-    employeemainwindow.cpp \
+    windows/editcitywindow.cpp \
+    windows/edithotelwindow.cpp \
+    windows/editticketwindow.cpp \
+    windows/employeedeletewindow.cpp \
+    windows/employeemainwindow.cpp \
     hotel.cpp \
-    hotelslistwindow.cpp \
+    windows/hotelslistwindow.cpp \
     main.cpp \
-    account.cpp \
-    myticketswindow.cpp \
-    registrationwindow.cpp \
-    ticketpurchasewindow.cpp \
-    ticketslistwindow.cpp \
+    windows/account.cpp \
+    windows/myticketswindow.cpp \
+    windows/registrationwindow.cpp \
+    windows/ticketpurchasewindow.cpp \
+    windows/ticketslistwindow.cpp \
     user.cpp \
-    userservice.cpp \
-    userslistwindow.cpp
+    services/userservice.cpp \
+    windows/userslistwindow.cpp
 
 HEADERS += \
-    account.h \
-    addcitywindow.h \
-    addemployeewindow.h \
-    addhotelwindow.h \
-    addticketwindow.h \
-    adminmainwindow.h \
+    windows/account.h \
+    windows/addcitywindow.h \
+    windows/addemployeewindow.h \
+    windows/addhotelwindow.h \
+    windows/addticketwindow.h \
+    windows/adminmainwindow.h \
     app.h \
     apperror.h \
-    authorizationwindow.h \
+    windows/authorizationwindow.h \
     city.h \
-    citylistwindow.h \
-    citymodel.h \
-    cityservice.h \
-    clientmainwindow.h \
-    clientmodel.h \
-    clientslistwindow.h \
+    windows/citylistwindow.h \
+    models/citymodel.h \
+    services/cityservice.h \
+    windows/clientmainwindow.h \
+    ./models/clientmodel.h \
+    windows/clientslistwindow.h \
     context.h \
     criticaldb.h \
     db.h \
-    editcitywindow.h \
-    edithotelwindow.h \
-    editticketwindow.h \
-    employeedeletewindow.h \
-    employeemainwindow.h \
+    windows/editcitywindow.h \
+    windows/edithotelwindow.h \
+    windows/editticketwindow.h \
+    windows/employeedeletewindow.h \
+    windows/employeemainwindow.h \
     hotel.h \
-    hotelslistwindow.h \
-    myticketswindow.h \
-    registrationwindow.h \
-    ticketpurchasewindow.h \
-    ticketslistwindow.h \
+    windows/hotelslistwindow.h \
+    windows/myticketswindow.h \
+    windows/registrationwindow.h \
+    windows/ticketpurchasewindow.h \
+    windows/ticketslistwindow.h \
     user.h \
-    userservice.h \
-    userslistwindow.h
+    services/userservice.h \
+    windows/userslistwindow.h
 
 FORMS += \
-    account.ui \
-    addcitywindow.ui \
-    addemployeewindow.ui \
-    addhotelwindow.ui \
-    addticketwindow.ui \
-    adminmainwindow.ui \
-    authorizationwindow.ui \
-    citylistwindow.ui \
-    clientmainwindow.ui \
-    clientslistwindow.ui \
-    editcitywindow.ui \
-    edithotelwindow.ui \
-    editticketwindow.ui \
-    employeedeletewindow.ui \
-    employeemainwindow.ui \
-    hotelslistwindow.ui \
-    myticketswindow.ui \
-    registrationwindow.ui \
-    ticketpurchasewindow.ui \
-    ticketslistwindow.ui \
-    userslistwindow.ui
+    gui/account.ui \
+    gui/addcitywindow.ui \
+    gui/addemployeewindow.ui \
+    gui/addhotelwindow.ui \
+    gui/addticketwindow.ui \
+    gui/adminmainwindow.ui \
+    gui/authorizationwindow.ui \
+    gui/citylistwindow.ui \
+    gui/clientmainwindow.ui \
+    gui/clientslistwindow.ui \
+    gui/editcitywindow.ui \
+    gui/edithotelwindow.ui \
+    gui/editticketwindow.ui \
+    gui/employeedeletewindow.ui \
+    gui/employeemainwindow.ui \
+    gui/hotelslistwindow.ui \
+    gui/myticketswindow.ui \
+    gui/registrationwindow.ui \
+    gui/ticketpurchasewindow.ui \
+    gui/ticketslistwindow.ui \
+    gui/userslistwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

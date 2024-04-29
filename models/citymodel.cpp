@@ -46,3 +46,12 @@ void CityModel::addCity(const QSharedPointer<City> city) {
     this->cities.append(city);
     emit layoutChanged();
 }
+
+QSharedPointer<City> CityModel::getCityByIndexRow(const int row) {
+    return this->cities.at(row);
+}
+
+void CityModel::removeCityByIndexRow(const int row_index) {
+    this->cities.remove(row_index);
+    emit layoutChanged();
+}

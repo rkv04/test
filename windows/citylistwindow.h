@@ -21,7 +21,8 @@ public:
     ~CityListWindow();
 
 private slots:
-    void onAddCityButtonClicked();
+    void onAddButtonClicked();
+    void onDeleteButtonClicked();
     void addNewCity(const QSharedPointer<City> city);
 
 private:

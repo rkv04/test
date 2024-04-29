@@ -13,7 +13,9 @@ CityListWindow::CityListWindow(QWidget *parent)
     , ui(new Ui::CityListWindow)
 {
     ui->setupUi(this);
-    connect(this->ui->addCityButton, SIGNAL(clicked(bool)), this, SLOT(onAddCityButtonClicked()));
+    connect(this->ui->addCityButton, SIGNAL(clicked(bool)), this, SLOT(onAddButtonClicked()));
+    connect(this->ui->deleteCityButton, SIGNAL(clicked(bool)), this, SLOT(onDeleteButtonClicked()));
+
 
     this->init();
 
@@ -38,9 +40,11 @@ void CityListWindow::init() {
     this->ui->tableView->setModel(city_model.get());
 
     this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    // TO DO
     this->ui->tableView->setWordWrap(true);
     // this->ui->tableView->verticalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
 CityListWindow::~CityListWindow()
@@ -48,10 +52,10 @@ CityListWindow::~CityListWindow()
     delete ui;
 }
 
-void CityListWindow::onAddCityButtonClicked() {
+void CityListWindow::onAddButtonClicked() {
     this->add_city_window = new AddCityWindow();
 
-    connect(this->add_city_window, SIGNAL(createdNewCity(QSharedPointer<City>)),
+    connect(this->add_city_window, SIGNAL(cityCreated(QSharedPointer<City>)),
             this, SLOT(addNewCity(QSharedPointer<City>)));
 
     this->add_city_window->setModal(true);
@@ -73,3 +77,24 @@ void CityListWindow::addNewCity(const QSharedPointer<City> city) {
     this->city_model->addCity(city);
 }
 
+void CityListWindow::onDeleteButtonClicked() {
+    QModelIndexList selected_indexes = this->ui->tableView->selectionModel()->selectedRows();
+    if (selected_indexes.isEmpty()) {
+        QMessageBox::warning(this, "Tour operator", "Для удаления необходимо выделить нужную строку");
+        return;
+    }
+    int selected_row = selected_indexes.first().row();
+    QSharedPointer<City> city = this->city_model->getCityByIndexRow(selected_row);
+    App *app = App::getInstance();
+    try {
+        app->removeCity(city);
+    }
+    catch(const AppError &ex) {
+        QMessageBox::critical(this, "Tour operator", ex.what());
+        if (ex.isFatal()) {
+            exit(-1);
+        }
+        return;
+    }
+    this->city_model->removeCityByIndexRow(selected_row);
+}

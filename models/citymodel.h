@@ -19,6 +19,8 @@ public:
 
     void setCityList(const QVector<QSharedPointer<City>> &cities);
     void addCity(const QSharedPointer<City> city);
+    void removeCityByIndexRow(const int row);
+    QSharedPointer<City> getCityByIndexRow(const int row);
 
 private:
     QVector<QSharedPointer<City>> cities;

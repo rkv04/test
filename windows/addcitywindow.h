@@ -20,7 +20,7 @@ private slots:
     void onAddButtonClicked();
 
 signals:
-    void createdNewCity(const QSharedPointer<City> city);
+    void cityCreated(const QSharedPointer<City> city);
 
 private:
     Ui::AddCityWindow *ui;

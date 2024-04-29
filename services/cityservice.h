@@ -12,6 +12,7 @@ class CityService
 public:
     CityService();
     int addCity(const QSharedPointer<City> city);
+    void removeCityById(const int id);
     QVector<QSharedPointer<City>> getCityList();
 private:
     QSharedPointer<City> createCityByRow(const QSqlRecord &record);
