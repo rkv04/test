@@ -2,6 +2,7 @@
 #include "db.h"
 #include "app.h"
 #include "criticaldb.h"
+#include "log.h"
 
 #include <QApplication>
 #include <QMessageBox>
@@ -16,7 +17,8 @@ int main(int argc, char *argv[]) {
         app->init();
     }
     catch(const CriticalDB &ex) {
-        QMessageBox::critical(nullptr, "Tour operator", ex.what());
+        QMessageBox::critical(nullptr, App::APPLICATION_NAME, CriticalDB::FATAL_MSG);
+        Log::write(ex.what());
         exit(-1);
     }
 

@@ -12,13 +12,13 @@ DB::DB() {}
 
 void DB::init() {
     QSqlDatabase app_db = QSqlDatabase::addDatabase("QSQLITE");
-    app_db.setDatabaseName("C:/Tour operator/build-tour_operator-Desktop_Qt_6_5_3_MinGW_64_bit-Debug/database/app_db.db");
+    app_db.setDatabaseName("./app_db.db");
 
     if (!app_db.open()) {
         throw CriticalDB(app_db.lastError().text());
     }
 
-    QFile file("C:/Tour operator/build-tour_operator-Desktop_Qt_6_5_3_MinGW_64_bit-Debug/database/db_script.sql");
+    QFile file("./db_script.sq");
     if (!file.open(QIODevice::ReadOnly)) {
         throw CriticalDB("Ошибка при открытии скрипта развёртывания базы данных");
     }

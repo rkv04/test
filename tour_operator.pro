@@ -17,6 +17,7 @@ INCLUDEPATH += \
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    app/log.cpp \
     windows/addcitywindow.cpp \
     windows/addemployeewindow.cpp \
     windows/addhotelwindow.cpp \
@@ -53,6 +54,7 @@ SOURCES += \
     windows/userslistwindow.cpp
 
 HEADERS += \
+    app/log.h \
     windows/account.h \
     windows/addcitywindow.h \
     windows/addemployeewindow.h \

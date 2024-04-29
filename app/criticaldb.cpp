@@ -5,5 +5,5 @@ CriticalDB::CriticalDB(const QString& msg) {
 }
 
 QString CriticalDB::what() const {
-    return QString("Критическая ошибка! См. файл log.txt");
+    return this->msg;
 }

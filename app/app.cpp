@@ -5,6 +5,7 @@
 #include "apperror.h"
 #include "user.h"
 #include "context.h"
+#include "log.h"
 
 #include <QMessageBox>
 #include <QCryptographicHash>
@@ -56,8 +57,8 @@ QSharedPointer<User> App::tryLoginAsClient(const QString &phone, const QString &
         return nullptr;
     }
     catch(const CriticalDB &ex) {
-        // TO DO writing in the log.txt
-        throw AppError("Критическая ошибка! См. log.txt", true);
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
     }
 }
 
@@ -71,8 +72,8 @@ QSharedPointer<User> App::tryLoginAsEmployee(const QString &phone, const QString
         return nullptr;
     }
     catch(const CriticalDB &ex) {
-        // TO DO writing in the log.txt
-        throw AppError("Критическая ошибка! См. log.txt", true);
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
     }
 }
 
@@ -86,8 +87,8 @@ void App::createClient(User &client) {
         this->user_service->addClient(client);
     }
     catch(const CriticalDB &ex) {
-        // TO DO writing in the log.txt
-        throw AppError("Критическая ошибка! См. log.txt", true);
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
     }
 
 }
@@ -97,8 +98,8 @@ QVector<QSharedPointer<User>> App::getClientsList() {
         return this->user_service->getClientList();
     }
     catch(const CriticalDB &ex) {
-        // TO DO writing in the log.txt
-        throw AppError("Критическая ошибка! См. log.txt", true);
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
     }
 }
 
@@ -107,8 +108,8 @@ void App::setDiscount(const int client_id, const int discount) {
         this->user_service->setDiscountById(client_id, discount);
     }
     catch(const CriticalDB &ex) {
-        // TO DO writing in the log.txt
-        throw AppError("Критическая ошибка! См. log.txt", true);
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
     }
 }
 
@@ -117,8 +118,8 @@ QVector<QSharedPointer<User>> App::getClientsListByFilter(const QMap<QString, QS
         return this->user_service->getClientsByFilter(filter);
     }
     catch(const CriticalDB &ex) {
-        // TO DO writing in the log.txt
-        throw AppError("Критическая ошибка! См. log.txt", true);
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
     }
 }
 
@@ -127,8 +128,8 @@ int App::createCity(const QSharedPointer<City> city) {
         return this->city_service->addCity(city);
     }
     catch(const CriticalDB &ex) {
-        // TO DO writing in the log.txt
-        throw AppError("Критическая ошибка! См. log.txt", true);
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
     }
 }
 
@@ -137,8 +138,8 @@ QVector<QSharedPointer<City>> App::getCityList() {
         return this->city_service->getCityList();
     }
     catch(const CriticalDB &ex) {
-        // TO DO writing in the log.txt
-        throw AppError("Критическая ошибка! См. log.txt", true);
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
     }
 }
 
@@ -147,8 +148,8 @@ void App::removeCity(const QSharedPointer<City> city) {
         this->city_service->removeCityById(city->id);
     }
     catch(const CriticalDB &ex) {
-        // TO DO writing in the log.txt
-        throw AppError("Критическая ошибка! См. log.txt", true);
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
     }
 }
 
@@ -157,7 +158,7 @@ void App::updateCity(const QSharedPointer<City> city) {
         this->city_service->updateCity(city);
     }
     catch(const CriticalDB &ex) {
-        // TO DO writing in the log.txt
-        throw AppError("Критическая ошибка! См. log.txt", true);
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
     }
 }
