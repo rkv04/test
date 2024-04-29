@@ -1,12 +1,14 @@
 #include "addcitywindow.h"
 #include "ui_addcitywindow.h"
 
+#include "app.h"
+
 AddCityWindow::AddCityWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::AddCityWindow)
 {
     ui->setupUi(this);
-
+    this->setWindowTitle(App::APPLICATION_NAME);
     connect(this->ui->addButton, SIGNAL(clicked(bool)), this, SLOT(onAddButtonClicked()));
 
 }

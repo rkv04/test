@@ -14,6 +14,7 @@ RegistrationWindow::RegistrationWindow(QWidget *parent)
     , ui(new Ui::RegistrationWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(App::APPLICATION_NAME);
 
     connect(this->ui->reg_button, SIGNAL(clicked(bool)), this, SLOT(regButtonClicked()));
     connect(this->ui->sign_in_button, SIGNAL(clicked(bool)), this, SLOT(toLoginWindow()));

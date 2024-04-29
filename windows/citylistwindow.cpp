@@ -8,14 +8,23 @@
 #include "app.h"
 #include "apperror.h"
 
+
 CityListWindow::CityListWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::CityListWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(App::APPLICATION_NAME);
+
     connect(this->ui->addCityButton, SIGNAL(clicked(bool)), this, SLOT(onAddButtonClicked()));
     connect(this->ui->deleteCityButton, SIGNAL(clicked(bool)), this, SLOT(onDeleteButtonClicked()));
     connect(this->ui->editCityButton, SIGNAL(clicked(bool)), this, SLOT(onEditButtonClicked()));
+
+    this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    // TO DO
+    this->ui->tableView->setWordWrap(true);
+    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     this->init();
 
@@ -34,17 +43,9 @@ void CityListWindow::init() {
         }
         return;
     }
-
     this->city_model = QSharedPointer<CityModel>(new CityModel());
     this->city_model->setCityList(city_list);
     this->ui->tableView->setModel(city_model.get());
-
-    this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
-    // TO DO
-    this->ui->tableView->setWordWrap(true);
-    // this->ui->tableView->verticalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
 CityListWindow::~CityListWindow()

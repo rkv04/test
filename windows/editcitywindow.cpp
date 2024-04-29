@@ -1,11 +1,15 @@
 #include "editcitywindow.h"
 #include "ui_editcitywindow.h"
 
+#include "app.h"
+
 EditCityWindow::EditCityWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::EditCityWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(App::APPLICATION_NAME);
+
     connect(this->ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(onSaveButtonClicked()));
 
 }

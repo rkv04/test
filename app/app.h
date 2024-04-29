@@ -13,6 +13,8 @@ class App {
 
 public:
 
+    inline static const QString APPLICATION_NAME = "Tour operator";
+
     static App* getInstance();
     void init();
 

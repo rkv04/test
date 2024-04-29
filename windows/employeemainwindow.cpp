@@ -4,12 +4,14 @@
 #include "ticketslistwindow.h"
 #include "clientslistwindow.h"
 #include "citylistwindow.h"
+#include "app.h"
 
 EmployeeMainWindow::EmployeeMainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::EmployeeMainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(App::APPLICATION_NAME);
 
     connect(this->ui->clientListButton, SIGNAL(clicked(bool)),
             this, SLOT(onClientListButtonClicked()));

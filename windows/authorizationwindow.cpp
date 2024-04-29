@@ -14,6 +14,7 @@ AuthorizationWindow::AuthorizationWindow(QWidget *parent)
     , ui(new Ui::AuthorizationWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(App::APPLICATION_NAME);
 
     connect(this->ui->regButton, SIGNAL(clicked(bool)), this, SLOT(regButtonClicked()));
     connect(this->ui->loginButton, SIGNAL(clicked(bool)), this, SLOT(loginButtonClicked()));
