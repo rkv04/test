@@ -7,11 +7,9 @@
 #include <QApplication>
 #include <QMessageBox>
 
-
 int main(int argc, char *argv[]) {
 
     QApplication a(argc, argv);
-
     try {
         App *app = App::getInstance();
         app->init();
@@ -21,7 +19,6 @@ int main(int argc, char *argv[]) {
         Log::write(ex.what());
         exit(-1);
     }
-
     AuthorizationWindow w;
     w.show();
     return a.exec();

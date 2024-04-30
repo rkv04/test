@@ -7,9 +7,9 @@ class Hotel
 {
 public:
     Hotel();
-    Hotel(const int id, const int id_city, const QString &title, const int category, const QString &address);
+    Hotel(const int id, const QString &city_title, const QString &title, const int category, const QString &address);
     int id;
-    int id_city;
+    QString city_title;
     QString title;
     int category;
     QString address;

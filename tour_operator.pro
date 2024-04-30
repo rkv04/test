@@ -18,6 +18,9 @@ INCLUDEPATH += \
 
 SOURCES += \
     app/log.cpp \
+    models/citylistmodel.cpp \
+    models/hotelmodel.cpp \
+    services/hotelservice.cpp \
     windows/addcitywindow.cpp \
     windows/addemployeewindow.cpp \
     windows/addhotelwindow.cpp \
@@ -55,6 +58,9 @@ SOURCES += \
 
 HEADERS += \
     app/log.h \
+    models/citylistmodel.h \
+    models/hotelmodel.h \
+    services/hotelservice.h \
     windows/account.h \
     windows/addcitywindow.h \
     windows/addemployeewindow.h \

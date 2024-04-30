@@ -43,14 +43,12 @@ void AuthorizationWindow::loginButtonClicked() {
         user = app->login(phone, password);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, "Tour operator", ex.what());
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         if (ex.isFatal()) {
             exit(-1);
         }
         return;
     }
-
-
     switch (user->role) {
         case 0: {
             this->client_main_window = new ClientMainWindow();

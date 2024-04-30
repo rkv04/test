@@ -18,7 +18,7 @@ void DB::init() {
         throw CriticalDB(app_db.lastError().text());
     }
 
-    QFile file("./db_script.sq");
+    QFile file("./db_script.sql");
     if (!file.open(QIODevice::ReadOnly)) {
         throw CriticalDB("Ошибка при открытии скрипта развёртывания базы данных");
     }

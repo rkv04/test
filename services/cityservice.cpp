@@ -20,7 +20,7 @@ int CityService::addCity(const QSharedPointer<City> city) {
 
 void CityService::removeCityById(const int id) {
     QSqlQuery query;
-    query.prepare("DELETE FROM City WHERE id = ?;");
+    query.prepare("UPDATE City SET activity_flag = 0 WHERE id = ?;");
     query.bindValue(0, id);
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
@@ -50,7 +50,7 @@ int CityService::getIdLastAddedCity() {
 
 QVector<QSharedPointer<City>> CityService::getCityList() {
     QSqlQuery query;
-    QString text_query = "SELECT * FROM City;";
+    QString text_query = "SELECT * FROM City WHERE activity_flag = 1;";
     if (!query.exec(text_query)) {
         throw CriticalDB(query.lastError().text());
     }

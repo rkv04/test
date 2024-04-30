@@ -5,6 +5,7 @@
 
 #include "clientslistwindow.h"
 #include "citylistwindow.h"
+#include "hotelslistwindow.h"
 
 namespace Ui {
 class EmployeeMainWindow;
@@ -21,6 +22,7 @@ public:
 public slots:
     void onClientListButtonClicked();
     void onCityListButtonClicked();
+    void onHotelListButtonClicked();
 
 signals:
 
@@ -29,6 +31,7 @@ private:
     Ui::EmployeeMainWindow *ui;
     ClientsListWindow *client_list_window;
     CityListWindow *city_list_window;
+    HotelsListWindow *hotel_list_window;
 };
 
 #endif // EMPLOYEEMAINWINDOW_H

@@ -4,6 +4,7 @@
 #include "ticketslistwindow.h"
 #include "clientslistwindow.h"
 #include "citylistwindow.h"
+#include "hotelslistwindow.h"
 #include "app.h"
 
 EmployeeMainWindow::EmployeeMainWindow(QWidget *parent)
@@ -13,10 +14,9 @@ EmployeeMainWindow::EmployeeMainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setWindowTitle(App::APPLICATION_NAME);
 
-    connect(this->ui->clientListButton, SIGNAL(clicked(bool)),
-            this, SLOT(onClientListButtonClicked()));
-    connect(this->ui->cityListButton, SIGNAL(clicked(bool)),
-            this, SLOT(onCityListButtonClicked()));
+    connect(this->ui->clientListButton, SIGNAL(clicked(bool)), this, SLOT(onClientListButtonClicked()));
+    connect(this->ui->cityListButton, SIGNAL(clicked(bool)), this, SLOT(onCityListButtonClicked()));
+    connect(this->ui->hotelListButton, SIGNAL(clicked(bool)), this, SLOT(onHotelListButtonClicked()));
 
 }
 
@@ -34,5 +34,11 @@ void EmployeeMainWindow::onClientListButtonClicked() {
 void EmployeeMainWindow::onCityListButtonClicked() {
     this->city_list_window = new CityListWindow();
     this->city_list_window->show();
+    this->close();
+}
+
+void EmployeeMainWindow::onHotelListButtonClicked() {
+    this->hotel_list_window = new HotelsListWindow();
+    this->hotel_list_window->show();
     this->close();
 }

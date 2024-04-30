@@ -2,6 +2,7 @@
 #define ADDHOTELWINDOW_H
 
 #include <QDialog>
+#include "citylistmodel.h"
 
 namespace Ui {
 class AddHotelWindow;
@@ -17,6 +18,7 @@ public:
 
 private:
     Ui::AddHotelWindow *ui;
+    QSharedPointer<CityListModel> city_list_model;
 };
 
 #endif // ADDHOTELWINDOW_H
