@@ -19,7 +19,9 @@ ClientsListWindow::ClientsListWindow(QWidget *parent)
     connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
     connect(this->ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(onSaveButtonClicked()));
 
-    this->init();
+    this->ui->tableView->resizeColumnsToContents();
+    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
 }
 
@@ -39,10 +41,6 @@ void ClientsListWindow::init() {
     this->client_model = QSharedPointer<ClientModel>(new ClientModel());
     this->client_model->setClientList(clients_list);
     this->ui->tableView->setModel(client_model.get());
-
-    this->ui->tableView->resizeColumnsToContents();
-    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     this->ui->comboBox->addItem("0%", QVariant(0));
     this->ui->comboBox->addItem("3%", QVariant(3));

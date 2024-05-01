@@ -23,7 +23,7 @@ public:
 
 private:
     QVector<QSharedPointer<Hotel>> hotels;
-    const QStringList headers = {"Название", "Город", "Адрес", "Категория"};
+    const QStringList headers = {"Название", "Категория", "Город", "Адрес"};
 
 };
 

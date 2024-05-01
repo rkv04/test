@@ -6,11 +6,11 @@ HotelModel::HotelModel(QObject *parent)
     : QAbstractTableModel{parent}
 {}
 
-int HotelModel::rowCount(const QModelIndex &parent) const {
+int HotelModel::rowCount(const QModelIndex &) const {
     return this->hotels.size();
 }
 
-int HotelModel::columnCount(const QModelIndex &parent) const {
+int HotelModel::columnCount(const QModelIndex &) const {
     return 4;
 }
 
@@ -20,11 +20,11 @@ QVariant HotelModel::data(const QModelIndex &index, int role) const {
         case 0:
             return this->hotels.at(index.row())->title;
         case 1:
-            return this->hotels.at(index.row())->city_title;
-        case 2:
-            return this->hotels.at(index.row())->address;
-        case 3:
             return this->hotels.at(index.row())->category;
+        case 2:
+            return this->hotels.at(index.row())->city_title;
+        case 3:
+            return this->hotels.at(index.row())->address;
         }
     }
     return QVariant();

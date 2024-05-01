@@ -21,6 +21,8 @@ public:
     explicit CityListWindow(QWidget *parent = nullptr);
     ~CityListWindow();
 
+    void init();
+
 private slots:
     void onAddButtonClicked();
     void onDeleteButtonClicked();
@@ -28,7 +30,6 @@ private slots:
     void onEditButtonClicked();
 
 private:
-    void init();
     Ui::CityListWindow *ui;
     QSharedPointer<CityModel> city_model;
     AddCityWindow *add_city_window;

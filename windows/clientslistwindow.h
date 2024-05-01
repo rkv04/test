@@ -17,13 +17,13 @@ class ClientsListWindow : public QMainWindow
 public:
     explicit ClientsListWindow(QWidget *parent = nullptr);
     ~ClientsListWindow();
+    void init();
 
 private slots:
     void onFindButtonClicked();
     void onSaveButtonClicked();
 
 private:
-    void init();
     void refreshModel();
     QSharedPointer<ClientModel> client_model;
     Ui::ClientsListWindow *ui;

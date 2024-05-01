@@ -21,13 +21,9 @@ CityListWindow::CityListWindow(QWidget *parent)
     connect(this->ui->editCityButton, SIGNAL(clicked(bool)), this, SLOT(onEditButtonClicked()));
 
     this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
-    // TO DO
     this->ui->tableView->setWordWrap(true);
     this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-
-    this->init();
-
 }
 
 void CityListWindow::init() {

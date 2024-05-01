@@ -27,18 +27,21 @@ EmployeeMainWindow::~EmployeeMainWindow()
 
 void EmployeeMainWindow::onClientListButtonClicked() {
     this->client_list_window = new ClientsListWindow();
+    this->client_list_window->init();
     this->client_list_window->show();
     this->close();
 }
 
 void EmployeeMainWindow::onCityListButtonClicked() {
     this->city_list_window = new CityListWindow();
+    this->city_list_window->init();
     this->city_list_window->show();
     this->close();
 }
 
 void EmployeeMainWindow::onHotelListButtonClicked() {
     this->hotel_list_window = new HotelsListWindow();
+    this->hotel_list_window->init();
     this->hotel_list_window->show();
     this->close();
 }

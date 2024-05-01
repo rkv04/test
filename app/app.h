@@ -5,8 +5,10 @@
 
 #include "userservice.h"
 #include "cityservice.h"
+#include "hotelservice.h"
 #include "user.h"
 #include "city.h"
+#include "hotel.h"
 
 
 class App {
@@ -29,6 +31,8 @@ public:
     void updateCity(const QSharedPointer<City> city);
     QVector<QSharedPointer<City>> getCityList();
 
+    QVector<QSharedPointer<Hotel>> getHotelList();
+
 private:
 
     App();
@@ -40,6 +44,7 @@ private:
 
     QSharedPointer<UserService> user_service;
     QSharedPointer<CityService> city_service;
+    QSharedPointer<HotelService> hotel_service;
 
 };
 

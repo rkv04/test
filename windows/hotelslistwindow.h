@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "addhotelwindow.h"
+#include "hotelmodel.h"
 
 namespace Ui {
 class HotelsListWindow;
@@ -15,6 +16,7 @@ class HotelsListWindow : public QMainWindow
 public:
     explicit HotelsListWindow(QWidget *parent = nullptr);
     ~HotelsListWindow();
+    void init();
 
 private slots:
     void onAddHotelButtonClicked();
@@ -22,6 +24,7 @@ private slots:
 private:
     Ui::HotelsListWindow *ui;
     AddHotelWindow *add_hotel_window;
+    QSharedPointer<HotelModel> hotel_model;
 };
 
 #endif // HOTELSLISTWINDOW_H

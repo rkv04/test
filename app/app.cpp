@@ -15,6 +15,7 @@ App* App::instance = nullptr;
 App::App() {
     this->user_service = QSharedPointer<UserService>(new UserService());
     this->city_service = QSharedPointer<CityService>(new CityService());
+    this->hotel_service = QSharedPointer<HotelService>(new HotelService());
 }
 
 App::~App() {}
@@ -156,6 +157,16 @@ void App::removeCity(const QSharedPointer<City> city) {
 void App::updateCity(const QSharedPointer<City> city) {
     try {
         this->city_service->updateCity(city);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+QVector<QSharedPointer<Hotel>> App::getHotelList() {
+    try {
+        return this->hotel_service->getHotelList();
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());

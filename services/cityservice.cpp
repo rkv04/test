@@ -50,7 +50,7 @@ int CityService::getIdLastAddedCity() {
 
 QVector<QSharedPointer<City>> CityService::getCityList() {
     QSqlQuery query;
-    QString text_query = "SELECT * FROM City WHERE activity_flag = 1;";
+    QString text_query = "SELECT * FROM City WHERE activity_flag = 1 ORDER BY title;";
     if (!query.exec(text_query)) {
         throw CriticalDB(query.lastError().text());
     }

@@ -1,7 +1,11 @@
 #include "hotelslistwindow.h"
 #include "ui_hotelslistwindow.h"
 
+#include <QMessageBox>
+
+#include "apperror.h"
 #include "addhotelwindow.h"
+#include "app.h"
 
 HotelsListWindow::HotelsListWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -9,11 +13,33 @@ HotelsListWindow::HotelsListWindow(QWidget *parent)
 {
     ui->setupUi(this);
     connect(this->ui->addHotelButton, SIGNAL(clicked(bool)), this, SLOT(onAddHotelButtonClicked()));
+
+    this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
 HotelsListWindow::~HotelsListWindow()
 {
     delete ui;
+}
+
+void HotelsListWindow::init() {
+    QVector<QSharedPointer<Hotel>> hotels;
+    App *app = App::getInstance();
+    try {
+        hotels = app->getHotelList();
+    }
+    catch(const AppError &ex) {
+        QMessageBox::critical(this, "Tour operator", ex.what());
+        if (ex.isFatal()) {
+            exit(-1);
+        }
+        return;
+    }
+    this->hotel_model = QSharedPointer<HotelModel>(new HotelModel());
+    this->hotel_model->setHotelsList(hotels);
+    this->ui->tableView->setModel(hotel_model.get());
 }
 
 void HotelsListWindow::onAddHotelButtonClicked() {
