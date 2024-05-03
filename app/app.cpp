@@ -164,9 +164,29 @@ void App::updateCity(const QSharedPointer<City> city) {
     }
 }
 
+QVector<QSharedPointer<City>> App::getCityListByFilter(const QString &title) {
+    try {
+        return this->city_service->getCityListByFilter(title);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
 QVector<QSharedPointer<Hotel>> App::getHotelList() {
     try {
         return this->hotel_service->getHotelList();
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+int App::createHotel(const QSharedPointer<Hotel> &hotel) {
+    try {
+        return this->hotel_service->addHotel(hotel);
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());

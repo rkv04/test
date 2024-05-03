@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QSqlQueryModel>
 
-#include "clientmodel.h"
+#include "clienttablemodel.h"
 
 namespace Ui {
 class ClientsListWindow;
@@ -25,7 +25,7 @@ private slots:
 
 private:
     void refreshModel();
-    QSharedPointer<ClientModel> client_model;
+    QSharedPointer<ClientTableModel> client_model;
     Ui::ClientsListWindow *ui;
 
 };

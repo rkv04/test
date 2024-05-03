@@ -22,6 +22,6 @@ void AddCityWindow::onAddButtonClicked() {
     QSharedPointer<City> city = QSharedPointer<City>(new City());
     city->title = this->ui->titleEdit->text();
     city->climate = this->ui->climateEdit->toPlainText();
-    emit this->cityCreated(city);
+    emit cityCreated(city);
     this->close();
 }

@@ -20,3 +20,7 @@ void CityListModel::setCityList(const QVector<QSharedPointer<City>> &cities) {
     this->cities = cities;
     this->endResetModel();
 }
+
+QSharedPointer<City> CityListModel::getCityByIndex(const int index) {
+    return this->cities.at(index);
+}

@@ -1,5 +1,5 @@
-#ifndef CITYMODEL_H
-#define CITYMODEL_H
+#ifndef CITYTABLEMODEL_H
+#define CITYTABLEMODEL_H
 
 #include <QAbstractTableModel>
 #include <QSharedPointer>
@@ -8,10 +8,10 @@
 
 #include "city.h"
 
-class CityModel : public QAbstractTableModel
+class CityTableModel : public QAbstractTableModel
 {
 public:
-    explicit CityModel(QObject *parent = nullptr);
+    explicit CityTableModel(QObject *parent = nullptr);
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
@@ -28,4 +28,4 @@ private:
     QStringList headers = {"Название", "Описание климата"};
 };
 
-#endif // CITYMODEL_H
+#endif // CITYTABLEMODEL_H

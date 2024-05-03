@@ -22,7 +22,7 @@ QVariant HotelModel::data(const QModelIndex &index, int role) const {
         case 1:
             return this->hotels.at(index.row())->category;
         case 2:
-            return this->hotels.at(index.row())->city_title;
+            return this->hotels.at(index.row())->city->title;
         case 3:
             return this->hotels.at(index.row())->address;
         }
@@ -43,13 +43,13 @@ QVariant HotelModel::headerData(int section, Qt::Orientation orientation, int ro
 }
 
 
-void HotelModel::setHotelsList(const QVector<QSharedPointer<Hotel>> hotels) {
+void HotelModel::setHotelsList(const QVector<QSharedPointer<Hotel>> &hotels) {
     this->beginResetModel();
     this->hotels = hotels;
     this->endResetModel();
 }
 
-void HotelModel::addHotel(const QSharedPointer<Hotel> hotel) {
+void HotelModel::addHotel(const QSharedPointer<Hotel> &hotel) {
     this->hotels.append(hotel);
     emit layoutChanged();
 }

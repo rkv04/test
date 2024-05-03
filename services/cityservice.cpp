@@ -73,3 +73,13 @@ QSharedPointer<City> CityService::createCityByRow(const QSqlRecord &record) {
     city->climate = record.value("climate").toString();
     return city;
 }
+
+QVector<QSharedPointer<City>> CityService::getCityListByFilter(const QString &title) {
+    QSqlQuery query;
+    query.prepare("SELECT * FROM City WHERE title LIKE ?;");
+    query.bindValue(0, title + "%");
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+    return this->getCityListByQuery(query);
+}

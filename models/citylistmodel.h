@@ -13,6 +13,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
     void setCityList(const QVector<QSharedPointer<City>> &cities);
+    QSharedPointer<City> getCityByIndex(const int id);
 
 private:
     QVector<QSharedPointer<City>> cities;

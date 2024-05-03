@@ -1,18 +1,18 @@
-#include "citymodel.h"
+#include "citytablemodel.h"
 
-CityModel::CityModel(QObject *parent)
+CityTableModel::CityTableModel(QObject *parent)
     : QAbstractTableModel{parent}
 {}
 
-int CityModel::rowCount(const QModelIndex &) const {
+int CityTableModel::rowCount(const QModelIndex &) const {
     return this->cities.size();
 }
 
-int CityModel::columnCount(const QModelIndex &) const {
+int CityTableModel::columnCount(const QModelIndex &) const {
     return 2;
 }
 
-QVariant CityModel::data(const QModelIndex &index, int role) const {
+QVariant CityTableModel::data(const QModelIndex &index, int role) const {
     if (role == Qt::DisplayRole) {
         switch(index.column()) {
         case 0:
@@ -24,7 +24,7 @@ QVariant CityModel::data(const QModelIndex &index, int role) const {
     return QVariant();
 }
 
-QVariant CityModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant CityTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (role == Qt::DisplayRole) {
         if (orientation == Qt::Horizontal) {
             return this->headers.at(section);
@@ -36,27 +36,27 @@ QVariant CityModel::headerData(int section, Qt::Orientation orientation, int rol
     return QVariant();
 }
 
-void CityModel::setCityList(const QVector<QSharedPointer<City>> &cities) {
+void CityTableModel::setCityList(const QVector<QSharedPointer<City>> &cities) {
     this->beginResetModel();
     this->cities = cities;
     this->endResetModel();
 }
 
-void CityModel::addCity(const QSharedPointer<City> city) {
+void CityTableModel::addCity(const QSharedPointer<City> city) {
     this->cities.append(city);
     emit layoutChanged();
 }
 
-QSharedPointer<City> CityModel::getCityByIndexRow(const int row) {
+QSharedPointer<City> CityTableModel::getCityByIndexRow(const int row) {
     return this->cities.at(row);
 }
 
-void CityModel::removeCityByIndexRow(const int row_index) {
+void CityTableModel::removeCityByIndexRow(const int row_index) {
     this->cities.remove(row_index);
     emit layoutChanged();
 }
 
-void CityModel::updateCityByIndexRow(const int row, const QSharedPointer<City> updated_city) {
+void CityTableModel::updateCityByIndexRow(const int row, const QSharedPointer<City> updated_city) {
     this->cities.at(row)->title = updated_city->title;
     this->cities.at(row)->climate = updated_city->climate;
     emit layoutChanged();

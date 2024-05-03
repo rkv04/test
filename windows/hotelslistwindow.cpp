@@ -44,6 +44,26 @@ void HotelsListWindow::init() {
 
 void HotelsListWindow::onAddHotelButtonClicked() {
     this->add_hotel_window = new AddHotelWindow();
+
+    connect(this->add_hotel_window, SIGNAL(hotelCreated(QSharedPointer<Hotel>)),
+            this, SLOT(addHotel(QSharedPointer<Hotel>)));
+
+    this->add_hotel_window->init();
     this->add_hotel_window->setModal(true);
     this->add_hotel_window->exec();
+}
+
+void HotelsListWindow::addHotel(const QSharedPointer<Hotel> &hotel) {
+    App *app = App::getInstance();
+    try {
+        hotel->id = app->createHotel(hotel);
+    }
+    catch(const AppError &ex) {
+        QMessageBox::critical(this, "Tour operator", ex.what());
+        if (ex.isFatal()) {
+            exit(-1);
+        }
+        return;
+    }
+    this->hotel_model->addHotel(hotel);
 }

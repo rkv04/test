@@ -17,8 +17,8 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
-    void setHotelsList(const QVector<QSharedPointer<Hotel>> hotels);
-    void addHotel(const QSharedPointer<Hotel> hotel);
+    void setHotelsList(const QVector<QSharedPointer<Hotel>> &hotels);
+    void addHotel(const QSharedPointer<Hotel> &hotel);
 
 
 private:

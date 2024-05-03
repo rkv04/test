@@ -20,6 +20,7 @@ public:
 
 private slots:
     void onAddHotelButtonClicked();
+    void addHotel(const QSharedPointer<Hotel> &hotel);
 
 private:
     Ui::HotelsListWindow *ui;

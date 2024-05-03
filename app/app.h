@@ -30,8 +30,10 @@ public:
     void removeCity(const QSharedPointer<City> city);
     void updateCity(const QSharedPointer<City> city);
     QVector<QSharedPointer<City>> getCityList();
+    QVector<QSharedPointer<City>> getCityListByFilter(const QString &title);
 
     QVector<QSharedPointer<Hotel>> getHotelList();
+    int createHotel(const QSharedPointer<Hotel> &hotel);
 
 private:
 

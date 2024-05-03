@@ -4,7 +4,7 @@
 #include <QMessageBox>
 
 #include "addcitywindow.h"
-#include "citymodel.h"
+#include "citytablemodel.h"
 #include "app.h"
 #include "apperror.h"
 
@@ -19,6 +19,7 @@ CityListWindow::CityListWindow(QWidget *parent)
     connect(this->ui->addCityButton, SIGNAL(clicked(bool)), this, SLOT(onAddButtonClicked()));
     connect(this->ui->deleteCityButton, SIGNAL(clicked(bool)), this, SLOT(onDeleteButtonClicked()));
     connect(this->ui->editCityButton, SIGNAL(clicked(bool)), this, SLOT(onEditButtonClicked()));
+    connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
 
     this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
     this->ui->tableView->setWordWrap(true);
@@ -39,7 +40,7 @@ void CityListWindow::init() {
         }
         return;
     }
-    this->city_model = QSharedPointer<CityModel>(new CityModel());
+    this->city_model = QSharedPointer<CityTableModel>(new CityTableModel());
     this->city_model->setCityList(city_list);
     this->ui->tableView->setModel(city_model.get());
 }
@@ -121,4 +122,19 @@ void CityListWindow::onEditButtonClicked() {
         return;
     }
     this->city_model->updateCityByIndexRow(selected_row, city);
+}
+
+void CityListWindow::onFindButtonClicked() {
+    QString title = this->ui->titleEdit->text();
+    QVector<QSharedPointer<City>> cities;
+    App *app = App::getInstance();
+    try {
+        cities = app->getCityListByFilter(title);
+    }
+    catch(const AppError &ex) {
+        QMessageBox::critical(this, "Tour operator", ex.what());
+        if (ex.isFatal()) exit(-1);
+        return;
+    }
+    this->city_model->setCityList(cities);
 }

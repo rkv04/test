@@ -38,7 +38,7 @@ void ClientsListWindow::init() {
         }
         return;
     }
-    this->client_model = QSharedPointer<ClientModel>(new ClientModel());
+    this->client_model = QSharedPointer<ClientTableModel>(new ClientTableModel());
     this->client_model->setClientList(clients_list);
     this->ui->tableView->setModel(client_model.get());
 

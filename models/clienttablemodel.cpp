@@ -1,18 +1,18 @@
-#include "clientmodel.h"
+#include "clienttablemodel.h"
 
-ClientModel::ClientModel(QObject *parent)
+ClientTableModel::ClientTableModel(QObject *parent)
     : QAbstractTableModel{parent}
 {}
 
-int ClientModel::rowCount(const QModelIndex &) const {
+int ClientTableModel::rowCount(const QModelIndex &) const {
     return this->clients.size();
 }
 
-int ClientModel::columnCount(const QModelIndex &) const {
+int ClientTableModel::columnCount(const QModelIndex &) const {
     return 7;
 }
 
-QVariant ClientModel::data(const QModelIndex &index, int role) const {
+QVariant ClientTableModel::data(const QModelIndex &index, int role) const {
     if (role == Qt::DisplayRole) {
         switch(index.column()) {
             case 0:
@@ -34,7 +34,7 @@ QVariant ClientModel::data(const QModelIndex &index, int role) const {
     return QVariant();
 }
 
-QVariant ClientModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant ClientTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (role == Qt::DisplayRole) {
         if (orientation == Qt::Horizontal) {
             return this->headers.at(section);
@@ -46,17 +46,17 @@ QVariant ClientModel::headerData(int section, Qt::Orientation orientation, int r
     return QVariant();
 }
 
-void ClientModel::setClientList(const QVector<QSharedPointer<User>> &clients) {
+void ClientTableModel::setClientList(const QVector<QSharedPointer<User>> &clients) {
     this->beginResetModel();
     this->clients = clients;
     this->endResetModel();
 }
 
-int ClientModel::getClientIdByIndexRow(int row) {
+int ClientTableModel::getClientIdByIndexRow(int row) {
     return this->clients.at(row)->id;
 }
 
-void ClientModel::refreshDiscountByIndex(const int row, const int discount) {
+void ClientTableModel::refreshDiscountByIndex(const int row, const int discount) {
     this->clients.at(row)->discount = discount;
     emit layoutChanged();
 }

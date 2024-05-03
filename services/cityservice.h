@@ -15,6 +15,7 @@ public:
     void removeCityById(const int id);
     void updateCity(const QSharedPointer<City> city);
     QVector<QSharedPointer<City>> getCityList();
+    QVector<QSharedPointer<City>> getCityListByFilter(const QString &title);
 private:
     QSharedPointer<City> createCityByRow(const QSqlRecord &record);
     QVector<QSharedPointer<City>> getCityListByQuery(QSqlQuery &query);

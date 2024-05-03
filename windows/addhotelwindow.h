@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "citylistmodel.h"
+#include "hotel.h"
 
 namespace Ui {
 class AddHotelWindow;
@@ -15,6 +16,13 @@ class AddHotelWindow : public QDialog
 public:
     explicit AddHotelWindow(QWidget *parent = nullptr);
     ~AddHotelWindow();
+    void init();
+
+signals:
+    void hotelCreated(const QSharedPointer<Hotel> &hotel);
+
+private slots:
+    void onAddButtonClicked();
 
 private:
     Ui::AddHotelWindow *ui;

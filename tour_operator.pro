@@ -19,6 +19,8 @@ INCLUDEPATH += \
 SOURCES += \
     app/log.cpp \
     models/citylistmodel.cpp \
+    models/citytablemodel.cpp \
+    models/clienttablemodel.cpp \
     models/hotelmodel.cpp \
     services/hotelservice.cpp \
     windows/addcitywindow.cpp \
@@ -31,10 +33,8 @@ SOURCES += \
     windows/authorizationwindow.cpp \
     entities/city.cpp \
     windows/citylistwindow.cpp \
-    models/citymodel.cpp \
     services/cityservice.cpp \
     windows/clientmainwindow.cpp \
-    models/clientmodel.cpp \
     windows/clientslistwindow.cpp \
     app/context.cpp \
     app/criticaldb.cpp \
@@ -59,6 +59,8 @@ SOURCES += \
 HEADERS += \
     app/log.h \
     models/citylistmodel.h \
+    models/citytablemodel.h \
+    models/clienttablemodel.h \
     models/hotelmodel.h \
     services/hotelservice.h \
     windows/account.h \
@@ -72,10 +74,8 @@ HEADERS += \
     windows/authorizationwindow.h \
     entities/city.h \
     windows/citylistwindow.h \
-    models/citymodel.h \
     services/cityservice.h \
     windows/clientmainwindow.h \
-    ./models/clientmodel.h \
     windows/clientslistwindow.h \
     app/context.h \
     app/criticaldb.h \

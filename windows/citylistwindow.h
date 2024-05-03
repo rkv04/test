@@ -7,7 +7,7 @@
 
 #include "addcitywindow.h"
 #include "editcitywindow.h"
-#include "citymodel.h"
+#include "citytablemodel.h"
 
 namespace Ui {
 class CityListWindow;
@@ -28,10 +28,11 @@ private slots:
     void onDeleteButtonClicked();
     void addNewCity(const QSharedPointer<City> city);
     void onEditButtonClicked();
+    void onFindButtonClicked();
 
 private:
     Ui::CityListWindow *ui;
-    QSharedPointer<CityModel> city_model;
+    QSharedPointer<CityTableModel> city_model;
     AddCityWindow *add_city_window;
     EditCityWindow *edit_city_window;
 };

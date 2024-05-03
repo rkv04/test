@@ -1,5 +1,5 @@
-#ifndef CLIENTMODEL_H
-#define CLIENTMODEL_H
+#ifndef CLIENTTABLEMODEL_H
+#define CLIENTTABLEMODEL_H
 
 #include <QAbstractTableModel>
 #include <QSharedPointer>
@@ -7,15 +7,16 @@
 
 #include "user.h"
 
-class ClientModel : public QAbstractTableModel
+class ClientTableModel : public QAbstractTableModel
 {
 public:
-    explicit ClientModel(QObject *parent = nullptr);
+    explicit ClientTableModel(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+
     int getClientIdByIndexRow(int row);
     void setClientList(const QVector<QSharedPointer<User>> &clients);
     void refreshDiscountByIndex(const int index, const int discount);
@@ -26,4 +27,4 @@ private:
     const QStringList headers = {"Фамилия", "Имя", "Отчество", "Телефон", "Адрес", "Путёвок куплено", "Скидка"};
 };
 
-#endif // CLIENTMODEL_H
+#endif // CLIENTTABLEMODEL_H
