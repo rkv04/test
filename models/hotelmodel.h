@@ -6,6 +6,7 @@
 #include <QStringList>
 
 #include "hotel.h"
+#include "city.h"
 
 class HotelModel : public QAbstractTableModel
 {
@@ -19,7 +20,7 @@ public:
 
     void setHotelsList(const QVector<QSharedPointer<Hotel>> &hotels);
     void addHotel(const QSharedPointer<Hotel> &hotel);
-
+    QVector<QSharedPointer<City>> getHotelCities();
 
 private:
     QVector<QSharedPointer<Hotel>> hotels;

@@ -193,3 +193,13 @@ int App::createHotel(const QSharedPointer<Hotel> &hotel) {
         throw AppError(CriticalDB::FATAL_MSG, true);
     }
 }
+
+QVector<QSharedPointer<Hotel>> App::getHotelListByFilter(const QMap<QString, QString> &filter) {
+    try {
+        return this->hotel_service->getHotelListByFilter(filter);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}

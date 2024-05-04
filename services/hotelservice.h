@@ -4,6 +4,7 @@
 #include <QSharedPointer>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QMap>
 #include "hotel.h"
 
 class HotelService
@@ -12,6 +13,7 @@ public:
     HotelService();
     QVector<QSharedPointer<Hotel>> getHotelList();
     int addHotel(const QSharedPointer<Hotel> &hotel);
+    QVector<QSharedPointer<Hotel>> getHotelListByFilter(const QMap<QString, QString> &filter);
 private:
     int getIdLastAddedHotel();
     QVector<QSharedPointer<Hotel>> getHotelListByQuery(QSqlQuery &query);

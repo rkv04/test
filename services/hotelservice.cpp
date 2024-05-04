@@ -67,3 +67,23 @@ int HotelService::getIdLastAddedHotel() {
     query.first();
     return query.value("id").toInt();
 }
+
+QVector<QSharedPointer<Hotel>> HotelService::getHotelListByFilter(const QMap<QString, QString> &filter) {
+    QSqlQuery query;
+    query.prepare("SELECT Hotel.id AS 'id', "
+                         "Hotel.title AS 'hotel_title', "
+                         "City.id AS 'city_id', "
+                         "City.title AS 'city_title', "
+                         "Hotel.address AS 'address', "
+                         "Hotel.category AS 'category' "
+                  "FROM Hotel "
+                        "JOIN City ON Hotel.id_city = City.id "
+                  "WHERE (hotel_title LIKE :t OR :t = '') AND (category = :ctg OR :ctg = '') AND (city_id = :idc OR :idc = '');");
+    query.bindValue(":t", filter["title"] + "%");
+    query.bindValue(":ctg", filter["category"]);
+    query.bindValue(":idc", filter["city_id"]);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+    return this->getHotelListByQuery(query);
+}

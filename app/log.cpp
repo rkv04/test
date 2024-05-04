@@ -5,8 +5,6 @@
 #include <QTextStream>
 #include <QDir>
 
-#define SEP "---------------------------------------------"
-
 
 Log::Log() {}
 
@@ -18,6 +16,6 @@ void Log::write(const QString &msg) {
     QFile file("./log/log.txt");
     file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
     QTextStream ost(&file);
-    ost << SEP << Qt::endl << QDateTime::currentDateTime().toString("hh:mm:ss dd.MM.yyyy") << Qt::endl << msg << Qt::endl;
+    ost << Qt::endl << QDateTime::currentDateTime().toString("hh:mm:ss dd.MM.yyyy") << Qt::endl << msg << Qt::endl;
     file.close();
 }

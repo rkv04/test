@@ -121,3 +121,4 @@ QVector<QSharedPointer<User>> UserService::getClientListByQuery(QSqlQuery &query
     }
     return users;
 }
+

@@ -54,3 +54,14 @@ void HotelModel::addHotel(const QSharedPointer<Hotel> &hotel) {
     emit layoutChanged();
 }
 
+QVector<QSharedPointer<City>> HotelModel::getHotelCities() {
+    QSet<QString> unique_city_title;
+    QVector<QSharedPointer<City>> hotel_cities;
+    for (auto hotel : this->hotels) {
+        if (!unique_city_title.contains(hotel->city->title)) {
+            unique_city_title.insert(hotel->city->title);
+            hotel_cities.push_back(hotel->city);
+        }
+    }
+    return hotel_cities;
+}

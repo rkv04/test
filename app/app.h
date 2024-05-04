@@ -34,6 +34,7 @@ public:
 
     QVector<QSharedPointer<Hotel>> getHotelList();
     int createHotel(const QSharedPointer<Hotel> &hotel);
+    QVector<QSharedPointer<Hotel>> getHotelListByFilter(const QMap<QString, QString> &filter);
 
 private:
 
