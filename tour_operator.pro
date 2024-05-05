@@ -21,6 +21,7 @@ SOURCES += \
     models/citylistmodel.cpp \
     models/citytablemodel.cpp \
     models/clienttablemodel.cpp \
+    models/hotellistmodel.cpp \
     models/hoteltablemodel.cpp \
     services/hotelservice.cpp \
     windows/addcitywindow.cpp \
@@ -61,6 +62,7 @@ HEADERS += \
     models/citylistmodel.h \
     models/citytablemodel.h \
     models/clienttablemodel.h \
+    models/hotellistmodel.h \
     models/hoteltablemodel.h \
     services/hotelservice.h \
     windows/account.h \

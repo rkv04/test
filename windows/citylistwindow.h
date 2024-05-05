@@ -8,6 +8,7 @@
 #include "addcitywindow.h"
 #include "editcitywindow.h"
 #include "citytablemodel.h"
+#include "apperror.h"
 
 namespace Ui {
 class CityListWindow;
@@ -31,6 +32,10 @@ private slots:
     void onFindButtonClicked();
 
 private:
+    bool confirmDelete();
+    bool hasSelection();
+    void handleAppError(const AppError &ex);
+
     Ui::CityListWindow *ui;
     QSharedPointer<CityTableModel> city_table_model;
     AddCityWindow *add_city_window;

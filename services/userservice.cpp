@@ -64,12 +64,12 @@ QVector<QSharedPointer<User>> UserService::getClientsByFilter(const QMap<QString
     QSqlQuery query;
     query.prepare("SELECT * "
                     "FROM Client "
-                    "WHERE (surname = :s OR :s = '') AND (name = :n OR :n = '') "
-                        "AND (patronymic = :pt OR :pt = '') AND (phone = :ph OR :ph = '');");
-    query.bindValue(":s", filter["surname"]);
-    query.bindValue(":n", filter["name"]);
-    query.bindValue(":pt", filter["patronymic"]);
-    query.bindValue(":ph", filter["phone"]);
+                    "WHERE (surname LIKE :s) AND (name LIKE :n) "
+                        "AND (patronymic LIKE :pt) AND (phone LIKE :ph);");
+    query.bindValue(":s", filter["surname"] + "%");
+    query.bindValue(":n", filter["name"] + "%");
+    query.bindValue(":pt", filter["patronymic"] + "%");
+    query.bindValue(":ph", filter["phone"] + "%");
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
     }

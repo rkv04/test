@@ -19,7 +19,7 @@ HotelsListWindow::HotelsListWindow(QWidget *parent)
     this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
     this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    this->ui->categoryBox->addItem("Все", QString());
+    this->ui->categoryBox->addItem(QString(), QString());
     this->ui->categoryBox->addItem("Без звёзд", "0");
     this->ui->categoryBox->addItem("1 звезда", "1");
     this->ui->categoryBox->addItem("2 звезды", "2");
@@ -40,7 +40,7 @@ void HotelsListWindow::init() {
         hotels = app->getHotelList();
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, "Tour operator", ex.what());
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         if (ex.isFatal()) {
             exit(-1);
         }
@@ -49,12 +49,16 @@ void HotelsListWindow::init() {
     this->hotel_table_model = QSharedPointer<HotelTableModel>(new HotelTableModel());
     this->hotel_table_model->setHotelsList(hotels);
     this->ui->tableView->setModel(hotel_table_model.get());
-
     QVector<QSharedPointer<City>> hotel_cities = this->hotel_table_model->getHotelCities();
-
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->city_list_model->setCityList(hotel_cities);
     this->ui->cityListBox->setModel(city_list_model.get());
+    this->ui->cityListBox->setMaxVisibleItems(10);
+}
+
+void HotelsListWindow::refreshCityBox() {
+    QVector<QSharedPointer<City>> hotel_cities = this->hotel_table_model->getHotelCities();
+    this->city_list_model->setCityList(hotel_cities);
 }
 
 void HotelsListWindow::onAddHotelButtonClicked() {
@@ -93,13 +97,14 @@ void HotelsListWindow::onDeleteButtonClicked() {
         app->removeHotel(selected_hotel);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, "Tour operator", ex.what());
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         if (ex.isFatal()) {
             exit(-1);
         }
         return;
     }
     this->hotel_table_model->removeHotelByIndexRow(selected_row);
+    this->refreshCityBox();
 }
 
 void HotelsListWindow::addHotel(const QSharedPointer<Hotel> &hotel) {
@@ -108,13 +113,14 @@ void HotelsListWindow::addHotel(const QSharedPointer<Hotel> &hotel) {
         hotel->id = app->createHotel(hotel);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, "Tour operator", ex.what());
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         if (ex.isFatal()) {
             exit(-1);
         }
         return;
     }
     this->hotel_table_model->addHotel(hotel);
+    this->refreshCityBox();
 }
 
 QSharedPointer<City> HotelsListWindow::getCityByCityBoxIndex(const int index) {
@@ -139,7 +145,7 @@ void HotelsListWindow::onFindButtonClicked() {
         filtered_hotels = app->getHotelListByFilter(filter);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, "Tour operator", ex.what());
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         if (ex.isFatal()) {
             exit(-1);
         }

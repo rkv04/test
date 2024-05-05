@@ -94,7 +94,6 @@ QVector<QSharedPointer<Hotel>> HotelService::getHotelListByFilter(const QMap<QSt
     query.bindValue(":t", filter["title"] + "%");
     query.bindValue(":ctg", filter["category"]);
     query.bindValue(":idc", filter["city_id"]);
-    qDebug() << filter["title"] + "%" << filter["category"] << filter["city_id"];
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
     }

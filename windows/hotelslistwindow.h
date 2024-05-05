@@ -2,6 +2,8 @@
 #define HOTELSLISTWINDOW_H
 
 #include <QMainWindow>
+#include <QCompleter>
+
 #include "addhotelwindow.h"
 #include "hoteltablemodel.h"
 #include "citylistmodel.h"
@@ -29,6 +31,8 @@ private slots:
     bool confirmDelete();
 
 private:
+    void refreshCityBox();
+
     Ui::HotelsListWindow *ui;
     AddHotelWindow *add_hotel_window;
     QSharedPointer<HotelTableModel> hotel_table_model;

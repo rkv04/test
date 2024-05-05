@@ -24,7 +24,6 @@ CityListWindow::CityListWindow(QWidget *parent)
     this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
     this->ui->tableView->setWordWrap(true);
     this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
 void CityListWindow::init() {
@@ -50,6 +49,13 @@ CityListWindow::~CityListWindow()
     delete ui;
 }
 
+void CityListWindow::handleAppError(const AppError &ex) {
+    QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
+    if (ex.isFatal()) {
+        exit(-1);
+    }
+}
+
 void CityListWindow::onAddButtonClicked() {
     this->add_city_window = new AddCityWindow();
 
@@ -66,35 +72,43 @@ void CityListWindow::addNewCity(const QSharedPointer<City> city) {
         city->id = app->createCity(city);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
-        if (ex.isFatal()) {
-            exit(-1);
-        }
+        this->handleAppError(ex);
         return;
     }
     this->city_table_model->addCity(city);
 }
 
+bool CityListWindow::confirmDelete() {
+    QMessageBox confirm_box;
+    confirm_box.setIcon(QMessageBox::Question);
+    confirm_box.setWindowTitle(App::APPLICATION_NAME);
+    confirm_box.setText("Удалить выбранное?");
+    confirm_box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);;
+    return confirm_box.exec() == QMessageBox::Yes;
+}
+
 void CityListWindow::onDeleteButtonClicked() {
-    QModelIndexList selected_indexes = this->ui->tableView->selectionModel()->selectedRows();
-    if (selected_indexes.isEmpty()) {
-        QMessageBox::warning(this, App::APPLICATION_NAME, "Для удаления необходимо выделить нужную строку");
+    if (!this->hasSelection()) {
+        QMessageBox::warning(this, App::APPLICATION_NAME, "Для удаления необходимо выделить нужные строки");
         return;
     }
-    int selected_row = selected_indexes.first().row();
-    QSharedPointer<City> city = this->city_table_model->getCityByIndexRow(selected_row);
+    if (!this->confirmDelete()) {
+        return;
+    }
+    QModelIndexList selected_indexes = this->ui->tableView->selectionModel()->selectedRows();
+    std::reverse(selected_indexes.begin(), selected_indexes.end());
     App *app = App::getInstance();
     try {
-        app->removeCity(city);
+        for (auto i : selected_indexes) {
+            QSharedPointer<City> city = this->city_table_model->getCityByIndexRow(i.row());
+            this->city_table_model->removeCityByIndexRow(i.row());
+            app->removeCity(city);
+        }
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
-        if (ex.isFatal()) {
-            exit(-1);
-        }
+        this->handleAppError(ex);
         return;
     }
-    this->city_table_model->removeCityByIndexRow(selected_row);
 }
 
 void CityListWindow::onEditButtonClicked() {
@@ -115,10 +129,7 @@ void CityListWindow::onEditButtonClicked() {
         app->updateCity(city);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
-        if (ex.isFatal()) {
-            exit(-1);
-        }
+        this->handleAppError(ex);
         return;
     }
     this->city_table_model->updateCityByIndexRow(selected_row, city);
@@ -132,9 +143,12 @@ void CityListWindow::onFindButtonClicked() {
         cities = app->getCityListByFilter(title);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
-        if (ex.isFatal()) exit(-1);
+        this->handleAppError(ex);
         return;
     }
     this->city_table_model->setCityList(cities);
+}
+
+bool CityListWindow::hasSelection() {
+    return this->ui->tableView->selectionModel()->hasSelection();
 }

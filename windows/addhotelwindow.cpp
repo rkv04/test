@@ -35,6 +35,7 @@ void AddHotelWindow::init() {
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->city_list_model->setCityList(cities);
     this->ui->cityList->setModel(city_list_model.get());
+    this->ui->cityList->setMaxVisibleItems(10);
     this->ui->hotelCategory->addItem("Без звёзд", 0);
     this->ui->hotelCategory->addItem("1 звезда", 1);
     this->ui->hotelCategory->addItem("2 звезды", 2);
