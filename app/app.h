@@ -20,20 +20,22 @@ public:
     static App* getInstance();
     void init();
 
-    void createClient(User &client);
+    void createClient(const QSharedPointer<User> &client);
     QSharedPointer<User> login(const QString &phone, const QString &password);
     QVector<QSharedPointer<User>> getClientsList();
     QVector<QSharedPointer<User>> getClientsListByFilter(const QMap<QString, QString> &filter);
     void setDiscount(const int client_id, const int discount);
 
-    int createCity(const QSharedPointer<City> city);
-    void removeCity(const QSharedPointer<City> city);
-    void updateCity(const QSharedPointer<City> city);
+    int createCity(const QSharedPointer<City> &city);
+    void removeCity(const QSharedPointer<City> &city);
+    void updateCity(const QSharedPointer<City> &city);
     QVector<QSharedPointer<City>> getCityList();
     QVector<QSharedPointer<City>> getCityListByFilter(const QString &title);
 
-    QVector<QSharedPointer<Hotel>> getHotelList();
     int createHotel(const QSharedPointer<Hotel> &hotel);
+    void removeHotel(const QSharedPointer<Hotel> &hotel);
+    // updateHotel()
+    QVector<QSharedPointer<Hotel>> getHotelList();
     QVector<QSharedPointer<Hotel>> getHotelListByFilter(const QMap<QString, QString> &filter);
 
 private:

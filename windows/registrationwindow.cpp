@@ -46,12 +46,12 @@ void RegistrationWindow::regButtonClicked() {
         QMessageBox::warning(this, "Tour operator", "Введённые пароли не совпадают");
         return;
     }
-    User client;
-    client.phone = this->ui->phoneEdit->text();
-    client.name = this->ui->nameEdit->text();
-    client.surname = this->ui->surnameEdit->text();
-    client.patronymic = this->ui->patronymicEdit->text();
-    client.password = password;
+    QSharedPointer<User> client = QSharedPointer<User>(new User());
+    client->phone = this->ui->phoneEdit->text();
+    client->name = this->ui->nameEdit->text();
+    client->surname = this->ui->surnameEdit->text();
+    client->patronymic = this->ui->patronymicEdit->text();
+    client->password = password;
 
     try {
         App *app = App::getInstance();

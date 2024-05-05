@@ -5,12 +5,15 @@ CityListModel::CityListModel(QObject *parent)
 {}
 
 int CityListModel::rowCount(const QModelIndex &) const {
-    return this->cities.size();
+    return this->cities.size() + 1;
 }
 
 QVariant CityListModel::data(const QModelIndex &index, int role) const {
     if (role == Qt::DisplayRole) {
-        return this->cities.at(index.row())->title;
+        if (index.row() == 0) {
+            return QString();
+        }
+        return this->cities.at(index.row() - 1)->title;
     }
     return QVariant();
 }

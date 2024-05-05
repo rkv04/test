@@ -11,9 +11,9 @@ class CityService
 {
 public:
     CityService();
-    int addCity(const QSharedPointer<City> city);
+    int addCity(const QSharedPointer<City> &city);
     void removeCityById(const int id);
-    void updateCity(const QSharedPointer<City> city);
+    void updateCity(const QSharedPointer<City> &city);
     QVector<QSharedPointer<City>> getCityList();
     QVector<QSharedPointer<City>> getCityListByFilter(const QString &title);
 private:

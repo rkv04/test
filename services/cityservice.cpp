@@ -7,7 +7,7 @@
 
 CityService::CityService() {}
 
-int CityService::addCity(const QSharedPointer<City> city) {
+int CityService::addCity(const QSharedPointer<City> &city) {
     QSqlQuery query;
     query.prepare("INSERT INTO City (title, climate) VALUES (?, ?);");
     query.bindValue(0, city->title);
@@ -27,7 +27,7 @@ void CityService::removeCityById(const int id) {
     }
 }
 
-void CityService::updateCity(const QSharedPointer<City> city) {
+void CityService::updateCity(const QSharedPointer<City> &city) {
     QSqlQuery query;
     query.prepare("UPDATE City SET title = ?, climate = ? WHERE id = ?;");
     query.bindValue(0, city->title);

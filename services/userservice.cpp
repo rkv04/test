@@ -10,14 +10,14 @@
 
 UserService::UserService() {}
 
-void UserService::addClient(const User &client) {
+void UserService::addClient(const QSharedPointer<User> &client) {
     QSqlQuery query;
     query.prepare("INSERT INTO Client (phone, name, surname, patronymic, hash_password) VALUES (?, ?, ?, ?, ?);");
-    query.bindValue(0, client.phone);
-    query.bindValue(1, client.name);
-    query.bindValue(2, client.surname);
-    query.bindValue(3, client.patronymic);
-    query.bindValue(4, client.password);
+    query.bindValue(0, client->phone);
+    query.bindValue(1, client->name);
+    query.bindValue(2, client->surname);
+    query.bindValue(3, client->patronymic);
+    query.bindValue(4, client->password);
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
     }

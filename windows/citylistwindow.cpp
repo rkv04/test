@@ -34,15 +34,15 @@ void CityListWindow::init() {
         city_list = app->getCityList();
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, "Tour operator", ex.what());
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         if (ex.isFatal()) {
             exit(-1);
         }
         return;
     }
-    this->city_model = QSharedPointer<CityTableModel>(new CityTableModel());
-    this->city_model->setCityList(city_list);
-    this->ui->tableView->setModel(city_model.get());
+    this->city_table_model = QSharedPointer<CityTableModel>(new CityTableModel());
+    this->city_table_model->setCityList(city_list);
+    this->ui->tableView->setModel(city_table_model.get());
 }
 
 CityListWindow::~CityListWindow()
@@ -66,45 +66,45 @@ void CityListWindow::addNewCity(const QSharedPointer<City> city) {
         city->id = app->createCity(city);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, "Tour operator", ex.what());
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         if (ex.isFatal()) {
             exit(-1);
         }
         return;
     }
-    this->city_model->addCity(city);
+    this->city_table_model->addCity(city);
 }
 
 void CityListWindow::onDeleteButtonClicked() {
     QModelIndexList selected_indexes = this->ui->tableView->selectionModel()->selectedRows();
     if (selected_indexes.isEmpty()) {
-        QMessageBox::warning(this, "Tour operator", "Для удаления необходимо выделить нужную строку");
+        QMessageBox::warning(this, App::APPLICATION_NAME, "Для удаления необходимо выделить нужную строку");
         return;
     }
     int selected_row = selected_indexes.first().row();
-    QSharedPointer<City> city = this->city_model->getCityByIndexRow(selected_row);
+    QSharedPointer<City> city = this->city_table_model->getCityByIndexRow(selected_row);
     App *app = App::getInstance();
     try {
         app->removeCity(city);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, "Tour operator", ex.what());
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         if (ex.isFatal()) {
             exit(-1);
         }
         return;
     }
-    this->city_model->removeCityByIndexRow(selected_row);
+    this->city_table_model->removeCityByIndexRow(selected_row);
 }
 
 void CityListWindow::onEditButtonClicked() {
     QModelIndexList selected_indexes = this->ui->tableView->selectionModel()->selectedRows();
     if (selected_indexes.isEmpty()) {
-        QMessageBox::warning(this, "Tour operator", "Для редактирования необходимо выделить нужную строку");
+        QMessageBox::warning(this, App::APPLICATION_NAME, "Для редактирования необходимо выделить нужную строку");
         return;
     }
     int selected_row = selected_indexes.first().row();
-    QSharedPointer<City> city = this->city_model->getCityByIndexRow(selected_row);
+    QSharedPointer<City> city = this->city_table_model->getCityByIndexRow(selected_row);
     this->edit_city_window = new EditCityWindow(this);
     this->edit_city_window->setCity(city);
     if (this->edit_city_window->exec() != EditCityWindow::Accepted) {
@@ -115,13 +115,13 @@ void CityListWindow::onEditButtonClicked() {
         app->updateCity(city);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, "Tour operator", ex.what());
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         if (ex.isFatal()) {
             exit(-1);
         }
         return;
     }
-    this->city_model->updateCityByIndexRow(selected_row, city);
+    this->city_table_model->updateCityByIndexRow(selected_row, city);
 }
 
 void CityListWindow::onFindButtonClicked() {
@@ -132,9 +132,9 @@ void CityListWindow::onFindButtonClicked() {
         cities = app->getCityListByFilter(title);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, "Tour operator", ex.what());
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         if (ex.isFatal()) exit(-1);
         return;
     }
-    this->city_model->setCityList(cities);
+    this->city_table_model->setCityList(cities);
 }

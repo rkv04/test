@@ -79,11 +79,11 @@ QSharedPointer<User> App::tryLoginAsEmployee(const QString &phone, const QString
 }
 
 
-void App::createClient(User &client) {
-    if (this->user_service->getClientByPhone(client.phone) != nullptr) {
+void App::createClient(const QSharedPointer<User> &client) {
+    if (this->user_service->getClientByPhone(client->phone) != nullptr) {
         throw AppError("Пользователь с таким номером телефона уже существует", false);
     }
-    client.password = QCryptographicHash::hash(client.password.toUtf8(), QCryptographicHash::Sha256).toHex();
+    client->password = QCryptographicHash::hash(client->password.toUtf8(), QCryptographicHash::Sha256).toHex();
     try {
         this->user_service->addClient(client);
     }
@@ -124,7 +124,7 @@ QVector<QSharedPointer<User>> App::getClientsListByFilter(const QMap<QString, QS
     }
 }
 
-int App::createCity(const QSharedPointer<City> city) {
+int App::createCity(const QSharedPointer<City> &city) {
     try {
         return this->city_service->addCity(city);
     }
@@ -144,7 +144,7 @@ QVector<QSharedPointer<City>> App::getCityList() {
     }
 }
 
-void App::removeCity(const QSharedPointer<City> city) {
+void App::removeCity(const QSharedPointer<City> &city) {
     try {
         this->city_service->removeCityById(city->id);
     }
@@ -154,7 +154,7 @@ void App::removeCity(const QSharedPointer<City> city) {
     }
 }
 
-void App::updateCity(const QSharedPointer<City> city) {
+void App::updateCity(const QSharedPointer<City> &city) {
     try {
         this->city_service->updateCity(city);
     }
@@ -187,6 +187,16 @@ QVector<QSharedPointer<Hotel>> App::getHotelList() {
 int App::createHotel(const QSharedPointer<Hotel> &hotel) {
     try {
         return this->hotel_service->addHotel(hotel);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+void App::removeHotel(const QSharedPointer<Hotel> &hotel) {
+    try {
+        this->hotel_service->removeHotelById(hotel->id);
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());

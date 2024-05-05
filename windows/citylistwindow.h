@@ -32,7 +32,7 @@ private slots:
 
 private:
     Ui::CityListWindow *ui;
-    QSharedPointer<CityTableModel> city_model;
+    QSharedPointer<CityTableModel> city_table_model;
     AddCityWindow *add_city_window;
     EditCityWindow *edit_city_window;
 };

@@ -1,20 +1,20 @@
-#include "hotelmodel.h"
+#include "hoteltablemodel.h"
 
 #include <QVariant>
 
-HotelModel::HotelModel(QObject *parent)
+HotelTableModel::HotelTableModel(QObject *parent)
     : QAbstractTableModel{parent}
 {}
 
-int HotelModel::rowCount(const QModelIndex &) const {
+int HotelTableModel::rowCount(const QModelIndex &) const {
     return this->hotels.size();
 }
 
-int HotelModel::columnCount(const QModelIndex &) const {
+int HotelTableModel::columnCount(const QModelIndex &) const {
     return 4;
 }
 
-QVariant HotelModel::data(const QModelIndex &index, int role) const {
+QVariant HotelTableModel::data(const QModelIndex &index, int role) const {
     if (role == Qt::DisplayRole) {
         switch(index.column()) {
         case 0:
@@ -30,7 +30,7 @@ QVariant HotelModel::data(const QModelIndex &index, int role) const {
     return QVariant();
 }
 
-QVariant HotelModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant HotelTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (role == Qt::DisplayRole) {
         if (orientation == Qt::Horizontal) {
             return this->headers.at(section);
@@ -43,18 +43,18 @@ QVariant HotelModel::headerData(int section, Qt::Orientation orientation, int ro
 }
 
 
-void HotelModel::setHotelsList(const QVector<QSharedPointer<Hotel>> &hotels) {
+void HotelTableModel::setHotelsList(const QVector<QSharedPointer<Hotel>> &hotels) {
     this->beginResetModel();
     this->hotels = hotels;
     this->endResetModel();
 }
 
-void HotelModel::addHotel(const QSharedPointer<Hotel> &hotel) {
+void HotelTableModel::addHotel(const QSharedPointer<Hotel> &hotel) {
     this->hotels.append(hotel);
     emit layoutChanged();
 }
 
-QVector<QSharedPointer<City>> HotelModel::getHotelCities() {
+QVector<QSharedPointer<City>> HotelTableModel::getHotelCities() {
     QSet<QString> unique_city_title;
     QVector<QSharedPointer<City>> hotel_cities;
     for (auto hotel : this->hotels) {
@@ -63,5 +63,17 @@ QVector<QSharedPointer<City>> HotelModel::getHotelCities() {
             hotel_cities.push_back(hotel->city);
         }
     }
+    std::sort(hotel_cities.begin(), hotel_cities.end(), [] (QSharedPointer<City> &l_city, QSharedPointer<City> &r_city) {
+        return l_city->title < r_city->title;
+    });
     return hotel_cities;
+}
+
+void HotelTableModel::removeHotelByIndexRow(const int row) {
+    this->hotels.remove(row);
+    emit layoutChanged();
+}
+
+QSharedPointer<Hotel> HotelTableModel::getHotelByIndexRow(const int row) {
+    return this->hotels.at(row);
 }

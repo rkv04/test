@@ -35,6 +35,7 @@ void AddHotelWindow::init() {
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->city_list_model->setCityList(cities);
     this->ui->cityList->setModel(city_list_model.get());
+    this->ui->hotelCategory->addItem("Без звёзд", 0);
     this->ui->hotelCategory->addItem("1 звезда", 1);
     this->ui->hotelCategory->addItem("2 звезды", 2);
     this->ui->hotelCategory->addItem("3 звезды", 3);
@@ -43,12 +44,18 @@ void AddHotelWindow::init() {
 }
 
 void AddHotelWindow::onAddButtonClicked() {
+    int city_box_index = this->ui->cityList->currentIndex();
+    QString title = this->ui->titleEdit->text();
+    QString address = this->ui->addressEdit->text();
+    if (title.isEmpty() || address.isEmpty() || city_box_index == 0) {
+        QMessageBox::warning(this, App::APPLICATION_NAME, "Необходимо заполнить все поля формы");
+        return;
+    }
     QSharedPointer<Hotel> hotel = QSharedPointer<Hotel>(new Hotel());
-    hotel->title = this->ui->titleEdit->text();
-    hotel->address = this->ui->addressEdit->text();
+    hotel->title = title;
+    hotel->address = address;
     hotel->category = this->ui->hotelCategory->currentData().toInt();
-    int city_index = this->ui->cityList->currentIndex();
-    hotel->city = this->city_list_model->getCityByIndex(city_index);
+    hotel->city = this->city_list_model->getCityByIndex(city_box_index - 1);
     this->close();
     emit hotelCreated(hotel);
 }

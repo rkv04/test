@@ -14,6 +14,7 @@ public:
     QVector<QSharedPointer<Hotel>> getHotelList();
     int addHotel(const QSharedPointer<Hotel> &hotel);
     QVector<QSharedPointer<Hotel>> getHotelListByFilter(const QMap<QString, QString> &filter);
+    void removeHotelById(const int id);
 private:
     int getIdLastAddedHotel();
     QVector<QSharedPointer<Hotel>> getHotelListByQuery(QSqlQuery &query);

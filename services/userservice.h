@@ -17,7 +17,7 @@ public:
     QVector<QSharedPointer<User>> getClientsByFilter(const QMap<QString, QString> &filter);
     void setDiscountById(const int id_client, const int discount);
     QSharedPointer<User> getEmployeeByPhone(const QString &phone);
-    void addClient(const User &client);
+    void addClient(const QSharedPointer<User> &client);
 
 private:
 

@@ -1,5 +1,5 @@
-#ifndef HOTELMODEL_H
-#define HOTELMODEL_H
+#ifndef HOTELTABLEMODEL_H
+#define HOTELTABLEMODEL_H
 
 #include <QAbstractTableModel>
 #include <QSharedPointer>
@@ -8,10 +8,10 @@
 #include "hotel.h"
 #include "city.h"
 
-class HotelModel : public QAbstractTableModel
+class HotelTableModel : public QAbstractTableModel
 {
 public:
-    explicit HotelModel(QObject *parent = nullptr);
+    explicit HotelTableModel(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
@@ -20,7 +20,9 @@ public:
 
     void setHotelsList(const QVector<QSharedPointer<Hotel>> &hotels);
     void addHotel(const QSharedPointer<Hotel> &hotel);
+    void removeHotelByIndexRow(const int row);
     QVector<QSharedPointer<City>> getHotelCities();
+    QSharedPointer<Hotel> getHotelByIndexRow(const int row);
 
 private:
     QVector<QSharedPointer<Hotel>> hotels;
@@ -28,4 +30,4 @@ private:
 
 };
 
-#endif // HOTELMODEL_H
+#endif // HOTELTABLEMODEL_H
