@@ -36,12 +36,10 @@ void AddHotelWindow::init() {
     this->city_list_model->setCityList(cities);
     this->ui->cityList->setModel(city_list_model.get());
     this->ui->cityList->setMaxVisibleItems(10);
-    this->ui->hotelCategory->addItem("Без звёзд", 0);
-    this->ui->hotelCategory->addItem("1 звезда", 1);
-    this->ui->hotelCategory->addItem("2 звезды", 2);
-    this->ui->hotelCategory->addItem("3 звезды", 3);
-    this->ui->hotelCategory->addItem("4 звезды", 4);
-    this->ui->hotelCategory->addItem("5 звёзд", 5);
+
+    this->category_model = QSharedPointer<HotelCategoryListModel>(new HotelCategoryListModel());
+    this->ui->hotelCategory->setModel(category_model.get());
+    this->ui->hotelCategory->setMaxVisibleItems(10);
 }
 
 void AddHotelWindow::onAddButtonClicked() {

@@ -101,8 +101,8 @@ void CityListWindow::onDeleteButtonClicked() {
     try {
         for (auto i : selected_indexes) {
             QSharedPointer<City> city = this->city_table_model->getCityByIndexRow(i.row());
-            this->city_table_model->removeCityByIndexRow(i.row());
             app->removeCity(city);
+            this->city_table_model->removeCityByIndexRow(i.row());
         }
     }
     catch(const AppError &ex) {

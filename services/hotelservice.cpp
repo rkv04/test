@@ -30,6 +30,19 @@ void HotelService::removeHotelById(const int id) {
     }
 }
 
+void HotelService::updateHotel(const QSharedPointer<Hotel> &hotel) {
+    QSqlQuery query;
+    query.prepare("UPDATE Hotel SET id_city = ?, title = ?, category = ?, address = ? WHERE id = ?;");
+    query.bindValue(0, hotel->city->id);
+    query.bindValue(1, hotel->title);
+    query.bindValue(2, hotel->category);
+    query.bindValue(3, hotel->address);
+    query.bindValue(4, hotel->id);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+}
+
 QVector<QSharedPointer<Hotel>> HotelService::getHotelList() {
     QSqlQuery query;
     QString text_query = "SELECT Hotel.id,"
@@ -62,7 +75,7 @@ QSharedPointer<Hotel> HotelService::createHotelByRow(const QSqlRecord &record) {
     hotel->id = record.value("id").toInt();
     hotel->title = record.value("hotel_title").toString();
     hotel->city->title = record.value("city_title").toString();
-    hotel->city->id = record.value("city_id").toInt();
+    hotel->city->id = record.value("id_city").toInt();
     hotel->address = record.value("address").toString();
     hotel->category = record.value("category").toInt();
     return hotel;
@@ -82,18 +95,17 @@ QVector<QSharedPointer<Hotel>> HotelService::getHotelListByFilter(const QMap<QSt
     QSqlQuery query;
     query.prepare("SELECT Hotel.id AS 'id', "
                          "Hotel.title AS 'hotel_title', "
-                         "City.id AS 'city_id', "
+                         "Hotel.id_city AS 'id_city', "
                          "City.title AS 'city_title', "
                          "Hotel.address AS 'address', "
                          "Hotel.category AS 'category' "
                   "FROM Hotel "
                         "JOIN City ON Hotel.id_city = City.id "
                   "WHERE (Hotel.activity_flag = 1) AND (hotel_title LIKE :t) "
-                            "AND (category = :ctg OR :ctg = '') AND (city_id = :idc OR :idc = '');");
-
+                            "AND (category = :ctg OR :ctg = '') AND (id_city = :idc OR :idc = '');");
     query.bindValue(":t", filter["title"] + "%");
     query.bindValue(":ctg", filter["category"]);
-    query.bindValue(":idc", filter["city_id"]);
+    query.bindValue(":idc", filter["id_city"]);
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
     }

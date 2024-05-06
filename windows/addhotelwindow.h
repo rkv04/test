@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "citylistmodel.h"
+#include "hotelcategorylistmodel.h"
 #include "hotel.h"
 
 namespace Ui {
@@ -27,6 +28,7 @@ private slots:
 private:
     Ui::AddHotelWindow *ui;
     QSharedPointer<CityListModel> city_list_model;
+    QSharedPointer<HotelCategoryListModel> category_model;
 };
 
 #endif // ADDHOTELWINDOW_H

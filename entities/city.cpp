@@ -1,5 +1,7 @@
 #include "city.h"
 
+#include <QDebug>
+
 City::City() {}
 
 City::City(const int id, const QString &title, const QString &climate) {

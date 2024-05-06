@@ -21,6 +21,7 @@ public:
     void setHotelsList(const QVector<QSharedPointer<Hotel>> &hotels);
     void addHotel(const QSharedPointer<Hotel> &hotel);
     void removeHotelByIndexRow(const int row);
+    void updateHotelByIndexRow(const int row, const QSharedPointer<Hotel> &updated_hotel);
     QVector<QSharedPointer<City>> getHotelCities();
     QSharedPointer<Hotel> getHotelByIndexRow(const int row);
 

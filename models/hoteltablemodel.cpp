@@ -74,6 +74,14 @@ void HotelTableModel::removeHotelByIndexRow(const int row) {
     emit layoutChanged();
 }
 
+void HotelTableModel::updateHotelByIndexRow(const int row, const QSharedPointer<Hotel> &updated_hotel) {
+    this->hotels.at(row)->title = updated_hotel->title;
+    this->hotels.at(row)->category = updated_hotel->category;
+    this->hotels.at(row)->address = updated_hotel->address;
+    this->hotels.at(row)->city = updated_hotel->city;
+    emit layoutChanged();
+}
+
 QSharedPointer<Hotel> HotelTableModel::getHotelByIndexRow(const int row) {
     return this->hotels.at(row);
 }

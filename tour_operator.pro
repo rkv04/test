@@ -21,6 +21,7 @@ SOURCES += \
     models/citylistmodel.cpp \
     models/citytablemodel.cpp \
     models/clienttablemodel.cpp \
+    models/hotelcategorylistmodel.cpp \
     models/hotellistmodel.cpp \
     models/hoteltablemodel.cpp \
     services/hotelservice.cpp \
@@ -62,6 +63,7 @@ HEADERS += \
     models/citylistmodel.h \
     models/citytablemodel.h \
     models/clienttablemodel.h \
+    models/hotelcategorylistmodel.h \
     models/hotellistmodel.h \
     models/hoteltablemodel.h \
     services/hotelservice.h \

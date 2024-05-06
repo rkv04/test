@@ -204,6 +204,16 @@ void App::removeHotel(const QSharedPointer<Hotel> &hotel) {
     }
 }
 
+void App::updateHotel(const QSharedPointer<Hotel> &hotel) {
+    try {
+        this->hotel_service->updateHotel(hotel);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
 QVector<QSharedPointer<Hotel>> App::getHotelListByFilter(const QMap<QString, QString> &filter) {
     try {
         return this->hotel_service->getHotelListByFilter(filter);
