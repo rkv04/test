@@ -31,7 +31,6 @@ private slots:
     void onEditButtonClicked();
     void onFindButtonClicked();
     void addHotel(const QSharedPointer<Hotel> &hotel);
-    QSharedPointer<City> getCityByCityBoxIndex(const int index);
     bool confirmDelete();
 
 private:

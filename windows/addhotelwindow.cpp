@@ -43,10 +43,11 @@ void AddHotelWindow::init() {
 }
 
 void AddHotelWindow::onAddButtonClicked() {
-    int city_box_index = this->ui->cityList->currentIndex();
+    QSharedPointer<City> city = this->ui->cityList->currentData(Qt::UserRole).value<QSharedPointer<City>>();
+    int category = this->ui->hotelCategory->currentData(Qt::UserRole).toInt();
     QString title = this->ui->titleEdit->text();
     QString address = this->ui->addressEdit->text();
-    if (title.isEmpty() || address.isEmpty() || city_box_index == 0) {
+    if (title.isEmpty() || address.isEmpty() || city == nullptr || category == -1) {
         QMessageBox::warning(this, App::APPLICATION_NAME, "Необходимо заполнить все поля формы");
         return;
     }
@@ -54,7 +55,7 @@ void AddHotelWindow::onAddButtonClicked() {
     hotel->title = title;
     hotel->address = address;
     hotel->category = this->ui->hotelCategory->currentData().toInt();
-    hotel->city = this->city_list_model->getCityByIndex(city_box_index - 1);
+    hotel->city = city;
     this->close();
     emit hotelCreated(hotel);
 }

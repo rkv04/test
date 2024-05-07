@@ -3,6 +3,7 @@
 HotelCategoryListModel::HotelCategoryListModel(QObject *parent)
     : QAbstractListModel{parent}
 {
+    this->categories.append(Category(QString(), -1));
     this->categories.append(Category("Без звёзд", 0));
     this->categories.append(Category("1 звезда", 1));
     this->categories.append(Category("2 звезды", 2));

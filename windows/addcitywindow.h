@@ -15,6 +15,7 @@ class AddCityWindow : public QDialog
 public:
     explicit AddCityWindow(QWidget *parent = nullptr);
     ~AddCityWindow();
+    QSharedPointer<City> getCreatedCity();
 
 private slots:
     void onAddButtonClicked();
@@ -24,6 +25,7 @@ signals:
 
 private:
     Ui::AddCityWindow *ui;
+    QSharedPointer<City> created_city;
 };
 
 #endif // ADDCITYWINDOW_H

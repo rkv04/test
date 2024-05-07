@@ -6,9 +6,12 @@
 #include "userservice.h"
 #include "cityservice.h"
 #include "hotelservice.h"
+#include "ticketservice.h"
+
 #include "user.h"
 #include "city.h"
 #include "hotel.h"
+#include "ticket.h"
 
 
 class App {
@@ -38,6 +41,12 @@ public:
     QVector<QSharedPointer<Hotel>> getHotelList();
     QVector<QSharedPointer<Hotel>> getHotelListByFilter(const QMap<QString, QString> &filter);
 
+    int createTicket(const QSharedPointer<Ticket> &ticket);
+    void removeTicket(const QSharedPointer<Ticket> &ticket);
+    void updateTicket(const QSharedPointer<Ticket> &ticket);
+    QVector<QSharedPointer<Ticket>> getTicketList();
+    QVector<QSharedPointer<Ticket>> getTicketListByFilter(const QMap<QString, QString> &filter);
+
 private:
 
     App();
@@ -50,6 +59,7 @@ private:
     QSharedPointer<UserService> user_service;
     QSharedPointer<CityService> city_service;
     QSharedPointer<HotelService> hotel_service;
+    QSharedPointer<TicketService> ticket_service;
 
 };
 

@@ -3,6 +3,9 @@
 
 #include <QDialog>
 
+#include "citylistmodel.h"
+#include "hotellistmodel.h"
+
 namespace Ui {
 class AddTicketWindow;
 }
@@ -15,8 +18,15 @@ public:
     explicit AddTicketWindow(QWidget *parent = nullptr);
     ~AddTicketWindow();
 
+    void init();
+
+private slots:
+    void onAddButtonClicked();
+
 private:
     Ui::AddTicketWindow *ui;
+    QSharedPointer<CityListModel> city_list_model;
+    QSharedPointer<HotelListModel> hotel_list_model;
 };
 
 #endif // ADDTICKETWINDOW_H

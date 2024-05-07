@@ -17,6 +17,7 @@ EmployeeMainWindow::EmployeeMainWindow(QWidget *parent)
     connect(this->ui->clientListButton, SIGNAL(clicked(bool)), this, SLOT(onClientListButtonClicked()));
     connect(this->ui->cityListButton, SIGNAL(clicked(bool)), this, SLOT(onCityListButtonClicked()));
     connect(this->ui->hotelListButton, SIGNAL(clicked(bool)), this, SLOT(onHotelListButtonClicked()));
+    connect(this->ui->ticketListButton, SIGNAL(clicked(bool)), this, SLOT(onTicketListButtonClicked()));
 
 }
 
@@ -43,5 +44,12 @@ void EmployeeMainWindow::onHotelListButtonClicked() {
     this->hotel_list_window = new HotelsListWindow();
     this->hotel_list_window->init();
     this->hotel_list_window->show();
+    this->close();
+}
+
+void EmployeeMainWindow::onTicketListButtonClicked() {
+    this->ticket_list_window = new TicketsListWindow();
+    this->ticket_list_window->init();
+    this->ticket_list_window->show();
     this->close();
 }

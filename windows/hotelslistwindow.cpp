@@ -144,19 +144,9 @@ void HotelsListWindow::onEditButtonClicked() {
     this->hotel_table_model->updateHotelByIndexRow(selected_row, hotel);
 }
 
-QSharedPointer<City> HotelsListWindow::getCityByCityBoxIndex(const int index) {
-    if (index == 0) {
-        return nullptr;
-    }
-    else {
-        return this->city_list_model->getCityByIndex(index - 1);
-    }
-}
-
 void HotelsListWindow::onFindButtonClicked() {
-    int city_box_index = this->ui->cityListBox->currentIndex();
     int category_box_index = this->ui->categoryBox->currentIndex();
-    QSharedPointer<City> city = this->getCityByCityBoxIndex(city_box_index);
+    QSharedPointer<City> city = this->ui->cityListBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
     QMap<QString, QString> filter;
     filter["title"] = this->ui->titleEdit->text();
     filter["category"] = QString::number(this->category_model->getCategoryByIndex(category_box_index));

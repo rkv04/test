@@ -3,6 +3,10 @@
 
 #include <QDialog>
 
+#include "tickettablemodel.h"
+#include "apperror.h"
+#include "addticketwindow.h"
+
 namespace Ui {
 class TicketsListWindow;
 }
@@ -15,8 +19,17 @@ public:
     explicit TicketsListWindow(QWidget *parent = nullptr);
     ~TicketsListWindow();
 
+    void init();
+
+private slots:
+    void onAddTicketButtonClicked();
+
 private:
     Ui::TicketsListWindow *ui;
+    AddTicketWindow *add_ticket_window;
+
+    void handleAppError(const AppError &ex);
+    QSharedPointer<TicketTableModel> ticket_table_model;
 };
 
 #endif // TICKETSLISTWINDOW_H

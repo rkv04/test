@@ -51,17 +51,17 @@ void EditHotelWindow::setHotel(const QSharedPointer<Hotel> &hotel) {
 }
 
 void EditHotelWindow::onSaveButtonClicked() {
-    int city_index = this->ui->cityBox->currentIndex();
     QString title = this->ui->titleEdit->text();
     QString address = this->ui->addressEdit->text();
-    if (title.isEmpty() || address.isEmpty() || city_index == 0) {
+    QSharedPointer<City> city = this->ui->cityBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
+    int category = this->ui->categoryBox->currentData(Qt::UserRole).toInt();
+    if (title.isEmpty() || address.isEmpty() || city == nullptr || category == -1) {
         QMessageBox::warning(this, App::APPLICATION_NAME, "Необходимо заполнить все поля формы");
         return;
     }
     this->hotel->title = title;
     this->hotel->address = address;
-    int category_index = this->ui->categoryBox->currentIndex();
-    this->hotel->category = this->category_model->getCategoryByIndex(category_index);
-    this->hotel->city = this->city_list_model->getCityByIndex(city_index - 1);
+    this->hotel->category = category;
+    this->hotel->city = city;
     EditHotelWindow::accept();
 }

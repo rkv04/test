@@ -27,13 +27,12 @@ public:
 private slots:
     void onAddButtonClicked();
     void onDeleteButtonClicked();
-    void addNewCity(const QSharedPointer<City> city);
     void onEditButtonClicked();
     void onFindButtonClicked();
 
 private:
     bool confirmDelete();
-    bool hasSelection();
+    bool tableHasSelection();
     void handleAppError(const AppError &ex);
 
     Ui::CityListWindow *ui;

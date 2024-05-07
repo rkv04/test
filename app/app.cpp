@@ -16,6 +16,7 @@ App::App() {
     this->user_service = QSharedPointer<UserService>(new UserService());
     this->city_service = QSharedPointer<CityService>(new CityService());
     this->hotel_service = QSharedPointer<HotelService>(new HotelService());
+    this->ticket_service = QSharedPointer<TicketService>(new TicketService());
 }
 
 App::~App() {}
@@ -222,4 +223,30 @@ QVector<QSharedPointer<Hotel>> App::getHotelListByFilter(const QMap<QString, QSt
         Log::write(ex.what());
         throw AppError(CriticalDB::FATAL_MSG, true);
     }
+}
+
+int App::createTicket(const QSharedPointer<Ticket> &ticket) {
+
+}
+
+void App::removeTicket(const QSharedPointer<Ticket> &ticket) {
+
+}
+
+void App::updateTicket(const QSharedPointer<Ticket> &ticket) {
+
+}
+
+QVector<QSharedPointer<Ticket>> App::getTicketList() {
+    try {
+        return this->ticket_service->getTicketList();
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+QVector<QSharedPointer<Ticket>> App::getTicketListByFilter(const QMap<QString, QString> &filter) {
+
 }

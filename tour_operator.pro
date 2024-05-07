@@ -18,13 +18,16 @@ INCLUDEPATH += \
 
 SOURCES += \
     app/log.cpp \
+    entities/ticket.cpp \
     models/citylistmodel.cpp \
     models/citytablemodel.cpp \
     models/clienttablemodel.cpp \
     models/hotelcategorylistmodel.cpp \
     models/hotellistmodel.cpp \
     models/hoteltablemodel.cpp \
+    models/tickettablemodel.cpp \
     services/hotelservice.cpp \
+    services/ticketservice.cpp \
     windows/addcitywindow.cpp \
     windows/addemployeewindow.cpp \
     windows/addhotelwindow.cpp \
@@ -60,13 +63,16 @@ SOURCES += \
 
 HEADERS += \
     app/log.h \
+    entities/ticket.h \
     models/citylistmodel.h \
     models/citytablemodel.h \
     models/clienttablemodel.h \
     models/hotelcategorylistmodel.h \
     models/hotellistmodel.h \
     models/hoteltablemodel.h \
+    models/tickettablemodel.h \
     services/hotelservice.h \
+    services/ticketservice.h \
     windows/account.h \
     windows/addcitywindow.h \
     windows/addemployeewindow.h \
