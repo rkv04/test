@@ -14,22 +14,22 @@ int TicketTableModel::columnCount(const QModelIndex &parent) const {
 
 QVariant TicketTableModel::data(const QModelIndex &index, int role) const {
     if (role == Qt::DisplayRole) {
-        int i = index.column();
-        switch (i) {
+        int row = index.row();
+        switch (index.column()) {
         case 0:
-            return this->tickets.at(i)->departure_city->title;
+            return this->tickets.at(row)->departure_city->title;
         case 1:
-            return this->tickets.at(i)->hotel->city->title;
+            return this->tickets.at(row)->hotel->city->title;
         case 2:
-            return this->tickets.at(i)->departure_date;
+            return this->tickets.at(row)->hotel->title;
         case 3:
-            return this->tickets.at(i)->travel_time;
+            return this->tickets.at(row)->departure_date;
         case 4:
-            return this->tickets.at(i)->duration;
+            return this->tickets.at(row)->duration;
         case 5:
-            return this->tickets.at(i)->price;
+            return this->tickets.at(row)->price;
         case 6:
-            return this->tickets.at(i)->quantity;
+            return this->tickets.at(row)->quantity;
         }
     }
     return QVariant();
@@ -51,4 +51,9 @@ void TicketTableModel::setTicketList(const QVector<QSharedPointer<Ticket>> &tick
     this->beginResetModel();
     this->tickets = tickets;
     this->endResetModel();
+}
+
+void TicketTableModel::addTicket(const QSharedPointer<Ticket> &ticket) {
+    this->tickets.append(ticket);
+    emit layoutChanged();
 }

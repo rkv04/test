@@ -10,13 +10,16 @@ TicketService::TicketService() {}
 
 int TicketService::addTicket(const QSharedPointer<Ticket> &ticket) {
     QSqlQuery query;
-    query.prepare("INSERT INTO Ticket VALUES (?, ?, ?, ?, ?, ?);");
+    query.prepare("INSERT INTO Ticket (price, quantity, id_hotel, id_departure_city, "
+                                        "duration, travel_time, departure_date) "
+                        "VALUES (?, ?, ?, ?, ?, ?, ?);");
     query.bindValue(0, ticket->price);
     query.bindValue(1, ticket->quantity);
     query.bindValue(2, ticket->hotel->id);
     query.bindValue(3, ticket->departure_city->id);
     query.bindValue(4, ticket->duration);
     query.bindValue(5, ticket->travel_time);
+    query.bindValue(6, ticket->departure_date);
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
     }
@@ -37,6 +40,7 @@ int TicketService::getIdLastAddedTicket() {
     if (!query.exec(text_query)) {
         throw CriticalDB(query.lastError().text());
     }
+    query.first();
     return query.value("id").toInt();
 }
 

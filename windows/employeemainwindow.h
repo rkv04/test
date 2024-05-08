@@ -31,6 +31,7 @@ signals:
 
 private:
     Ui::EmployeeMainWindow *ui;
+
     ClientsListWindow *client_list_window;
     CityListWindow *city_list_window;
     HotelsListWindow *hotel_list_window;

@@ -19,6 +19,7 @@ CityListWindow::CityListWindow(QWidget *parent)
     connect(this->ui->deleteCityButton, SIGNAL(clicked(bool)), this, SLOT(onDeleteButtonClicked()));
     connect(this->ui->editCityButton, SIGNAL(clicked(bool)), this, SLOT(onEditButtonClicked()));
     connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
+    connect(this->ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditButtonClicked()));
 
 }
 
@@ -56,12 +57,12 @@ void CityListWindow::handleAppError(const AppError &ex) {
 }
 
 void CityListWindow::onAddButtonClicked() {
-    this->add_city_window = new AddCityWindow();
-    this->add_city_window->setModal(true);
-    if (this->add_city_window->exec() != QDialog::Accepted) {
+    AddCityWindow add_city_window;
+    add_city_window.setModal(true);
+    if (add_city_window.exec() != QDialog::Accepted) {
         return;
     }
-    QSharedPointer<City> city = this->add_city_window->getCreatedCity();
+    QSharedPointer<City> city = add_city_window.getCreatedCity();
     App *app = App::getInstance();
     try {
         city->id = app->createCity(city);
@@ -113,9 +114,9 @@ void CityListWindow::onEditButtonClicked() {
     }
     int selected_row = this->ui->tableView->selectionModel()->selectedRows().first().row();
     QSharedPointer<City> city = this->city_table_model->getCityByIndexRow(selected_row);
-    this->edit_city_window = new EditCityWindow(this);
-    this->edit_city_window->setCity(city);
-    if (this->edit_city_window->exec() != EditCityWindow::Accepted) {
+    EditCityWindow edit_city_window;
+    edit_city_window.setCity(city);
+    if (edit_city_window.exec() != EditCityWindow::Accepted) {
         return;
     }
     App *app = App::getInstance();

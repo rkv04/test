@@ -26,7 +26,6 @@ private slots:
 
 private:
     Ui::TicketsListWindow *ui;
-    AddTicketWindow *add_ticket_window;
 
     void handleAppError(const AppError &ex);
     QSharedPointer<TicketTableModel> ticket_table_model;

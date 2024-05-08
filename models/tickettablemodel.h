@@ -15,11 +15,12 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
     void setTicketList(const QVector<QSharedPointer<Ticket>> &tickets);
+    void addTicket(const QSharedPointer<Ticket> &ticket);
 
 private:
 
     QVector<QSharedPointer<Ticket>> tickets;
-    const QStringList headers = {"Город отпр.", "Город назн.", "Дата отпр.", "Время в пути", "Длительность", "Цена", "Количество"};
+    const QStringList headers = {"Город отпр.", "Город назн.", "Отель", "Дата отпр.", "Длительность", "Цена", "Количество"};
 
 };
 

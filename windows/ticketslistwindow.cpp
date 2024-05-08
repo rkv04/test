@@ -47,8 +47,20 @@ void TicketsListWindow::init() {
 }
 
 void TicketsListWindow::onAddTicketButtonClicked() {
-    this->add_ticket_window = new AddTicketWindow();
-    this->add_ticket_window->init();
-    this->add_ticket_window->setModal(true);
-    this->add_ticket_window->exec();
+    AddTicketWindow add_ticket_window;
+    add_ticket_window.init();
+    add_ticket_window.setModal(true);
+    if (add_ticket_window.exec() != QDialog::Accepted) {
+        return;
+    }
+    QSharedPointer<Ticket> ticket = add_ticket_window.getCreatedTicket();
+    App *app = App::getInstance();
+    try {
+        ticket->id = app->createTicket(ticket);
+    }
+    catch(const AppError &ex) {
+        this->handleAppError(ex);
+        return;
+    }
+    this->ticket_table_model->addTicket(ticket);
 }
