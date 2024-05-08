@@ -38,6 +38,7 @@ public:
     int createHotel(const QSharedPointer<Hotel> &hotel);
     void removeHotel(const QSharedPointer<Hotel> &hotel);
     void updateHotel(const QSharedPointer<Hotel> &hotel);
+    QVector<QSharedPointer<Hotel>> getHotelsByCity(const QSharedPointer<City> &city);
     QVector<QSharedPointer<Hotel>> getHotelList();
     QVector<QSharedPointer<Hotel>> getHotelListByFilter(const QMap<QString, QString> &filter);
 

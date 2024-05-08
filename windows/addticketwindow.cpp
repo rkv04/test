@@ -11,13 +11,23 @@ AddTicketWindow::AddTicketWindow(QWidget *parent)
     , ui(new Ui::AddTicketWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(App::APPLICATION_NAME);
     connect(this->ui->addButton, SIGNAL(clicked(bool)), this, SLOT(onAddButtonClicked()));
+    connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+
     this->ui->durationBox->addItem("14 дней", 14); // to do
 }
 
 AddTicketWindow::~AddTicketWindow()
 {
     delete ui;
+}
+
+void AddTicketWindow::handleAppError(const AppError &ex) {
+    QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
+    if (ex.isFatal()) {
+        exit(-1);
+    }
 }
 
 void AddTicketWindow::init() {
@@ -29,38 +39,52 @@ void AddTicketWindow::init() {
         hotels = app->getHotelList();
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
-        if (ex.isFatal()) {
-            exit(-1);
-        }
+        this->handleAppError(ex);
         return;
     }
+
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->city_list_model->setCityList(cities);
     this->ui->departureCityBox->setModel(city_list_model.get());
     this->ui->destinationCityBox->setModel(city_list_model.get());
     this->ui->departureCityBox->setMaxVisibleItems(10);
     this->ui->destinationCityBox->setMaxVisibleItems(10);
+    connect(this->ui->destinationCityBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(destinationCityBoxChanged()));
 
     this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
-    this->hotel_list_model->setHotelList(hotels);
     this->ui->hotelBox->setModel(hotel_list_model.get());
     this->ui->hotelBox->setMaxVisibleItems(10);
 
 }
 
+void AddTicketWindow::destinationCityBoxChanged() {
+    QSharedPointer<City> destination_city = this->ui->destinationCityBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
+    if (destination_city == nullptr) {
+        this->hotel_list_model->setHotelList(QVector<QSharedPointer<Hotel>>());
+        return;
+    }
+    QVector<QSharedPointer<Hotel>> hotels;
+    App *app = App::getInstance();
+    try {
+        hotels = app->getHotelsByCity(destination_city);
+    }
+    catch(const AppError &ex) {
+        this->handleAppError(ex);
+        return;
+    }
+    this->hotel_list_model->setHotelList(hotels);
+}
+
 void AddTicketWindow::onAddButtonClicked() {
     QSharedPointer<City> departure_city = this->ui->departureCityBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
-    QSharedPointer<City> destination_city = this->ui->destinationCityBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
     QSharedPointer<Hotel> hotel = this->ui->hotelBox->currentData(Qt::UserRole).value<QSharedPointer<Hotel>>();
     QString departure_date = this->ui->dateEdit->date().toString("dd.MM.yyyy");
     int duration = this->ui->durationBox->currentData().toInt();
     QString quantity = this->ui->quantityEdit->text();
     QString price = this->ui->priceEdit->text();
     QString travel_time = this->ui->travelTimeEdit->text();
-    if (departure_city == nullptr || destination_city == nullptr || hotel == nullptr ||
-        quantity.isEmpty() || price.isEmpty() || travel_time.isEmpty())
-    {
+    if (departure_city == nullptr || hotel == nullptr || quantity.isEmpty() || price.isEmpty() || travel_time.isEmpty()) {
         QMessageBox::warning(this, App::APPLICATION_NAME, "Необходимо заполнить все поля формы");
         return;
     }
@@ -72,7 +96,6 @@ void AddTicketWindow::onAddButtonClicked() {
     this->created_ticket->departure_date = departure_date;
     this->created_ticket->departure_city = departure_city;
     this->created_ticket->hotel = hotel;
-    this->created_ticket->hotel->city = destination_city;
     AddTicketWindow::accept();
 }
 

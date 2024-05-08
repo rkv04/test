@@ -57,3 +57,7 @@ void TicketTableModel::addTicket(const QSharedPointer<Ticket> &ticket) {
     this->tickets.append(ticket);
     emit layoutChanged();
 }
+
+QSharedPointer<Ticket> TicketTableModel::getTicketByIndexRow(const int row) {
+    return this->tickets.at(row);
+}

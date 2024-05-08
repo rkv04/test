@@ -225,6 +225,16 @@ QVector<QSharedPointer<Hotel>> App::getHotelListByFilter(const QMap<QString, QSt
     }
 }
 
+QVector<QSharedPointer<Hotel>> App::getHotelsByCity(const QSharedPointer<City> &city) {
+    try {
+        return this->hotel_service->getHotelListByCityId(city->id);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
 int App::createTicket(const QSharedPointer<Ticket> &ticket) {
     try {
         return this->ticket_service->addTicket(ticket);

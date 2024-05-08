@@ -4,8 +4,9 @@
 #include <QDialog>
 
 #include "tickettablemodel.h"
+#include "citylistmodel.h"
+#include "hotellistmodel.h"
 #include "apperror.h"
-#include "addticketwindow.h"
 
 namespace Ui {
 class TicketsListWindow;
@@ -23,12 +24,15 @@ public:
 
 private slots:
     void onAddTicketButtonClicked();
+    void showTicketInfo(const QModelIndex &index);
 
 private:
     Ui::TicketsListWindow *ui;
-
     void handleAppError(const AppError &ex);
+
     QSharedPointer<TicketTableModel> ticket_table_model;
+    QSharedPointer<CityListModel> city_list_model;
+    QSharedPointer<HotelListModel> hotel_list_model;
 };
 
 #endif // TICKETSLISTWINDOW_H

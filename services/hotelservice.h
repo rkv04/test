@@ -11,10 +11,11 @@ class HotelService
 {
 public:
     HotelService();
-    QVector<QSharedPointer<Hotel>> getHotelList();
     int addHotel(const QSharedPointer<Hotel> &hotel);
+    QVector<QSharedPointer<Hotel>> getHotelList();
     void removeHotelById(const int id);
     void updateHotel(const QSharedPointer<Hotel> &hotel);
+    QVector<QSharedPointer<Hotel>> getHotelListByCityId(const int id);
     QVector<QSharedPointer<Hotel>> getHotelListByFilter(const QMap<QString, QString> &filter);
 private:
     int getIdLastAddedHotel();

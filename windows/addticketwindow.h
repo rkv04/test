@@ -6,6 +6,7 @@
 #include "citylistmodel.h"
 #include "hotellistmodel.h"
 #include "ticket.h"
+#include "apperror.h"
 
 namespace Ui {
 class AddTicketWindow;
@@ -24,9 +25,12 @@ public:
 
 private slots:
     void onAddButtonClicked();
+    void destinationCityBoxChanged();
 
 private:
     Ui::AddTicketWindow *ui;
+    void handleAppError(const AppError &ex);
+
     QSharedPointer<CityListModel> city_list_model;
     QSharedPointer<HotelListModel> hotel_list_model;
 

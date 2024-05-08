@@ -111,3 +111,21 @@ QVector<QSharedPointer<Hotel>> HotelService::getHotelListByFilter(const QMap<QSt
     }
     return this->getHotelListByQuery(query);
 }
+
+QVector<QSharedPointer<Hotel>> HotelService::getHotelListByCityId(const int id) {
+    QSqlQuery query;
+    query.prepare("SELECT Hotel.id,"
+                         "Hotel.title AS 'hotel_title',"
+                         "City.id AS 'city_id',"
+                         "City.title AS 'city_title',"
+                         "Hotel.address,"
+                         "Hotel.category "
+                    "FROM Hotel "
+                        "JOIN City ON Hotel.id_city = City.id "
+                    "WHERE Hotel.activity_flag = 1 AND Hotel.id_city = ?;");
+    query.bindValue(0, id);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+    return this->getHotelListByQuery(query);
+}

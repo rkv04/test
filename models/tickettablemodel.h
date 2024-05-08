@@ -17,6 +17,8 @@ public:
     void setTicketList(const QVector<QSharedPointer<Ticket>> &tickets);
     void addTicket(const QSharedPointer<Ticket> &ticket);
 
+    QSharedPointer<Ticket> getTicketByIndexRow(const int row);
+
 private:
 
     QVector<QSharedPointer<Ticket>> tickets;
