@@ -9,7 +9,7 @@ int TicketTableModel::rowCount(const QModelIndex &parent) const {
 }
 
 int TicketTableModel::columnCount(const QModelIndex &parent) const {
-    return 7;
+    return 8;
 }
 
 QVariant TicketTableModel::data(const QModelIndex &index, int role) const {
@@ -25,10 +25,12 @@ QVariant TicketTableModel::data(const QModelIndex &index, int role) const {
         case 3:
             return this->tickets.at(row)->departure_date;
         case 4:
-            return this->tickets.at(row)->duration;
+            return this->tickets.at(row)->travel_time;
         case 5:
-            return this->tickets.at(row)->price;
+            return QString::number(this->tickets.at(row)->duration) + QString(" дн.");
         case 6:
+            return QString::number(this->tickets.at(row)->price) + QString(" руб.");
+        case 7:
             return this->tickets.at(row)->quantity;
         }
     }
@@ -60,4 +62,9 @@ void TicketTableModel::addTicket(const QSharedPointer<Ticket> &ticket) {
 
 QSharedPointer<Ticket> TicketTableModel::getTicketByIndexRow(const int row) {
     return this->tickets.at(row);
+}
+
+void TicketTableModel::removeTicketByIndexRow(const int row) {
+    this->tickets.remove(row);
+    emit layoutChanged();
 }

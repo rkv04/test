@@ -24,11 +24,17 @@ public:
 
 private slots:
     void onAddTicketButtonClicked();
+    void onDeleteButtonClicked();
+    void onFindButtonClicked();
     void showTicketInfo(const QModelIndex &index);
+
+    void destinationCityBoxChanged();
 
 private:
     Ui::TicketsListWindow *ui;
     void handleAppError(const AppError &ex);
+    bool hasSelection();
+    bool confirmDelete();
 
     QSharedPointer<TicketTableModel> ticket_table_model;
     QSharedPointer<CityListModel> city_list_model;

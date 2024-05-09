@@ -18,9 +18,7 @@ public:
     explicit AddHotelWindow(QWidget *parent = nullptr);
     ~AddHotelWindow();
     void init();
-
-signals:
-    void hotelCreated(const QSharedPointer<Hotel> &hotel);
+    QSharedPointer<Hotel> getCreatedHotel();
 
 private slots:
     void onAddButtonClicked();
@@ -29,6 +27,8 @@ private:
     Ui::AddHotelWindow *ui;
     QSharedPointer<CityListModel> city_list_model;
     QSharedPointer<HotelCategoryListModel> category_model;
+
+    QSharedPointer<Hotel> created_hotel;
 };
 
 #endif // ADDHOTELWINDOW_H

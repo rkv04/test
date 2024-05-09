@@ -18,11 +18,12 @@ public:
     void addTicket(const QSharedPointer<Ticket> &ticket);
 
     QSharedPointer<Ticket> getTicketByIndexRow(const int row);
+    void removeTicketByIndexRow(const int row);
 
 private:
 
     QVector<QSharedPointer<Ticket>> tickets;
-    const QStringList headers = {"Город отпр.", "Город назн.", "Отель", "Дата отпр.", "Длительность", "Цена", "Количество"};
+    const QStringList headers = {"Город отпр.", "Город назн.", "Отель", "Дата отпр.", "Время в пути", "Длительность", "Цена", "Количество"};
 
 };
 

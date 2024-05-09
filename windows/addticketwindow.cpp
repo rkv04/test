@@ -14,6 +14,7 @@ AddTicketWindow::AddTicketWindow(QWidget *parent)
     this->setWindowTitle(App::APPLICATION_NAME);
     connect(this->ui->addButton, SIGNAL(clicked(bool)), this, SLOT(onAddButtonClicked()));
     connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
+    connect(this->ui->destinationCityBox, SIGNAL(currentIndexChanged(int)), this, SLOT(destinationCityBoxChanged()));
 
     this->ui->durationBox->addItem("14 дней", 14); // to do
 }
@@ -44,15 +45,14 @@ void AddTicketWindow::init() {
     }
 
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
+    this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
+
     this->city_list_model->setCityList(cities);
     this->ui->departureCityBox->setModel(city_list_model.get());
     this->ui->destinationCityBox->setModel(city_list_model.get());
     this->ui->departureCityBox->setMaxVisibleItems(10);
     this->ui->destinationCityBox->setMaxVisibleItems(10);
-    connect(this->ui->destinationCityBox, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(destinationCityBoxChanged()));
 
-    this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
     this->ui->hotelBox->setModel(hotel_list_model.get());
     this->ui->hotelBox->setMaxVisibleItems(10);
 

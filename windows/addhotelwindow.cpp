@@ -12,6 +12,7 @@ AddHotelWindow::AddHotelWindow(QWidget *parent)
 {
     ui->setupUi(this);
     connect(this->ui->addButton, SIGNAL(clicked(bool)), this, SLOT(onAddButtonClicked()));
+    this->created_hotel = nullptr;
 }
 
 AddHotelWindow::~AddHotelWindow()
@@ -51,11 +52,14 @@ void AddHotelWindow::onAddButtonClicked() {
         QMessageBox::warning(this, App::APPLICATION_NAME, "Необходимо заполнить все поля формы");
         return;
     }
-    QSharedPointer<Hotel> hotel = QSharedPointer<Hotel>(new Hotel());
-    hotel->title = title;
-    hotel->address = address;
-    hotel->category = this->ui->hotelCategory->currentData().toInt();
-    hotel->city = city;
-    this->close();
-    emit hotelCreated(hotel);
+    this->created_hotel = QSharedPointer<Hotel>(new Hotel());
+    this->created_hotel->title = title;
+    this->created_hotel->address = address;
+    this->created_hotel->category = category;
+    this->created_hotel->city = city;
+    QDialog::accept();
+}
+
+QSharedPointer<Hotel> AddHotelWindow::getCreatedHotel() {
+    return this->created_hotel;
 }

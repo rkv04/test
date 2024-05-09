@@ -64,17 +64,13 @@ bool HotelsListWindow::hasSelection() {
 }
 
 void HotelsListWindow::onAddHotelButtonClicked() {
-    this->add_hotel_window = new AddHotelWindow(this);
-
-    connect(this->add_hotel_window, SIGNAL(hotelCreated(QSharedPointer<Hotel>)),
-            this, SLOT(addHotel(QSharedPointer<Hotel>)));
-
-    this->add_hotel_window->init();
-    this->add_hotel_window->setModal(true);
-    this->add_hotel_window->exec();
-}
-
-void HotelsListWindow::addHotel(const QSharedPointer<Hotel> &hotel) {
+    AddHotelWindow add_hotel_window;
+    add_hotel_window.init();
+    add_hotel_window.setModal(true);
+    if (add_hotel_window.exec() != QDialog::Accepted) {
+        return;
+    }
+    auto hotel = add_hotel_window.getCreatedHotel();
     App *app = App::getInstance();
     try {
         hotel->id = app->createHotel(hotel);
@@ -85,7 +81,6 @@ void HotelsListWindow::addHotel(const QSharedPointer<Hotel> &hotel) {
     }
     this->hotel_table_model->addHotel(hotel);
 }
-
 
 bool HotelsListWindow::confirmDelete() {
     QMessageBox confirm_box;
@@ -105,7 +100,7 @@ void HotelsListWindow::onDeleteButtonClicked() {
         return;
     }
     QModelIndexList selected_indexes = this->ui->tableView->selectionModel()->selectedRows();
-    std::reverse(selected_indexes.begin(), selected_indexes.end());
+    std::sort(selected_indexes.begin(), selected_indexes.end(), [](const QModelIndex &l, const QModelIndex &r){return l.row() > r.row();});
     App *app = App::getInstance();
     try {
         for (auto i : selected_indexes) {
@@ -116,7 +111,6 @@ void HotelsListWindow::onDeleteButtonClicked() {
     }
     catch(const AppError &ex) {
         this->handleAppError(ex);
-        return;
     }
 }
 
@@ -127,10 +121,10 @@ void HotelsListWindow::onEditButtonClicked() {
     }
     int selected_row = this->ui->tableView->selectionModel()->selectedRows().first().row();
     QSharedPointer<Hotel> hotel = this->hotel_table_model->getHotelByIndexRow(selected_row);
-    this->edit_hotel_window = new EditHotelWindow(this);
-    this->edit_hotel_window->init();
-    this->edit_hotel_window->setHotel(hotel);
-    if (this->edit_hotel_window->exec() != QDialog::Accepted) {
+    EditHotelWindow edit_hotel_window;
+    edit_hotel_window.init();
+    edit_hotel_window.setHotel(hotel);
+    if (edit_hotel_window.exec() != QDialog::Accepted) {
         return;
     }
     App *app = App::getInstance();
@@ -148,8 +142,8 @@ void HotelsListWindow::onFindButtonClicked() {
     int category_box_index = this->ui->categoryBox->currentIndex();
     QSharedPointer<City> city = this->ui->cityListBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
     QMap<QString, QString> filter;
-    filter["title"] = this->ui->titleEdit->text();
-    filter["category"] = QString::number(this->category_model->getCategoryByIndex(category_box_index));
+    filter["title"] = this->ui->titleEdit->text() + "%";
+    filter["category"] = this->category_model->getCategoryByIndex(category_box_index);
     filter["id_city"] = city == nullptr ? QString() : QString::number(city->id);
     App *app = App::getInstance();
     QVector<QSharedPointer<Hotel>> filtered_hotels;

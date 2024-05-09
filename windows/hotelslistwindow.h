@@ -30,15 +30,12 @@ private slots:
     void onDeleteButtonClicked();
     void onEditButtonClicked();
     void onFindButtonClicked();
-    void addHotel(const QSharedPointer<Hotel> &hotel);
     bool confirmDelete();
 
 private:
     void handleAppError(const AppError &ex);
     bool hasSelection();
     Ui::HotelsListWindow *ui;
-    AddHotelWindow *add_hotel_window;
-    EditHotelWindow *edit_hotel_window;
 
     QSharedPointer<HotelCategoryListModel> category_model;
     QSharedPointer<HotelTableModel> hotel_table_model;

@@ -10,8 +10,7 @@ TicketService::TicketService() {}
 
 int TicketService::addTicket(const QSharedPointer<Ticket> &ticket) {
     QSqlQuery query;
-    query.prepare("INSERT INTO Ticket (price, quantity, id_hotel, id_departure_city, "
-                                        "duration, travel_time, departure_date) "
+    query.prepare("INSERT INTO Ticket (price, quantity, id_hotel, id_departure_city, duration, travel_time, departure_date) "
                         "VALUES (?, ?, ?, ?, ?, ?, ?);");
     query.bindValue(0, ticket->price);
     query.bindValue(1, ticket->quantity);
@@ -27,7 +26,12 @@ int TicketService::addTicket(const QSharedPointer<Ticket> &ticket) {
 }
 
 void TicketService::removeTicketById(const int id) {
-
+    QSqlQuery query;
+    query.prepare("UPDATE Ticket SET activity_flag = 0 WHERE id = ?;");
+    query.bindValue(0, id);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
 }
 
 void TicketService::updateTicket(const QSharedPointer<Ticket> &ticket) {
@@ -46,24 +50,7 @@ int TicketService::getIdLastAddedTicket() {
 
 QVector<QSharedPointer<Ticket>> TicketService::getTicketList() {
     QSqlQuery query;
-    QString text_query = "SELECT Ticket.id AS 'id_ticket', "
-                                "Ticket.price AS 'price', "
-                                "Ticket.quantity AS 'quantity', "
-                                "Ticket.duration AS 'duration', "
-                                "Ticket.travel_time AS 'travel_time', "
-                                "Ticket.id_hotel AS 'id_hotel', "
-                                "Ticket.id_departure_city AS 'id_departure_city', "
-                                "Ticket.departure_date AS 'departure_date', "
-                                "Hotel.title AS 'hotel_title', "
-                                "Hotel.id_city AS 'id_destination_city', "
-                                "C1.title AS 'city_departure_title', "
-                                "C2.title AS 'city_destination_title', "
-                                "C2.climate AS 'city_climate' "
-                            "FROM Ticket "
-                                "JOIN Hotel ON Ticket.id_hotel = Hotel.id "
-                                "JOIN City C1 ON Ticket.id_departure_city = C1.id "
-                                "JOIN City C2 ON Hotel.id_city = C2.id "
-                            "WHERE Ticket.activity_flag = 1 ";
+    QString text_query = this->textQueryGetAllTickets();
     if (!query.exec(text_query)) {
         throw CriticalDB(query.lastError().text());
     }
@@ -101,5 +88,57 @@ QSharedPointer<Ticket> TicketService::createTicketByRow(const QSqlRecord &record
 }
 
 QVector<QSharedPointer<Ticket>> TicketService::getTicketListByFilter(const QMap<QString, QString> &filter) {
+    QSqlQuery query;
+    QString text_query = this->textQueryGetAllTickets();
+    if (!filter["id_departure_city"].isEmpty()) {
+        text_query += " AND id_departure_city = :id_departure_city";
+    }
+    if (!filter["id_destination_city"].isEmpty()) {
+        text_query += " AND id_destination_city = :id_destination_city";
+    }
+    if (!filter["id_hotel"].isEmpty()) {
+        text_query += " AND id_hotel = :id_hotel";
+    }
+    if (!filter["departure_date"].isEmpty()) {
+        text_query += " AND departure_date LIKE :departure_date";
+    }
+    if (!filter["duration"].isEmpty()) {
+        text_query += " AND duration = :duration";
+    }
+    if (!filter["priceLower"].isEmpty()) {
+        text_query += " AND price >= :priceLower";
+    }
+    if (!filter["priceUpper"].isEmpty()) {
+        text_query += " AND price <= :priceUpper";
+    }
+    query.prepare(text_query);
+    QStringList keys = filter.keys();
+    for (auto &key : keys) {
+        query.bindValue(":" + key, filter[key]);
+    }
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+    return this->getTicketListByQuery(query);
+}
 
+QString TicketService::textQueryGetAllTickets() {
+    return QString("SELECT Ticket.id AS 'id_ticket', "
+                        "Ticket.price AS 'price', "
+                        "Ticket.quantity AS 'quantity', "
+                        "Ticket.duration AS 'duration', "
+                        "Ticket.travel_time AS 'travel_time', "
+                        "Ticket.id_hotel AS 'id_hotel', "
+                        "Ticket.id_departure_city AS 'id_departure_city', "
+                        "Ticket.departure_date AS 'departure_date', "
+                        "Hotel.title AS 'hotel_title', "
+                        "Hotel.id_city AS 'id_destination_city', "
+                        "C1.title AS 'city_departure_title', "
+                        "C2.title AS 'city_destination_title', "
+                        "C2.climate AS 'city_climate' "
+                    "FROM Ticket "
+                        "JOIN Hotel ON Ticket.id_hotel = Hotel.id "
+                        "JOIN City C1 ON Ticket.id_departure_city = C1.id "
+                        "JOIN City C2 ON Hotel.id_city = C2.id "
+                   "WHERE Ticket.activity_flag = 1 ");
 }

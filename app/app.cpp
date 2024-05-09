@@ -246,7 +246,13 @@ int App::createTicket(const QSharedPointer<Ticket> &ticket) {
 }
 
 void App::removeTicket(const QSharedPointer<Ticket> &ticket) {
-
+    try {
+        this->ticket_service->removeTicketById(ticket->id);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
 }
 
 void App::updateTicket(const QSharedPointer<Ticket> &ticket) {
@@ -264,5 +270,11 @@ QVector<QSharedPointer<Ticket>> App::getTicketList() {
 }
 
 QVector<QSharedPointer<Ticket>> App::getTicketListByFilter(const QMap<QString, QString> &filter) {
-
+    try {
+        return this->ticket_service->getTicketListByFilter(filter);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
 }

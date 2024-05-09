@@ -10,12 +10,12 @@ public:
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
 
-    int getCategoryByIndex(const int index);
+    QString getCategoryByIndex(const int index);
 private:
     struct Category {
         QString title;
-        int value;
-        Category(const QString &t, const int v) : title(t), value(v){}
+        QString value;
+        Category(const QString &t, QString v) : title(t), value(v){}
     };
 
     QVector<Category> categories;

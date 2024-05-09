@@ -93,7 +93,7 @@ int HotelService::getIdLastAddedHotel() {
 
 QVector<QSharedPointer<Hotel>> HotelService::getHotelListByFilter(const QMap<QString, QString> &filter) {
     QSqlQuery query;
-    query.prepare("SELECT Hotel.id AS 'id', "
+    QString text_query = "SELECT Hotel.id AS 'id', "
                          "Hotel.title AS 'hotel_title', "
                          "Hotel.id_city AS 'id_city', "
                          "City.title AS 'city_title', "
@@ -101,11 +101,21 @@ QVector<QSharedPointer<Hotel>> HotelService::getHotelListByFilter(const QMap<QSt
                          "Hotel.category AS 'category' "
                   "FROM Hotel "
                         "JOIN City ON Hotel.id_city = City.id "
-                  "WHERE (Hotel.activity_flag = 1) AND (hotel_title LIKE :t) "
-                            "AND (category = :ctg OR :ctg = '') AND (id_city = :idc OR :idc = '');");
-    query.bindValue(":t", filter["title"] + "%");
-    query.bindValue(":ctg", filter["category"]);
-    query.bindValue(":idc", filter["id_city"]);
+                  "WHERE Hotel.activity_flag = 1 ";
+    if (!filter["title"].isEmpty()) {
+        text_query += " AND hotel_title LIKE :title";
+    }
+    if (!filter["category"].isEmpty()) {
+        text_query += " AND category = :category";
+    }
+    if (!filter["id_city"].isEmpty()) {
+        text_query += " AND id_city = :id_city";
+    }
+    query.prepare(text_query);
+    QStringList keys = filter.keys();
+    for (auto &key : keys) {
+        query.bindValue(":" + key, filter[key]);
+    }
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
     }

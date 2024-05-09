@@ -18,6 +18,7 @@ public:
 
 private:
 
+    QString textQueryGetAllTickets();
     QVector<QSharedPointer<Ticket>> getTicketListByQuery(QSqlQuery &query);
     QSharedPointer<Ticket> createTicketByRow(const QSqlRecord &record);
     int getIdLastAddedTicket();

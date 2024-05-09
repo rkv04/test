@@ -16,12 +16,19 @@ TicketsListWindow::TicketsListWindow(QWidget *parent)
     this->setWindowTitle(App::APPLICATION_NAME);
     connect(this->ui->addTicketButton, SIGNAL(clicked(bool)), this, SLOT(onAddTicketButtonClicked()));
     connect(this->ui->ticketView, SIGNAL(clicked(QModelIndex)), this, SLOT(showTicketInfo(QModelIndex)));
+    connect(this->ui->deleteTicketButton, SIGNAL(clicked(bool)), this, SLOT(onDeleteButtonClicked()));
+    connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
+    connect(this->ui->destinationCityBox, SIGNAL(currentIndexChanged(int)), this, SLOT(destinationCityBoxChanged()));
+    this->ui->departureDateEdit->setDisplayFormat("MMM/yyyy");
+    this->ui->departureDateEdit->setDate(QDate::currentDate());
     this->ui->departureCityBox->setMaxVisibleItems(10);
     this->ui->destinationCityBox->setMaxVisibleItems(10);
     this->ui->hotelBox->setMaxVisibleItems(10);
     this->ui->ticketView->resizeColumnsToContents();
     this->ui->ticketView->verticalHeader()->stretchLastSection();
     this->ui->ticketView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->priceEditLower->setPlaceholderText("От ...");
+    this->ui->priceEditUpper->setPlaceholderText("До ...");
 }
 
 TicketsListWindow::~TicketsListWindow()
@@ -34,6 +41,19 @@ void TicketsListWindow::handleAppError(const AppError &ex) {
     if (ex.isFatal()) {
         exit(-1);
     }
+}
+
+bool TicketsListWindow::hasSelection() {
+    return this->ui->ticketView->selectionModel()->hasSelection();
+}
+
+bool TicketsListWindow::confirmDelete() {
+    QMessageBox confirm_box;
+    confirm_box.setIcon(QMessageBox::Question);
+    confirm_box.setWindowTitle(App::APPLICATION_NAME);
+    confirm_box.setText("Удалить выбранное?");
+    confirm_box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    return confirm_box.exec() == QMessageBox::Yes;
 }
 
 void TicketsListWindow::init() {
@@ -63,6 +83,26 @@ void TicketsListWindow::init() {
     this->ui->ticketView->setModel(ticket_table_model.get());
 }
 
+void TicketsListWindow::destinationCityBoxChanged() {
+    QSharedPointer<City> destination_city = this->ui->destinationCityBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
+    if (destination_city == nullptr) {
+        this->hotel_list_model->setHotelList(QVector<QSharedPointer<Hotel>>());
+        this->ui->hotelBox->setEnabled(false);
+        return;
+    }
+    QVector<QSharedPointer<Hotel>> hotels;
+    App *app = App::getInstance();
+    try {
+        hotels = app->getHotelsByCity(destination_city);
+    }
+    catch(const AppError &ex) {
+        this->handleAppError(ex);
+        return;
+    }
+    this->hotel_list_model->setHotelList(hotels);
+    this->ui->hotelBox->setEnabled(true);
+}
+
 void TicketsListWindow::onAddTicketButtonClicked() {
     AddTicketWindow add_ticket_window;
     add_ticket_window.init();
@@ -82,8 +122,55 @@ void TicketsListWindow::onAddTicketButtonClicked() {
     this->ticket_table_model->addTicket(ticket);
 }
 
+void TicketsListWindow::onDeleteButtonClicked() {
+    if (!this->hasSelection()) {
+        QMessageBox::warning(this, App::APPLICATION_NAME, "Для удаления необходимо выделить нужные строки");
+        return;
+    }
+    if (!this->confirmDelete()) {
+        return;
+    }
+    QModelIndexList selected_indexes = this->ui->ticketView->selectionModel()->selectedRows();
+    std::sort(selected_indexes.begin(), selected_indexes.end(), [](const QModelIndex &l, const QModelIndex &r){return l.row() > r.row();});
+    App *app = App::getInstance();
+    try {
+        for (auto i : selected_indexes) {
+            QSharedPointer<Ticket> ticket = this->ticket_table_model->getTicketByIndexRow(i.row());
+            app->removeTicket(ticket);
+            this->ticket_table_model->removeTicketByIndexRow(i.row());
+        }
+    }
+    catch(const AppError &ex) {
+        this->handleAppError(ex);
+        return;
+    }
+}
+
+void TicketsListWindow::onFindButtonClicked() {
+    QMap<QString, QString> filter;
+    auto departure_city = this->ui->departureCityBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
+    auto destination_city = this->ui->destinationCityBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
+    auto hotel = this->ui->hotelBox->currentData(Qt::UserRole).value<QSharedPointer<Hotel>>();
+    filter["id_departure_city"] = departure_city == nullptr ? QString() : QString::number(departure_city->id);
+    filter["id_destination_city"] = destination_city == nullptr ? QString() : QString::number(destination_city->id);
+    filter["id_hotel"] = hotel == nullptr ? QString() : QString::number(hotel->id);
+    filter["departure_date"] = "%" + this->ui->departureDateEdit->date().toString("MM.yyyy");
+    filter["duration"] = this->ui->durationBox->currentData().toString();
+    filter["priceLower"] = this->ui->priceEditLower->text();
+    filter["priceUpper"] = this->ui->priceEditUpper->text();
+    App *app = App::getInstance();
+    QVector<QSharedPointer<Ticket>> filtered_tickets;
+    try {
+        filtered_tickets = app->getTicketListByFilter(filter);
+    }
+    catch(const AppError &ex) {
+        this->handleAppError(ex);
+        return;
+    }
+    this->ticket_table_model->setTicketList(filtered_tickets);
+}
+
 void TicketsListWindow::showTicketInfo(const QModelIndex &index) {
     auto ticket = this->ticket_table_model->getTicketByIndexRow(index.row());
-    this->ui->timeTravelEdit->setText(QString::number(ticket->travel_time));
     this->ui->climateEdit->setText(ticket->hotel->city->climate);
 }
