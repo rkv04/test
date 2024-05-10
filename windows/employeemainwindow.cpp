@@ -27,28 +27,40 @@ EmployeeMainWindow::~EmployeeMainWindow()
 }
 
 void EmployeeMainWindow::onClientListButtonClicked() {
-    this->client_list_window = new ClientsListWindow();
+    if (this->client_list_window == nullptr) {
+        this->client_list_window = QSharedPointer<ClientsListWindow>(new ClientsListWindow());
+        connect(this->client_list_window.get(), SIGNAL(showEmployeeMainWindow()), this, SLOT(show()));
+    }
     this->client_list_window->init();
     this->client_list_window->show();
     this->close();
 }
 
 void EmployeeMainWindow::onCityListButtonClicked() {
-    this->city_list_window = new CityListWindow();
+    if (this->city_list_window == nullptr) {
+        this->city_list_window = QSharedPointer<CityListWindow>(new CityListWindow());
+        connect(this->city_list_window.get(), SIGNAL(showEmployeeMainWindow()), this, SLOT(show()));
+    }
     this->city_list_window->init();
     this->city_list_window->show();
     this->close();
 }
 
 void EmployeeMainWindow::onHotelListButtonClicked() {
-    this->hotel_list_window = new HotelsListWindow();
+    if (this->hotel_list_window == nullptr) {
+        this->hotel_list_window = QSharedPointer<HotelsListWindow>(new HotelsListWindow());
+        connect(this->hotel_list_window.get(), SIGNAL(showEmployeeMainWindow()), this, SLOT(show()));
+    }
     this->hotel_list_window->init();
     this->hotel_list_window->show();
     this->close();
 }
 
 void EmployeeMainWindow::onTicketListButtonClicked() {
-    this->ticket_list_window = new TicketsListWindow();
+    if (this->ticket_list_window == nullptr) {
+        this->ticket_list_window = QSharedPointer<TicketsListWindow>(new TicketsListWindow());
+        connect(this->ticket_list_window.get(), SIGNAL(showEmployeeMainWindow()), this, SLOT(show()));
+    }
     this->ticket_list_window->init();
     this->ticket_list_window->show();
     this->close();

@@ -30,7 +30,11 @@ private slots:
     void onDeleteButtonClicked();
     void onEditButtonClicked();
     void onFindButtonClicked();
+    void onBackButtonClicked();
     bool confirmDelete();
+
+signals:
+    void showEmployeeMainWindow();
 
 private:
     void handleAppError(const AppError &ex);

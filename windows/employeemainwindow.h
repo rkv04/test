@@ -32,10 +32,10 @@ signals:
 private:
     Ui::EmployeeMainWindow *ui;
 
-    ClientsListWindow *client_list_window;
-    CityListWindow *city_list_window;
-    HotelsListWindow *hotel_list_window;
-    TicketsListWindow *ticket_list_window;
+    QSharedPointer<ClientsListWindow> client_list_window;
+    QSharedPointer<CityListWindow> city_list_window;
+    QSharedPointer<HotelsListWindow> hotel_list_window;
+    QSharedPointer<TicketsListWindow> ticket_list_window;
 };
 
 #endif // EMPLOYEEMAINWINDOW_H

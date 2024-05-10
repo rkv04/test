@@ -18,6 +18,7 @@ ClientsListWindow::ClientsListWindow(QWidget *parent)
 
     connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
     connect(this->ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(onSaveButtonClicked()));
+    connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
 
     this->ui->tableView->resizeColumnsToContents();
     this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -92,4 +93,9 @@ void ClientsListWindow::onSaveButtonClicked() {
         }
     }
     this->client_model->refreshDiscountByIndex(index.row(), discount);
+}
+
+void ClientsListWindow::onBackButtonClicked() {
+    emit showEmployeeMainWindow();
+    this->close();
 }

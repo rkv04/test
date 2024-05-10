@@ -19,9 +19,13 @@ public:
     ~ClientsListWindow();
     void init();
 
+signals:
+    void showEmployeeMainWindow();
+
 private slots:
     void onFindButtonClicked();
     void onSaveButtonClicked();
+    void onBackButtonClicked();
 
 private:
     void refreshModel();

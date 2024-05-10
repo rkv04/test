@@ -16,6 +16,7 @@ HotelsListWindow::HotelsListWindow(QWidget *parent)
     connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
     connect(this->ui->deleteButton, SIGNAL(clicked(bool)), this, SLOT(onDeleteButtonClicked()));
     connect(this->ui->editButton, SIGNAL(clicked(bool)), this, SLOT(onEditButtonClicked()));
+    connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
 
 }
 
@@ -155,4 +156,9 @@ void HotelsListWindow::onFindButtonClicked() {
         return;
     }
     this->hotel_table_model->setHotelsList(filtered_hotels);
+}
+
+void HotelsListWindow::onBackButtonClicked() {
+    this->close();
+    emit showEmployeeMainWindow();
 }

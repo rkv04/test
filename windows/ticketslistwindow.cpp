@@ -19,8 +19,11 @@ TicketsListWindow::TicketsListWindow(QWidget *parent)
     connect(this->ui->deleteTicketButton, SIGNAL(clicked(bool)), this, SLOT(onDeleteButtonClicked()));
     connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
     connect(this->ui->destinationCityBox, SIGNAL(currentIndexChanged(int)), this, SLOT(destinationCityBoxChanged()));
+    connect(this->ui->dateSwitch, SIGNAL(toggled(bool)), this->ui->departureDateEdit, SLOT(setEnabled(bool)));
+    connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
     this->ui->departureDateEdit->setDisplayFormat("MMM/yyyy");
     this->ui->departureDateEdit->setDate(QDate::currentDate());
+    this->ui->departureDateEdit->setEnabled(false);
     this->ui->departureCityBox->setMaxVisibleItems(10);
     this->ui->destinationCityBox->setMaxVisibleItems(10);
     this->ui->hotelBox->setMaxVisibleItems(10);
@@ -151,10 +154,11 @@ void TicketsListWindow::onFindButtonClicked() {
     auto departure_city = this->ui->departureCityBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
     auto destination_city = this->ui->destinationCityBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
     auto hotel = this->ui->hotelBox->currentData(Qt::UserRole).value<QSharedPointer<Hotel>>();
+    bool dateIsOn = this->ui->dateSwitch->isChecked();
     filter["id_departure_city"] = departure_city == nullptr ? QString() : QString::number(departure_city->id);
     filter["id_destination_city"] = destination_city == nullptr ? QString() : QString::number(destination_city->id);
     filter["id_hotel"] = hotel == nullptr ? QString() : QString::number(hotel->id);
-    filter["departure_date"] = "%" + this->ui->departureDateEdit->date().toString("MM.yyyy");
+    filter["departure_date"] = dateIsOn ? "%" + this->ui->departureDateEdit->date().toString("MM.yyyy") : "%";
     filter["duration"] = this->ui->durationBox->currentData().toString();
     filter["priceLower"] = this->ui->priceEditLower->text();
     filter["priceUpper"] = this->ui->priceEditUpper->text();
@@ -173,4 +177,9 @@ void TicketsListWindow::onFindButtonClicked() {
 void TicketsListWindow::showTicketInfo(const QModelIndex &index) {
     auto ticket = this->ticket_table_model->getTicketByIndexRow(index.row());
     this->ui->climateEdit->setText(ticket->hotel->city->climate);
+}
+
+void TicketsListWindow::onBackButtonClicked() {
+    this->close();
+    emit showEmployeeMainWindow();
 }

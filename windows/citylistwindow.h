@@ -29,6 +29,10 @@ private slots:
     void onDeleteButtonClicked();
     void onEditButtonClicked();
     void onFindButtonClicked();
+    void onBackButtonClicked();
+
+signals:
+    void showEmployeeMainWindow();
 
 private:
     bool confirmDelete();

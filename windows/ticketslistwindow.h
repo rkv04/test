@@ -22,12 +22,15 @@ public:
 
     void init();
 
+signals:
+    void showEmployeeMainWindow();
+
 private slots:
     void onAddTicketButtonClicked();
     void onDeleteButtonClicked();
     void onFindButtonClicked();
+    void onBackButtonClicked();
     void showTicketInfo(const QModelIndex &index);
-
     void destinationCityBoxChanged();
 
 private:
