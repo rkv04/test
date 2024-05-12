@@ -53,7 +53,7 @@ void EditHotelWindow::setHotel(const QSharedPointer<Hotel> &hotel) {
 void EditHotelWindow::onSaveButtonClicked() {
     QString title = this->ui->titleEdit->text();
     QString address = this->ui->addressEdit->text();
-    QSharedPointer<City> city = this->ui->cityBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
+    QSharedPointer<City> city = this->ui->cityBox->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
     int category = this->ui->categoryBox->currentData(Qt::UserRole).toInt();
     if (title.isEmpty() || address.isEmpty() || city == nullptr || category == -1) {
         QMessageBox::warning(this, App::APPLICATION_NAME, "Необходимо заполнить все поля формы");

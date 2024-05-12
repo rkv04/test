@@ -28,6 +28,7 @@ signals:
 private slots:
     void onAddTicketButtonClicked();
     void onDeleteButtonClicked();
+    void onEditButtonClicked();
     void onFindButtonClicked();
     void onBackButtonClicked();
     void showTicketInfo(const QModelIndex &index);
@@ -35,8 +36,12 @@ private slots:
 
 private:
     Ui::TicketsListWindow *ui;
+
+    void initModels();
+    void initUi();
     void handleAppError(const AppError &ex);
     bool hasSelection();
+    QMap<QString, QString> createFilter();
     bool confirmDelete();
 
     QSharedPointer<TicketTableModel> ticket_table_model;

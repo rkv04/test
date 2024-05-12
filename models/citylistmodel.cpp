@@ -17,11 +17,17 @@ QVariant CityListModel::data(const QModelIndex &index, int role) const {
         }
         return this->cities.at(index.row() - 1)->title;
     }
-    if (role == Qt::UserRole) {
+    if (role == CityPtrRole) {
         if (index.row() == 0) {
             return QVariant::fromValue(nullptr);
         }
         return QVariant::fromValue(this->cities.at(index.row() - 1));
+    }
+    if (role == CityIdRole) {
+        if (index.row() == 0) {
+            return -1;
+        }
+        return this->cities.at(index.row() - 1)->id;
     }
     return QVariant();
 }

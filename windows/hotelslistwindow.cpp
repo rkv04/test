@@ -17,7 +17,6 @@ HotelsListWindow::HotelsListWindow(QWidget *parent)
     connect(this->ui->deleteButton, SIGNAL(clicked(bool)), this, SLOT(onDeleteButtonClicked()));
     connect(this->ui->editButton, SIGNAL(clicked(bool)), this, SLOT(onEditButtonClicked()));
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
-
 }
 
 HotelsListWindow::~HotelsListWindow()
@@ -26,6 +25,11 @@ HotelsListWindow::~HotelsListWindow()
 }
 
 void HotelsListWindow::init() {
+    this->initModels();
+    this->initUi();
+}
+
+void HotelsListWindow::initModels() {
     QVector<QSharedPointer<Hotel>> hotels;
     QVector<QSharedPointer<City>> cities;
     App *app = App::getInstance();
@@ -39,17 +43,19 @@ void HotelsListWindow::init() {
     }
     this->hotel_table_model = QSharedPointer<HotelTableModel>(new HotelTableModel());
     this->hotel_table_model->setHotelsList(hotels);
-    this->ui->tableView->setModel(hotel_table_model.get());
-    this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
-    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->city_list_model->setCityList(cities);
-    this->ui->cityListBox->setModel(city_list_model.get());
-    this->ui->cityListBox->setMaxVisibleItems(10);
-
     this->category_model = QSharedPointer<HotelCategoryListModel>(new HotelCategoryListModel());
+}
+
+void HotelsListWindow::initUi() {
+    this->ui->tableView->setModel(hotel_table_model.get());
+    this->ui->cityListBox->setModel(city_list_model.get());
     this->ui->categoryBox->setModel(category_model.get());
+    this->ui->tableView->resizeColumnsToContents();
+    this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->cityListBox->setMaxVisibleItems(10);
     this->ui->categoryBox->setMaxVisibleItems(10);
 }
 
@@ -140,12 +146,7 @@ void HotelsListWindow::onEditButtonClicked() {
 }
 
 void HotelsListWindow::onFindButtonClicked() {
-    int category_box_index = this->ui->categoryBox->currentIndex();
-    QSharedPointer<City> city = this->ui->cityListBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
-    QMap<QString, QString> filter;
-    filter["title"] = this->ui->titleEdit->text() + "%";
-    filter["category"] = this->category_model->getCategoryByIndex(category_box_index);
-    filter["id_city"] = city == nullptr ? QString() : QString::number(city->id);
+    QMap<QString, QString> filter = this->createFilter();
     App *app = App::getInstance();
     QVector<QSharedPointer<Hotel>> filtered_hotels;
     try {
@@ -159,6 +160,15 @@ void HotelsListWindow::onFindButtonClicked() {
 }
 
 void HotelsListWindow::onBackButtonClicked() {
-    this->close();
     emit showEmployeeMainWindow();
+    this->close();
+}
+
+QMap<QString, QString> HotelsListWindow::createFilter() {
+    QMap<QString, QString> filter;
+    QSharedPointer<City> city = this->ui->cityListBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
+    filter["title"] = this->ui->titleEdit->text() + "%";
+    filter["category"] = this->ui->categoryBox->currentData(HotelCategoryListModel::CategoryRole).toString();
+    filter["id_city"] = city == nullptr ? QString() : QString::number(city->id);
+    return filter;
 }

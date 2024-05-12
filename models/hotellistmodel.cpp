@@ -15,11 +15,17 @@ QVariant HotelListModel::data(const QModelIndex &index, int role) const {
         }
         return this->hotels.at(index.row() - 1)->title;
     }
-    if (role == Qt::UserRole) {
+    if (role == HotelPtrRole) {
         if (index.row() == 0) {
             return QVariant::fromValue(nullptr);
         }
         return QVariant::fromValue(this->hotels.at(index.row() - 1));
+    }
+    if (role == HotelIdRole) {
+        if (index.row() == 0) {
+            return -1;
+        }
+        return this->hotels.at(index.row() - 1)->id;
     }
     return QVariant();
 }

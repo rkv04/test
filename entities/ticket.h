@@ -15,7 +15,7 @@ public:
     QSharedPointer<City> departure_city;
     QSharedPointer<Hotel> hotel;
     int duration;
-    int travel_time;
+    QString travel_time;
 };
 
 #endif // TICKET_H

@@ -20,7 +20,7 @@ QVariant HotelCategoryListModel::data(const QModelIndex &index, int role) const 
     if (role == Qt::DisplayRole) {
         return this->categories.at(index.row()).title;
     }
-    if (role == Qt::UserRole) {
+    if (role == CategoryRole) {
         return this->categories.at(index.row()).value;
     }
     return QVariant();

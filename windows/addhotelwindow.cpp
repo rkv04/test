@@ -44,7 +44,7 @@ void AddHotelWindow::init() {
 }
 
 void AddHotelWindow::onAddButtonClicked() {
-    QSharedPointer<City> city = this->ui->cityList->currentData(Qt::UserRole).value<QSharedPointer<City>>();
+    QSharedPointer<City> city = this->ui->cityList->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
     int category = this->ui->hotelCategory->currentData(Qt::UserRole).toInt();
     QString title = this->ui->titleEdit->text();
     QString address = this->ui->addressEdit->text();

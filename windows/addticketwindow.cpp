@@ -16,6 +16,7 @@ AddTicketWindow::AddTicketWindow(QWidget *parent)
     connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(close()));
     connect(this->ui->destinationCityBox, SIGNAL(currentIndexChanged(int)), this, SLOT(destinationCityBoxChanged()));
 
+    this->ui->dateEdit->setDate(QDate::currentDate());
     this->ui->durationBox->addItem("14 дней", 14); // to do
 }
 
@@ -59,7 +60,7 @@ void AddTicketWindow::init() {
 }
 
 void AddTicketWindow::destinationCityBoxChanged() {
-    QSharedPointer<City> destination_city = this->ui->destinationCityBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
+    QSharedPointer<City> destination_city = this->ui->destinationCityBox->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
     if (destination_city == nullptr) {
         this->hotel_list_model->setHotelList(QVector<QSharedPointer<Hotel>>());
         return;
@@ -77,8 +78,8 @@ void AddTicketWindow::destinationCityBoxChanged() {
 }
 
 void AddTicketWindow::onAddButtonClicked() {
-    QSharedPointer<City> departure_city = this->ui->departureCityBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
-    QSharedPointer<Hotel> hotel = this->ui->hotelBox->currentData(Qt::UserRole).value<QSharedPointer<Hotel>>();
+    QSharedPointer<City> departure_city = this->ui->departureCityBox->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
+    QSharedPointer<Hotel> hotel = this->ui->hotelBox->currentData(HotelListModel::HotelPtrRole).value<QSharedPointer<Hotel>>();
     QString departure_date = this->ui->dateEdit->date().toString("dd.MM.yyyy");
     int duration = this->ui->durationBox->currentData().toInt();
     QString quantity = this->ui->quantityEdit->text();
@@ -92,7 +93,7 @@ void AddTicketWindow::onAddButtonClicked() {
     this->created_ticket->price = price.toInt();
     this->created_ticket->duration = duration;
     this->created_ticket->quantity = quantity.toInt();
-    this->created_ticket->travel_time = travel_time.toInt();
+    this->created_ticket->travel_time = travel_time;
     this->created_ticket->departure_date = departure_date;
     this->created_ticket->departure_city = departure_city;
     this->created_ticket->hotel = hotel;

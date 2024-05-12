@@ -35,7 +35,21 @@ void TicketService::removeTicketById(const int id) {
 }
 
 void TicketService::updateTicket(const QSharedPointer<Ticket> &ticket) {
-
+    QSqlQuery query;
+    query.prepare("UPDATE Ticket SET price = ?, quantity = ?, id_hotel = ?, id_departure_city = ?, "
+                                    "duration = ?, travel_time = ?, departure_date = ? "
+                                 "WHERE id = ?;");
+    query.bindValue(0, ticket->price);
+    query.bindValue(1, ticket->quantity);
+    query.bindValue(2, ticket->hotel->id);
+    query.bindValue(3, ticket->departure_city->id);
+    query.bindValue(4, ticket->duration);
+    query.bindValue(5, ticket->travel_time);
+    query.bindValue(6, ticket->departure_date);
+    query.bindValue(7, ticket->id);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
 }
 
 int TicketService::getIdLastAddedTicket() {
@@ -75,7 +89,7 @@ QSharedPointer<Ticket> TicketService::createTicketByRow(const QSqlRecord &record
     ticket->price = record.value("price").toInt();
     ticket->quantity = record.value("quantity").toInt();
     ticket->duration = record.value("duration").toInt();
-    ticket->travel_time = record.value("travel_time").toInt();
+    ticket->travel_time = record.value("travel_time").toString();
     ticket->departure_date = record.value("departure_date").toString();
     ticket->departure_city->id = record.value("id_departure_city").toInt();
     ticket->departure_city->title = record.value("city_departure_title").toString();

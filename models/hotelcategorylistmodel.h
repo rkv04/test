@@ -6,6 +6,10 @@
 class HotelCategoryListModel : public QAbstractListModel
 {
 public:
+
+    enum {
+        CategoryRole = Qt::UserRole + 1
+    };
     explicit HotelCategoryListModel(QObject *parent = nullptr);
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;

@@ -49,10 +49,10 @@ CREATE TABLE IF NOT EXISTS Ticket (
 	id_hotel INTEGER NOT NULL,
 	id_departure_city INTEGER NOT NULL,
 	duration INTEGER NOT NULL,
-	travel_time INTEGER NOT NULL,
+	travel_time TEXT NOT NULL,
 	departure_date TEXT NOT NULL,
 	activity_flag INTEGER DEFAULT 1 NOT NULL,
-	FOREIGN KEY (id_hotel) REFERENCES id (Hotel),
+	FOREIGN KEY (id_hotel) REFERENCES Hotel (id),
 	FOREIGN KEY (id_departure_city) REFERENCES City (id)
 );
 

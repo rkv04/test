@@ -35,6 +35,8 @@ signals:
     void showEmployeeMainWindow();
 
 private:
+    void initUi();
+    void initModels();
     bool confirmDelete();
     bool tableHasSelection();
     void handleAppError(const AppError &ex);

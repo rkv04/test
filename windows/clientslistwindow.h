@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSqlQueryModel>
 
+#include "apperror.h"
 #include "clienttablemodel.h"
 
 namespace Ui {
@@ -28,9 +29,13 @@ private slots:
     void onBackButtonClicked();
 
 private:
-    void refreshModel();
-    QSharedPointer<ClientTableModel> client_model;
     Ui::ClientsListWindow *ui;
+
+    void initUi();
+    void initModels();
+    void handleAppError(const AppError &ex);
+    QMap<QString, QString> createFilter();
+    QSharedPointer<ClientTableModel> client_model;
 
 };
 

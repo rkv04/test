@@ -16,9 +16,9 @@ public:
 
     void setTicketList(const QVector<QSharedPointer<Ticket>> &tickets);
     void addTicket(const QSharedPointer<Ticket> &ticket);
-
     QSharedPointer<Ticket> getTicketByIndexRow(const int row);
     void removeTicketByIndexRow(const int row);
+    void updateTicketByIndexRow(const int row, const QSharedPointer<Ticket> &ticket);
 
 private:
 

@@ -37,9 +37,13 @@ signals:
     void showEmployeeMainWindow();
 
 private:
+    Ui::HotelsListWindow *ui;
+
+    void initModels();
+    void initUi();
     void handleAppError(const AppError &ex);
     bool hasSelection();
-    Ui::HotelsListWindow *ui;
+    QMap<QString, QString> createFilter();
 
     QSharedPointer<HotelCategoryListModel> category_model;
     QSharedPointer<HotelTableModel> hotel_table_model;

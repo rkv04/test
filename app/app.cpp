@@ -256,7 +256,13 @@ void App::removeTicket(const QSharedPointer<Ticket> &ticket) {
 }
 
 void App::updateTicket(const QSharedPointer<Ticket> &ticket) {
-
+    try {
+        this->ticket_service->updateTicket(ticket);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
 }
 
 QVector<QSharedPointer<Ticket>> App::getTicketList() {

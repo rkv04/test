@@ -47,7 +47,7 @@ QVector<QSharedPointer<Hotel>> HotelService::getHotelList() {
     QSqlQuery query;
     QString text_query = "SELECT Hotel.id,"
                                 "Hotel.title AS 'hotel_title',"
-                                "City.id AS 'city_id',"
+                                "City.id AS 'id_city',"
                                 "City.title AS 'city_title',"
                                 "Hotel.address,"
                                 "Hotel.category "
@@ -95,7 +95,7 @@ QVector<QSharedPointer<Hotel>> HotelService::getHotelListByFilter(const QMap<QSt
     QSqlQuery query;
     QString text_query = "SELECT Hotel.id AS 'id', "
                          "Hotel.title AS 'hotel_title', "
-                         "Hotel.id_city AS 'id_city', "
+                         "City.id AS 'id_city', "
                          "City.title AS 'city_title', "
                          "Hotel.address AS 'address', "
                          "Hotel.category AS 'category' "
@@ -126,13 +126,13 @@ QVector<QSharedPointer<Hotel>> HotelService::getHotelListByCityId(const int id) 
     QSqlQuery query;
     query.prepare("SELECT Hotel.id,"
                          "Hotel.title AS 'hotel_title',"
-                         "City.id AS 'city_id',"
+                         "City.id AS 'id_city',"
                          "City.title AS 'city_title',"
                          "Hotel.address,"
                          "Hotel.category "
                     "FROM Hotel "
                         "JOIN City ON Hotel.id_city = City.id "
-                    "WHERE Hotel.activity_flag = 1 AND Hotel.id_city = ?;");
+                    "WHERE Hotel.activity_flag = 1 AND City.id = ?;");
     query.bindValue(0, id);
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());

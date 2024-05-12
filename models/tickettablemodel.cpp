@@ -68,3 +68,14 @@ void TicketTableModel::removeTicketByIndexRow(const int row) {
     this->tickets.remove(row);
     emit layoutChanged();
 }
+
+void TicketTableModel::updateTicketByIndexRow(const int row, const QSharedPointer<Ticket> &ticket) {
+    this->tickets.at(row)->price = ticket->price;
+    this->tickets.at(row)->quantity = ticket->quantity;
+    this->tickets.at(row)->travel_time = ticket->travel_time;
+    this->tickets.at(row)->duration = ticket->duration;
+    this->tickets.at(row)->departure_date = ticket->departure_date;
+    this->tickets.at(row)->departure_city = ticket->departure_city;
+    this->tickets.at(row)->hotel = ticket->hotel;
+    emit layoutChanged();
+}

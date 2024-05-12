@@ -42,7 +42,6 @@ QVariant HotelTableModel::headerData(int section, Qt::Orientation orientation, i
     return QVariant();
 }
 
-
 void HotelTableModel::setHotelsList(const QVector<QSharedPointer<Hotel>> &hotels) {
     this->beginResetModel();
     this->hotels = hotels;
@@ -52,21 +51,6 @@ void HotelTableModel::setHotelsList(const QVector<QSharedPointer<Hotel>> &hotels
 void HotelTableModel::addHotel(const QSharedPointer<Hotel> &hotel) {
     this->hotels.append(hotel);
     emit layoutChanged();
-}
-
-QVector<QSharedPointer<City>> HotelTableModel::getHotelCities() {
-    QSet<QString> unique_city_title;
-    QVector<QSharedPointer<City>> hotel_cities;
-    for (auto hotel : this->hotels) {
-        if (!unique_city_title.contains(hotel->city->title)) {
-            unique_city_title.insert(hotel->city->title);
-            hotel_cities.push_back(hotel->city);
-        }
-    }
-    std::sort(hotel_cities.begin(), hotel_cities.end(), [] (QSharedPointer<City> &l_city, QSharedPointer<City> &r_city) {
-        return l_city->title < r_city->title;
-    });
-    return hotel_cities;
 }
 
 void HotelTableModel::removeHotelByIndexRow(const int row) {
