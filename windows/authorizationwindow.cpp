@@ -51,19 +51,28 @@ void AuthorizationWindow::loginButtonClicked() {
     }
     switch (user->role) {
         case 0: {
-            this->client_main_window = new ClientMainWindow();
+            if (this->client_main_window == nullptr) {
+                this->client_main_window = QSharedPointer<ClientMainWindow>(new ClientMainWindow());
+            }
             this->client_main_window->show();
             this->close();
             break;
         }
         case 1: {
-            this->employee_main_window = new EmployeeMainWindow();
+            if (this->employee_main_window == nullptr) {
+                this->employee_main_window = QSharedPointer<EmployeeMainWindow>(new EmployeeMainWindow());
+                connect(this->employee_main_window.get(), SIGNAL(logout()), this, SLOT(show()));
+            }
             this->employee_main_window->show();
             this->close();
             break;
         }
         case 2: {
-            QMessageBox::information(this, "Tour operator", "Это администратор");
+            if (this->admin_main_window == nullptr) {
+                this->admin_main_window = QSharedPointer<AdminMainWindow>(new AdminMainWindow());
+            }
+            this->admin_main_window->show();
+            this->close();
             break;
         }
 

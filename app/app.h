@@ -29,6 +29,9 @@ public:
     QVector<QSharedPointer<User>> getClientsListByFilter(const QMap<QString, QString> &filter);
     void setDiscount(const int client_id, const int discount);
 
+    void updateEmployee(const QSharedPointer<User> &employee);
+    void updateEmployeePassword(const int employee_id, const QString &password);
+
     int createCity(const QSharedPointer<City> &city);
     void removeCity(const QSharedPointer<City> &city);
     void updateCity(const QSharedPointer<City> &city);

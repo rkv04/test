@@ -28,6 +28,15 @@ void EditTicketWindow::handleAppError(const AppError &ex) {
     }
 }
 
+bool EditTicketWindow::saveAsNewTicket() {
+    QMessageBox confirm_box;
+    confirm_box.setIcon(QMessageBox::Question);
+    confirm_box.setWindowTitle(App::APPLICATION_NAME);
+    confirm_box.setText("Сохранить путёвку как новую?");
+    confirm_box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    return confirm_box.exec() == QMessageBox::Yes;
+}
+
 void EditTicketWindow::init() {
     this->initModels();
     this->initUi();
@@ -35,6 +44,10 @@ void EditTicketWindow::init() {
 
 void EditTicketWindow::setTicket(const QSharedPointer<Ticket> &ticket) {
     this->ticket = ticket;
+}
+
+QSharedPointer<Ticket> EditTicketWindow::getUpdatedTicket() {
+    return this->ticket;
 }
 
 void EditTicketWindow::initModels() {
@@ -89,6 +102,9 @@ void EditTicketWindow::onSaveButtonClicked() {
     {
         QMessageBox::warning(this, App::APPLICATION_NAME, "Необходимо заполнить все поля формы");
         return;
+    }
+    if (this->saveAsNewTicket()) {
+        this->ticket = QSharedPointer<Ticket>(new Ticket());
     }
     this->ticket->departure_city = departure_city;
     this->ticket->hotel = hotel;

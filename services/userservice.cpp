@@ -122,3 +122,25 @@ QVector<QSharedPointer<User>> UserService::getClientListByQuery(QSqlQuery &query
     return users;
 }
 
+void UserService::updateEmployeePassword(const int id, const QString &hash_password)  {
+    QSqlQuery query;
+    query.prepare("UPDATE Employee SET hash_password = ? WHERE id = ?");
+    query.bindValue(0, hash_password);
+    query.bindValue(1, id);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+}
+
+void UserService::updateEmployee(const QSharedPointer<User> &employee) {
+    QSqlQuery query;
+    query.prepare("UPDATE Employee SET surname = ?, name = ?, patronymic = ?, phone = ? WHERE id = ?");
+    query.bindValue(0, employee->surname);
+    query.bindValue(1, employee->name);
+    query.bindValue(2, employee->patronymic);
+    query.bindValue(3, employee->phone);
+    query.bindValue(4, employee->id);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+}

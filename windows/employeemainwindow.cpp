@@ -18,7 +18,8 @@ EmployeeMainWindow::EmployeeMainWindow(QWidget *parent)
     connect(this->ui->cityListButton, SIGNAL(clicked(bool)), this, SLOT(onCityListButtonClicked()));
     connect(this->ui->hotelListButton, SIGNAL(clicked(bool)), this, SLOT(onHotelListButtonClicked()));
     connect(this->ui->ticketListButton, SIGNAL(clicked(bool)), this, SLOT(onTicketListButtonClicked()));
-
+    connect(this->ui->logoutButton, SIGNAL(clicked(bool)), this, SLOT(onLogoutButtonClicked()));
+    connect(this->ui->accountButton, SIGNAL(clicked(bool)), this, SLOT(onAccountButtonClicked()));
 }
 
 EmployeeMainWindow::~EmployeeMainWindow()
@@ -63,5 +64,20 @@ void EmployeeMainWindow::onTicketListButtonClicked() {
     }
     this->ticket_list_window->init();
     this->ticket_list_window->show();
+    this->close();
+}
+
+void EmployeeMainWindow::onAccountButtonClicked() {
+    if (this->employee_account_window == nullptr) {
+        this->employee_account_window = QSharedPointer<EmployeeAccountWindow>(new EmployeeAccountWindow());
+        // connect(this->employee_account_window.get(), SIGNAL(showEmployeeMainWindow()), this, SLOT(show()));
+    }
+    this->employee_account_window->init();
+    this->employee_account_window->show();
+    this->close();
+}
+
+void EmployeeMainWindow::onLogoutButtonClicked() {
+    emit logout();
     this->close();
 }

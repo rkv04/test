@@ -1,16 +1,20 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
+#include <QSharedPointer>
+
+#include "user.h"
+
 class Context
 {
 public:
     Context();
 
-    static int getContext();
-    static void setContext(const int id_user);
+    static QSharedPointer<User> getContext();
+    static void setContext(const QSharedPointer<User> &employee);
 
 private:
-    static int current_user_id;
+    static QSharedPointer<User> current_user;
 };
 
 #endif // CONTEXT_H

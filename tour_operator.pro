@@ -47,6 +47,7 @@ SOURCES += \
     windows/editcitywindow.cpp \
     windows/edithotelwindow.cpp \
     windows/editticketwindow.cpp \
+    windows/employeeaccountwindow.cpp \
     windows/employeedeletewindow.cpp \
     windows/employeemainwindow.cpp \
     entities/hotel.cpp \
@@ -93,6 +94,7 @@ HEADERS += \
     windows/editcitywindow.h \
     windows/edithotelwindow.h \
     windows/editticketwindow.h \
+    windows/employeeaccountwindow.h \
     windows/employeedeletewindow.h \
     windows/employeemainwindow.h \
     entities/hotel.h \
@@ -126,7 +128,8 @@ FORMS += \
     gui/registrationwindow.ui \
     gui/ticketpurchasewindow.ui \
     gui/ticketslistwindow.ui \
-    gui/userslistwindow.ui
+    gui/userslistwindow.ui \
+    gui/employeeaccountwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -147,15 +147,20 @@ void TicketsListWindow::onEditButtonClicked() {
     if (edit_ticket_window.exec() != QDialog::Accepted) {
         return;
     }
+    QSharedPointer<Ticket> updated_ticket = edit_ticket_window.getUpdatedTicket();
     App *app = App::getInstance();
     try {
-        app->updateTicket(ticket);
+        if (updated_ticket->id == -1) {
+            updated_ticket->id = app->createTicket(updated_ticket);
+            this->ticket_table_model->addTicket(updated_ticket);
+        }
+        else {
+            app->updateTicket(updated_ticket);
+        }
     }
     catch(const AppError &ex) {
         this->handleAppError(ex);
-        return;
     }
-    this->ticket_table_model->updateTicketByIndexRow(selected_row, ticket);
 }
 
 void TicketsListWindow::onDeleteButtonClicked() {

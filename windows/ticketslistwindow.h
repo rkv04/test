@@ -43,6 +43,7 @@ private:
     bool hasSelection();
     QMap<QString, QString> createFilter();
     bool confirmDelete();
+    bool saveAsNewTicket();
 
     QSharedPointer<TicketTableModel> ticket_table_model;
     QSharedPointer<CityListModel> city_list_model;

@@ -38,12 +38,12 @@ void App::init() {
 QSharedPointer<User> App::login(const QString &phone, const QString &password) {
     auto client = this->tryLoginAsClient(phone, password);
     if (client != nullptr) {
-        Context::setContext(client->id);
+        Context::setContext(client);
         return client;
     }
     auto employeee = this->tryLoginAsEmployee(phone, password);
     if (employeee != nullptr) {
-        Context::setContext(employeee->id);
+        Context::setContext(employeee);
         return employeee;
     }
     throw AppError("Введён неверный логин или пароль", false);
@@ -118,6 +118,27 @@ void App::setDiscount(const int client_id, const int discount) {
 QVector<QSharedPointer<User>> App::getClientsListByFilter(const QMap<QString, QString> &filter) {
     try {
         return this->user_service->getClientsByFilter(filter);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+void App::updateEmployee(const QSharedPointer<User> &employee) {
+    try {
+        this->user_service->updateEmployee(employee);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+void App::updateEmployeePassword(const int employee_id, const QString &password) {
+    const QString hash_password = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
+    try {
+        this->user_service->updateEmployeePassword(employee_id, hash_password);
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());

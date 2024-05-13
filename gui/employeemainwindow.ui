@@ -50,8 +50,8 @@
    <widget class="QPushButton" name="hotelListButton">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>240</y>
+      <x>220</x>
+      <y>200</y>
       <width>261</width>
       <height>41</height>
      </rect>
@@ -69,8 +69,8 @@
    <widget class="QPushButton" name="ticketListButton">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>180</y>
+      <x>220</x>
+      <y>140</y>
       <width>261</width>
       <height>41</height>
      </rect>
@@ -88,8 +88,8 @@
    <widget class="QPushButton" name="clientListButton">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>360</y>
+      <x>220</x>
+      <y>320</y>
       <width>261</width>
       <height>41</height>
      </rect>
@@ -107,8 +107,8 @@
    <widget class="QPushButton" name="cityListButton">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>300</y>
+      <x>220</x>
+      <y>260</y>
       <width>261</width>
       <height>41</height>
      </rect>
@@ -134,6 +134,25 @@
     </property>
     <property name="text">
      <string>Выйти из системы</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="accountButton">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>380</y>
+      <width>261</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Личный кабинет</string>
     </property>
    </widget>
   </widget>

@@ -7,6 +7,7 @@
 #include "citylistwindow.h"
 #include "hotelslistwindow.h"
 #include "ticketslistwindow.h"
+#include "employeeaccountwindow.h"
 
 namespace Ui {
 class EmployeeMainWindow;
@@ -25,9 +26,11 @@ public slots:
     void onCityListButtonClicked();
     void onHotelListButtonClicked();
     void onTicketListButtonClicked();
+    void onAccountButtonClicked();
+    void onLogoutButtonClicked();
 
 signals:
-
+    void logout();
 
 private:
     Ui::EmployeeMainWindow *ui;
@@ -36,6 +39,7 @@ private:
     QSharedPointer<CityListWindow> city_list_window;
     QSharedPointer<HotelsListWindow> hotel_list_window;
     QSharedPointer<TicketsListWindow> ticket_list_window;
+    QSharedPointer<EmployeeAccountWindow> employee_account_window;
 };
 
 #endif // EMPLOYEEMAINWINDOW_H

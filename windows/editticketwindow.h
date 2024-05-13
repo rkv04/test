@@ -20,6 +20,7 @@ public:
     explicit EditTicketWindow(QWidget *parent = nullptr);
     ~EditTicketWindow();
 
+    QSharedPointer<Ticket> getUpdatedTicket();
     void setTicket(const QSharedPointer<Ticket> &ticket);
     void init();
 
@@ -32,6 +33,7 @@ private:
     void initModels();
     void initUi();
     void handleAppError(const AppError &ex);
+    bool saveAsNewTicket();
 
     Ui::EditTicketWindow *ui;
 
