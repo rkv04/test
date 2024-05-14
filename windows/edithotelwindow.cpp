@@ -46,7 +46,7 @@ void EditHotelWindow::setHotel(const QSharedPointer<Hotel> &hotel) {
     this->ui->addressEdit->setText(hotel->address);
     int city_index = this->ui->cityBox->findText(hotel->city->title);
     this->ui->cityBox->setCurrentIndex(city_index);
-    int category_index = this->ui->categoryBox->findData(hotel->category, Qt::UserRole);
+    int category_index = this->ui->categoryBox->findData(hotel->category, HotelCategoryListModel::CategoryRole);
     this->ui->categoryBox->setCurrentIndex(category_index);
 }
 

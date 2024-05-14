@@ -122,11 +122,16 @@ QVector<QSharedPointer<User>> UserService::getClientListByQuery(QSqlQuery &query
     return users;
 }
 
-void UserService::updateEmployeePassword(const int id, const QString &hash_password)  {
+void UserService::updateUserPassword(const QSharedPointer<User> &user, const QString &hash_password)  {
     QSqlQuery query;
-    query.prepare("UPDATE Employee SET hash_password = ? WHERE id = ?");
+    if (user->role == User::Client) {
+        query.prepare("UPDATE Client SET hash_password = ? WHERE id = ?");
+    }
+    else {
+        query.prepare("UPDATE Employee SET hash_password = ? WHERE id = ?");
+    }
     query.bindValue(0, hash_password);
-    query.bindValue(1, id);
+    query.bindValue(1, user->id);
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
     }
@@ -140,6 +145,20 @@ void UserService::updateEmployee(const QSharedPointer<User> &employee) {
     query.bindValue(2, employee->patronymic);
     query.bindValue(3, employee->phone);
     query.bindValue(4, employee->id);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+}
+
+void UserService::updateClient(const QSharedPointer<User> &client) {
+    QSqlQuery query;
+    query.prepare("UPDATE Client SET surname = ?, name = ?, patronymic = ?, phone = ?, address = ? WHERE id = ?");
+    query.bindValue(0, client->surname);
+    query.bindValue(1, client->name);
+    query.bindValue(2, client->patronymic);
+    query.bindValue(3, client->phone);
+    query.bindValue(4, client->address);
+    query.bindValue(5, client->id);
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
     }

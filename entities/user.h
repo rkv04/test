@@ -7,6 +7,12 @@ class User {
 public:
     User();
 
+    enum Roles {
+        Client = 0,
+        Employee = 1,
+        Admin = 2
+    };
+
     int id;
     int role;
     QString phone;

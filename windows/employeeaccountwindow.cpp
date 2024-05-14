@@ -14,10 +14,11 @@ EmployeeAccountWindow::EmployeeAccountWindow(QWidget *parent)
     ui->setupUi(this);
     connect(this->ui->changePasswordButton, SIGNAL(clicked(bool)), this, SLOT(onChangePasswordButtonClicked()));
     connect(this->ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(onSaveButtonClicked()));
-    this->employee = Context::getContext();
+    connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(onCancelButtonClicked()));
 }
 
 void EmployeeAccountWindow::init() {
+    this->employee = Context::getContext();
     this->ui->surnameEdit->setText(this->employee->surname);
     this->ui->nameEdit->setText(this->employee->name);
     this->ui->patronymicEdit->setText(this->employee->patronymic);
@@ -73,11 +74,16 @@ void EmployeeAccountWindow::onChangePasswordButtonClicked() {
     }
     App *app = App::getInstance();
     try {
-        app->updateEmployeePassword(this->employee->id, password);
+        app->updateUserPassword(this->employee, password);
     }
     catch(const AppError &ex) {
         this->handleAppError(ex);
         return;
     }
     QMessageBox::information(this, App::APPLICATION_NAME, "Пароль успешно изменён");
+}
+
+void EmployeeAccountWindow::onCancelButtonClicked() {
+    emit closed();
+    this->close();
 }

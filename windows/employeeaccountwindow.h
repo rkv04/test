@@ -20,9 +20,13 @@ public:
 
     void init();
 
+signals:
+    void closed();
+
 private slots:
     void onChangePasswordButtonClicked();
     void onSaveButtonClicked();
+    void onCancelButtonClicked();
 
 private:
     Ui::EmployeeAccountWindow *ui;

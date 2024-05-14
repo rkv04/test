@@ -35,3 +35,13 @@ void HotelListModel::setHotelList(const QVector<QSharedPointer<Hotel>> &hotels) 
     this->hotels = hotels;
     this->endResetModel();
 }
+
+void HotelListModel::addHotelIfNotExists(const QSharedPointer<Hotel> &hotel) {
+    for (int i = 0; i < this->rowCount(QModelIndex()); i++) {
+        QModelIndex index = this->index(i, 0);
+        if (hotel->id == this->data(index, HotelIdRole)) {
+            return;
+        }
+    }
+    this->hotels.append(hotel);
+}

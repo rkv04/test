@@ -210,8 +210,14 @@
     <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
       <widget class="QPushButton" name="pushButton_12">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
-        <string>Сохранить</string>
+        <string>Удалить выбранное</string>
        </property>
       </widget>
      </item>
@@ -233,6 +239,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_11">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
         <string>Назад</string>
        </property>

@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+#include "user.h"
+#include "apperror.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class Account;
@@ -17,7 +20,21 @@ public:
     Account(QWidget *parent = nullptr);
     ~Account();
 
+    void init();
+
+signals:
+    void closed();
+
+private slots:
+    void onCancelButtonClicked();
+    void onSaveButtonClicked();
+    void onChangePasswordButtonClicked();
+
 private:
     Ui::Account *ui;
+
+    void handleAppError(const AppError &ex);
+
+    QSharedPointer<User> client;
 };
 #endif // ACCOUNT_H

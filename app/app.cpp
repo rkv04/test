@@ -125,6 +125,16 @@ QVector<QSharedPointer<User>> App::getClientsListByFilter(const QMap<QString, QS
     }
 }
 
+void App::updateCLient(const QSharedPointer<User> &client) {
+    try {
+        this->user_service->updateClient(client);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
 void App::updateEmployee(const QSharedPointer<User> &employee) {
     try {
         this->user_service->updateEmployee(employee);
@@ -135,10 +145,10 @@ void App::updateEmployee(const QSharedPointer<User> &employee) {
     }
 }
 
-void App::updateEmployeePassword(const int employee_id, const QString &password) {
+void App::updateUserPassword(const QSharedPointer<User> &user, const QString &password) {
     const QString hash_password = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
     try {
-        this->user_service->updateEmployeePassword(employee_id, hash_password);
+        this->user_service->updateUserPassword(user, hash_password);
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());

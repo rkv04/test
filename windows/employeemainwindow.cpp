@@ -70,7 +70,7 @@ void EmployeeMainWindow::onTicketListButtonClicked() {
 void EmployeeMainWindow::onAccountButtonClicked() {
     if (this->employee_account_window == nullptr) {
         this->employee_account_window = QSharedPointer<EmployeeAccountWindow>(new EmployeeAccountWindow());
-        // connect(this->employee_account_window.get(), SIGNAL(showEmployeeMainWindow()), this, SLOT(show()));
+        connect(this->employee_account_window.get(), SIGNAL(closed()), this, SLOT(show()));
     }
     this->employee_account_window->init();
     this->employee_account_window->show();

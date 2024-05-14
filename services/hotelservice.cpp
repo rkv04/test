@@ -48,7 +48,8 @@ QVector<QSharedPointer<Hotel>> HotelService::getHotelList() {
     QString text_query = "SELECT Hotel.id,"
                                 "Hotel.title AS 'hotel_title',"
                                 "City.id AS 'id_city',"
-                                "City.title AS 'city_title',"
+                                "City.title AS 'city_title', "
+                                "City.climate AS 'city_climate', "
                                 "Hotel.address,"
                                 "Hotel.category "
                          "FROM Hotel "
@@ -74,8 +75,9 @@ QSharedPointer<Hotel> HotelService::createHotelByRow(const QSqlRecord &record) {
     hotel->city = QSharedPointer<City>(new City());
     hotel->id = record.value("id").toInt();
     hotel->title = record.value("hotel_title").toString();
-    hotel->city->title = record.value("city_title").toString();
     hotel->city->id = record.value("id_city").toInt();
+    hotel->city->title = record.value("city_title").toString();
+    hotel->city->climate = record.value("city_climate").toString();
     hotel->address = record.value("address").toString();
     hotel->category = record.value("category").toInt();
     return hotel;
@@ -128,6 +130,7 @@ QVector<QSharedPointer<Hotel>> HotelService::getHotelListByCityId(const int id) 
                          "Hotel.title AS 'hotel_title',"
                          "City.id AS 'id_city',"
                          "City.title AS 'city_title',"
+                         "City.climate AS 'city_climate', "
                          "Hotel.address,"
                          "Hotel.category "
                     "FROM Hotel "

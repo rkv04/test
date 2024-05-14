@@ -11,6 +11,7 @@ EditTicketWindow::EditTicketWindow(QWidget *parent)
     , ui(new Ui::EditTicketWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(App::APPLICATION_NAME);
     connect(this->ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(onSaveButtonClicked()));
     connect(this->ui->destinationCityBox, SIGNAL(currentIndexChanged(int)), this, SLOT(destinationCityBoxChanged()));
     connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
@@ -64,6 +65,8 @@ void EditTicketWindow::initModels() {
     }
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->city_list_model->setCityList(cities);
+    this->city_list_model->addCityIfNotExists(this->ticket->departure_city);
+    this->city_list_model->addCityIfNotExists(this->ticket->hotel->city);
     this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
     this->hotel_list_model->setHotelList(hotels);
 }
@@ -132,4 +135,5 @@ void EditTicketWindow::destinationCityBoxChanged() {
         return;
     }
     this->hotel_list_model->setHotelList(hotels);
+    this->hotel_list_model->addHotelIfNotExists(this->ticket->hotel);
 }
