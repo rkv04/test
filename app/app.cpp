@@ -125,7 +125,11 @@ QVector<QSharedPointer<User>> App::getClientsListByFilter(const QMap<QString, QS
     }
 }
 
-void App::updateCLient(const QSharedPointer<User> &client) {
+void App::updateCLient(const QSharedPointer<User> &updated_client) {
+    QSharedPointer<User> client = this->user_service->getClientByPhone(updated_client->phone);
+    if (client != nullptr && updated_client->id != client->id) {
+        throw AppError("Указанный номер телефона уже занят", false);
+    }
     try {
         this->user_service->updateClient(client);
     }
@@ -135,7 +139,11 @@ void App::updateCLient(const QSharedPointer<User> &client) {
     }
 }
 
-void App::updateEmployee(const QSharedPointer<User> &employee) {
+void App::updateEmployee(const QSharedPointer<User> &updated_employee) {
+    QSharedPointer<User> employee = this->user_service->getEmployeeByPhone(employee->phone);
+    if (employee != nullptr && updated_employee->id != employee->id) {
+        throw AppError("Указанный номер телефона уже занят", false);
+    }
     try {
         this->user_service->updateEmployee(employee);
     }
@@ -306,9 +314,47 @@ QVector<QSharedPointer<Ticket>> App::getTicketList() {
     }
 }
 
+QVector<QSharedPointer<Ticket>> App::getTicketsAvailableForPurchase() {
+    try {
+        return this->ticket_service->getTicketsAvailableForPurchase();
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
 QVector<QSharedPointer<Ticket>> App::getTicketListByFilter(const QMap<QString, QString> &filter) {
     try {
         return this->ticket_service->getTicketListByFilter(filter);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+QVector<QSharedPointer<Ticket>> App::getCurrentClientTicketList() {
+    auto current_client_id = Context::getContext()->id;
+    try {
+        return this->ticket_service->getClientTicketList(current_client_id);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+void App::buyTicket(const QSharedPointer<Ticket> &purchased_ticket, const int quantity) {
+    int id_client = Context::getContext()->id;
+    QSharedPointer<Ticket> ticket;
+    try {
+        ticket = this->ticket_service->getTicketById(purchased_ticket->id);
+        if (ticket->quantity < quantity) {
+            throw AppError("Указанное количество путевок превышает имеющееся количество в продаже", false);
+        }
+        this->ticket_service->addClientsTicket(purchased_ticket->id, quantity, id_client);
+        this->ticket_service->setQuantityById(purchased_ticket->id, ticket->quantity - quantity);
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());

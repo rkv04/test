@@ -44,6 +44,7 @@ SOURCES += \
     app/context.cpp \
     app/criticaldb.cpp \
     app/db.cpp \
+    windows/clientticketswindow.cpp \
     windows/editcitywindow.cpp \
     windows/edithotelwindow.cpp \
     windows/editticketwindow.cpp \
@@ -54,7 +55,6 @@ SOURCES += \
     windows/hotelslistwindow.cpp \
     app/main.cpp \
     windows/account.cpp \
-    windows/myticketswindow.cpp \
     windows/registrationwindow.cpp \
     windows/ticketpurchasewindow.cpp \
     windows/ticketslistwindow.cpp \
@@ -91,6 +91,7 @@ HEADERS += \
     app/context.h \
     app/criticaldb.h \
     app/db.h \
+    windows/clientticketswindow.h \
     windows/editcitywindow.h \
     windows/edithotelwindow.h \
     windows/editticketwindow.h \
@@ -99,7 +100,6 @@ HEADERS += \
     windows/employeemainwindow.h \
     entities/hotel.h \
     windows/hotelslistwindow.h \
-    windows/myticketswindow.h \
     windows/registrationwindow.h \
     windows/ticketpurchasewindow.h \
     windows/ticketslistwindow.h \
@@ -124,12 +124,12 @@ FORMS += \
     gui/employeedeletewindow.ui \
     gui/employeemainwindow.ui \
     gui/hotelslistwindow.ui \
-    gui/myticketswindow.ui \
     gui/registrationwindow.ui \
     gui/ticketpurchasewindow.ui \
     gui/ticketslistwindow.ui \
     gui/userslistwindow.ui \
-    gui/employeeaccountwindow.ui
+    gui/employeeaccountwindow.ui \
+    gui/clientticketswindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -39,7 +39,7 @@ QSharedPointer<User> UserService::getClientByPhone(const QString &phone) {
 
 QSharedPointer<User> UserService::getEmployeeByPhone(const QString &phone) {
     QSqlQuery query;
-    query.prepare("SELECT * FROM Employee WHERE phone = ?;");
+    query.prepare("SELECT * FROM Employee WHERE phone = ? AND activity_flag = 1;");
     query.bindValue(0, phone);
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());

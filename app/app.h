@@ -50,7 +50,11 @@ public:
     void removeTicket(const QSharedPointer<Ticket> &ticket);
     void updateTicket(const QSharedPointer<Ticket> &ticket);
     QVector<QSharedPointer<Ticket>> getTicketList();
+    QVector<QSharedPointer<Ticket>> getTicketsAvailableForPurchase();
+    QVector<QSharedPointer<Ticket>> getCurrentClientTicketList();
     QVector<QSharedPointer<Ticket>> getTicketListByFilter(const QMap<QString, QString> &filter);
+
+    void buyTicket(const QSharedPointer<Ticket> &ticket, const int quantity);
 
 private:
 

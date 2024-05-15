@@ -19,6 +19,7 @@ public:
     QSharedPointer<Ticket> getTicketByIndexRow(const int row);
     void removeTicketByIndexRow(const int row);
     void updateTicketByIndexRow(const int row, const QSharedPointer<Ticket> &ticket);
+    void updateQuantityByIndexRow(const int row, const int quantity);
 
 private:
 

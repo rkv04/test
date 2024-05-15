@@ -96,7 +96,7 @@ void TicketsListWindow::init() {
 }
 
 void TicketsListWindow::destinationCityBoxChanged() {
-    QSharedPointer<City> destination_city = this->ui->destinationCityBox->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
+    auto destination_city = this->ui->destinationCityBox->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
     if (destination_city == nullptr) {
         this->hotel_list_model->setHotelList(QVector<QSharedPointer<Hotel>>());
         this->ui->hotelBox->setEnabled(false);

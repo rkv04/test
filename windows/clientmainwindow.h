@@ -4,9 +4,9 @@
 #include <QMainWindow>
 #include <QSharedPointer>
 
-#include "myticketswindow.h"
 #include "account.h"
 #include "ticketpurchasewindow.h"
+#include "clientticketswindow.h"
 
 namespace Ui {
 class ClientMainWindow;
@@ -32,6 +32,9 @@ private:
     Ui::ClientMainWindow *ui;
 
     QSharedPointer<Account> account_window;
+    QSharedPointer<TicketPurchaseWindow> ticket_purchase_window;
+    QSharedPointer<ClientTicketsWindow> client_ticket_window;
+
 };
 
 #endif // CLIENTMAINWINDOW_H

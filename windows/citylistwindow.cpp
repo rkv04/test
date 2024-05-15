@@ -97,7 +97,7 @@ void CityListWindow::onDeleteButtonClicked() {
         return;
     }
     QModelIndexList selected_indexes = this->ui->tableView->selectionModel()->selectedRows();
-    std::reverse(selected_indexes.begin(), selected_indexes.end());
+    std::sort(selected_indexes.begin(), selected_indexes.end(), [](const QModelIndex &l, const QModelIndex &r){return l.row() > r.row();});
     App *app = App::getInstance();
     try {
         for (auto i : selected_indexes) {

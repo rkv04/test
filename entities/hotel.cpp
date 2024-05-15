@@ -1,5 +1,7 @@
 #include "hotel.h"
 
+#include <QDebug>
+
 Hotel::Hotel() {
     this->id = -1;
     this->title = QString();

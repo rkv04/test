@@ -79,3 +79,8 @@ void TicketTableModel::updateTicketByIndexRow(const int row, const QSharedPointe
     this->tickets.at(row)->hotel = ticket->hotel;
     emit layoutChanged();
 }
+
+void TicketTableModel::updateQuantityByIndexRow(const int row, const int quantity) {
+    this->tickets.at(row)->quantity = quantity;
+    emit layoutChanged();
+}

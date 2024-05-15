@@ -18,8 +18,8 @@ public:
 private:
     struct Category {
         QString title;
-        QString value;
-        Category(const QString &t, QString v) : title(t), value(v){}
+        int value;
+        Category(const QString &t, int v) : title(t), value(v){}
     };
 
     QVector<Category> categories;

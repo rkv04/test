@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS Employee (
 	hash_password TEXT NOT NULL,
 	surname TEXT NOT NULL,
 	name TEXT NOT NULL,
-	patronymic TEXT
+	patronymic TEXT,
+	activity_flag INTEGER DEFAULT 1 NOT NULL
 );
 
 
