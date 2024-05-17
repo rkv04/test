@@ -24,6 +24,7 @@ SOURCES += \
     models/citytablemodel.cpp \
     models/clienttablemodel.cpp \
     models/dealtablemodel.cpp \
+    models/employeetablemodel.cpp \
     models/hotelcategorylistmodel.cpp \
     models/hotellistmodel.cpp \
     models/hoteltablemodel.cpp \
@@ -52,7 +53,7 @@ SOURCES += \
     windows/edithotelwindow.cpp \
     windows/editticketwindow.cpp \
     windows/employeeaccountwindow.cpp \
-    windows/employeedeletewindow.cpp \
+    windows/employeelistwindow.cpp \
     windows/employeemainwindow.cpp \
     entities/hotel.cpp \
     windows/hotelslistwindow.cpp \
@@ -73,6 +74,7 @@ HEADERS += \
     models/citytablemodel.h \
     models/clienttablemodel.h \
     models/dealtablemodel.h \
+    models/employeetablemodel.h \
     models/hotelcategorylistmodel.h \
     models/hotellistmodel.h \
     models/hoteltablemodel.h \
@@ -102,7 +104,7 @@ HEADERS += \
     windows/edithotelwindow.h \
     windows/editticketwindow.h \
     windows/employeeaccountwindow.h \
-    windows/employeedeletewindow.h \
+    windows/employeelistwindow.h \
     windows/employeemainwindow.h \
     entities/hotel.h \
     windows/hotelslistwindow.h \
@@ -127,7 +129,6 @@ FORMS += \
     gui/editcitywindow.ui \
     gui/edithotelwindow.ui \
     gui/editticketwindow.ui \
-    gui/employeedeletewindow.ui \
     gui/employeemainwindow.ui \
     gui/hotelslistwindow.ui \
     gui/registrationwindow.ui \
@@ -135,7 +136,8 @@ FORMS += \
     gui/ticketslistwindow.ui \
     gui/userslistwindow.ui \
     gui/employeeaccountwindow.ui \
-    gui/clientticketswindow.ui
+    gui/clientticketswindow.ui \
+    gui/employeelistwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

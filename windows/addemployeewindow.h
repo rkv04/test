@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "user.h"
+
 namespace Ui {
 class AddEmployeeWindow;
 }
@@ -15,8 +17,15 @@ public:
     explicit AddEmployeeWindow(QWidget *parent = nullptr);
     ~AddEmployeeWindow();
 
+    QSharedPointer<User> getCreatedEmployee();
+
+private slots:
+    void onRegistrationButtonClicked();
+
 private:
     Ui::AddEmployeeWindow *ui;
+
+    QSharedPointer<User> created_employee;
 };
 
 #endif // ADDEMPLOYEEWINDOW_H

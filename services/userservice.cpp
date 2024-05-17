@@ -37,6 +37,30 @@ QSharedPointer<User> UserService::getClientByPhone(const QString &phone) {
     return client;
 }
 
+int UserService::addEmployee(const QSharedPointer<User> &employee) {
+    QSqlQuery query;
+    query.prepare("INSERT INTO Employee (surname, name, patronymic, phone, hash_password) VALUES (?, ?, ?, ?, ?);");
+    query.bindValue(0, employee->surname);
+    query.bindValue(1, employee->name);
+    query.bindValue(2, employee->patronymic);
+    query.bindValue(3, employee->phone);
+    query.bindValue(4, employee->password);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+    return this->getIdLastAddedEmployee();
+}
+
+int UserService::getIdLastAddedEmployee() {
+    QSqlQuery query;
+    QString text_query = "SELECT id FROM Employee ORDER BY id DESC LIMIT 1";
+    if (!query.exec(text_query)) {
+        throw CriticalDB(query.lastError().text());
+    }
+    query.first();
+    return query.value("id").toInt();
+}
+
 QSharedPointer<User> UserService::getEmployeeByPhone(const QString &phone) {
     QSqlQuery query;
     query.prepare("SELECT * FROM Employee WHERE phone = ? AND activity_flag = 1;");
@@ -49,6 +73,24 @@ QSharedPointer<User> UserService::getEmployeeByPhone(const QString &phone) {
     }
     auto employee = this->createEmployeeByRow(query.record());
     return employee;
+}
+
+QVector<QSharedPointer<User>> UserService::getEmployeeList() {
+    QSqlQuery query;
+    QString text_query = "SELECT * FROM Employee;";
+    if (!query.exec(text_query)) {
+        throw CriticalDB(query.lastError().text());
+    }
+    return this->getEmployeeListByQuery(query);
+}
+
+QVector<QSharedPointer<User>> UserService::getEmployeeListByQuery(QSqlQuery &query) {
+    QVector<QSharedPointer<User>> employees;
+    while (query.next()) {
+        auto employee = this->createEmployeeByRow(query.record());
+        employees.append(employee);
+    }
+    return employees;
 }
 
 QVector<QSharedPointer<User>> UserService::getClientList() {

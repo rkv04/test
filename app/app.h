@@ -32,7 +32,9 @@ public:
     void setDiscount(const int client_id, const int discount);
     void updateCLient(const QSharedPointer<User> &client);
 
+    int createEmployee(const QSharedPointer<User> &employee);
     void updateEmployee(const QSharedPointer<User> &employee);
+    QVector<QSharedPointer<User>> getEmployeeList();
     void updateUserPassword(const QSharedPointer<User> &user, const QString &password);
 
     int createCity(const QSharedPointer<City> &city);

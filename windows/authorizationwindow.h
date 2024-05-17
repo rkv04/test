@@ -30,8 +30,8 @@ private slots:
 
 private:
     Ui::AuthorizationWindow *ui;
-    RegistrationWindow *reg_window;
 
+    QSharedPointer<RegistrationWindow> registration_window;
     QSharedPointer<ClientMainWindow> client_main_window;
     QSharedPointer<EmployeeMainWindow> employee_main_window;
     QSharedPointer<AdminMainWindow> admin_main_window;

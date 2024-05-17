@@ -22,7 +22,7 @@ public:
 
 signals:
     void successfulRegistration();
-
+    void back();
 
 public slots:
     void regButtonClicked();

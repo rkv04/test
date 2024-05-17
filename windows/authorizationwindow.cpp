@@ -15,10 +15,8 @@ AuthorizationWindow::AuthorizationWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle(App::APPLICATION_NAME);
-
     connect(this->ui->regButton, SIGNAL(clicked(bool)), this, SLOT(regButtonClicked()));
     connect(this->ui->loginButton, SIGNAL(clicked(bool)), this, SLOT(loginButtonClicked()));
-
 }
 
 AuthorizationWindow::~AuthorizationWindow()
@@ -27,8 +25,11 @@ AuthorizationWindow::~AuthorizationWindow()
 }
 
 void AuthorizationWindow::regButtonClicked() {
-    this->reg_window = new RegistrationWindow();
-    this->reg_window->show();
+    if (this->registration_window == nullptr) {
+        this->registration_window = QSharedPointer<RegistrationWindow>(new RegistrationWindow());
+        connect(this->registration_window.get(), SIGNAL(back()), this, SLOT(show()));
+    }
+    this->registration_window->show();
     this->close();
 }
 

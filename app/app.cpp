@@ -140,6 +140,20 @@ void App::updateCLient(const QSharedPointer<User> &updated_client) {
     }
 }
 
+int App::createEmployee(const QSharedPointer<User> &employee) {
+    if (this->user_service->getEmployeeByPhone(employee->phone) != nullptr) {
+        throw AppError("Сотрудник с таким номером телефона уже существует", false);
+    }
+    employee->password = QCryptographicHash::hash(employee->password.toUtf8(), QCryptographicHash::Sha256).toHex();
+    try {
+        return this->user_service->addEmployee(employee);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
 void App::updateEmployee(const QSharedPointer<User> &updated_employee) {
     QSharedPointer<User> employee = this->user_service->getEmployeeByPhone(employee->phone);
     if (employee != nullptr && updated_employee->id != employee->id) {
@@ -147,6 +161,16 @@ void App::updateEmployee(const QSharedPointer<User> &updated_employee) {
     }
     try {
         this->user_service->updateEmployee(employee);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+QVector<QSharedPointer<User>> App::getEmployeeList() {
+    try {
+        return this->user_service->getEmployeeList();
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());

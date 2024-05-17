@@ -19,14 +19,19 @@ public:
     void setDiscountById(const int id_client, const int discount);
     void updateClient(const QSharedPointer<User> &client);
 
+    int addEmployee(const QSharedPointer<User> &employee);
+    void removeEmployeeById(const int id);
     void updateEmployee(const QSharedPointer<User> &employee);
     QSharedPointer<User> getEmployeeByPhone(const QString &phone);
+    QVector<QSharedPointer<User>> getEmployeeList();
 
     void updateUserPassword(const QSharedPointer<User> &user , const QString &hash_password);
 
 private:
 
+    int getIdLastAddedEmployee();
     QVector<QSharedPointer<User>> getClientListByQuery(QSqlQuery &query);
+    QVector<QSharedPointer<User>> getEmployeeListByQuery(QSqlQuery &query);
     QSharedPointer<User> createClientByRow(const QSqlRecord &record);
     QSharedPointer<User> createEmployeeByRow(const QSqlRecord &record);
 

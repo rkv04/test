@@ -62,7 +62,7 @@
      <item>
       <widget class="QPushButton" name="cancelButton">
        <property name="text">
-        <string>Отмена</string>
+        <string>Назад</string>
        </property>
       </widget>
      </item>
@@ -95,7 +95,7 @@
       <x>110</x>
       <y>180</y>
       <width>261</width>
-      <height>241</height>
+      <height>251</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -169,7 +169,7 @@
       <x>450</x>
       <y>189</y>
       <width>251</width>
-      <height>166</height>
+      <height>186</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">

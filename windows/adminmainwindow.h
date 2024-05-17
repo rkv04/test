@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+#include "employeelistwindow.h"
+#include "userslistwindow.h"
+
 namespace Ui {
 class AdminMainWindow;
 }
@@ -19,10 +22,15 @@ signals:
     void logout();
 
 private slots:
+    void onEmployeeButtonClicked();
+    void onUsersButtonClicked();
     void onLogoutButtonClicked();
 
 private:
     Ui::AdminMainWindow *ui;
+
+    QSharedPointer<EmployeeListWindow> employee_list_window;
+    QSharedPointer<UsersListWindow> user_list_window;
 };
 
 #endif // ADMINMAINWINDOW_H

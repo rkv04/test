@@ -20,7 +20,6 @@ RegistrationWindow::RegistrationWindow(QWidget *parent)
     connect(this->ui->sign_in_button, SIGNAL(clicked(bool)), this, SLOT(toLoginWindow()));
     connect(this, SIGNAL(successfulRegistration()), this, SLOT(toLoginWindow()));
 
-
     QRegularExpression phone_exp("^\\d{11}$");
     this->phone_validator = new QRegularExpressionValidator(phone_exp, this);
     this->ui->phoneEdit->setValidator(phone_validator);
@@ -43,7 +42,7 @@ void RegistrationWindow::regButtonClicked() {
     QString password = this->ui->passwordEdit->text();
     QString password_repeat = this->ui->passwordRepeatEdit->text();
     if (password != password_repeat) {
-        QMessageBox::warning(this, "Tour operator", "Введённые пароли не совпадают");
+        QMessageBox::warning(this, App::APPLICATION_NAME, "Введённые пароли не совпадают");
         return;
     }
     QSharedPointer<User> client = QSharedPointer<User>(new User());
@@ -58,19 +57,18 @@ void RegistrationWindow::regButtonClicked() {
         app->createClient(client);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, "Tour operator", ex.what());
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         if (ex.isFatal()) {
             exit(-1);
         }
         return;
     }
 
-    QMessageBox::information(this, "Tour operator", "Вы успешно зарегистрированны");
+    QMessageBox::information(this, App::APPLICATION_NAME, "Вы успешно зарегистрированны");
     emit successfulRegistration();
 }
 
 void RegistrationWindow::toLoginWindow() {
-    this->author_window = new AuthorizationWindow();
-    this->author_window->show();
+    emit back();
     this->close();
 }
