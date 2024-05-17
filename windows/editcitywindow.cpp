@@ -11,6 +11,7 @@ EditCityWindow::EditCityWindow(QWidget *parent)
     this->setWindowTitle(App::APPLICATION_NAME);
 
     connect(this->ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(onSaveButtonClicked()));
+    connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
 
 }
 

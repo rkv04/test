@@ -19,6 +19,10 @@ ClientsListWindow::ClientsListWindow(QWidget *parent)
     connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
     connect(this->ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(onSaveButtonClicked()));
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
+    this->ui->comboBox->addItem("0%", QVariant(0));
+    this->ui->comboBox->addItem("3%", QVariant(3));
+    this->ui->comboBox->addItem("5%", QVariant(5));
+    this->ui->comboBox->addItem("10%", QVariant(10));
 }
 
 void ClientsListWindow::handleAppError(const AppError &ex) {
@@ -52,10 +56,6 @@ void ClientsListWindow::initUi() {
     this->ui->tableView->resizeColumnsToContents();
     this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    this->ui->comboBox->addItem("0%", QVariant(0)); // to do
-    this->ui->comboBox->addItem("3%", QVariant(3));
-    this->ui->comboBox->addItem("5%", QVariant(5));
-    this->ui->comboBox->addItem("10%", QVariant(10));
 }
 
 ClientsListWindow::~ClientsListWindow()

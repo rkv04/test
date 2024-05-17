@@ -23,7 +23,7 @@ public:
     void init();
 
 signals:
-    void closed();
+    void back();
 
 private slots:
     void onCancelButtonClicked();

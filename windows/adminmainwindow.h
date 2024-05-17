@@ -15,6 +15,12 @@ public:
     explicit AdminMainWindow(QWidget *parent = nullptr);
     ~AdminMainWindow();
 
+signals:
+    void logout();
+
+private slots:
+    void onLogoutButtonClicked();
+
 private:
     Ui::AdminMainWindow *ui;
 };

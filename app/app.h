@@ -7,11 +7,13 @@
 #include "cityservice.h"
 #include "hotelservice.h"
 #include "ticketservice.h"
+#include "dealservice.h"
 
 #include "user.h"
 #include "city.h"
 #include "hotel.h"
 #include "ticket.h"
+#include "deal.h"
 
 
 class App {
@@ -51,10 +53,11 @@ public:
     void updateTicket(const QSharedPointer<Ticket> &ticket);
     QVector<QSharedPointer<Ticket>> getTicketList();
     QVector<QSharedPointer<Ticket>> getTicketsAvailableForPurchase();
-    QVector<QSharedPointer<Ticket>> getCurrentClientTicketList();
+    QVector<QSharedPointer<Ticket>> getTicketListByListIds(const QStringList &ids);
     QVector<QSharedPointer<Ticket>> getTicketListByFilter(const QMap<QString, QString> &filter);
 
     void buyTicket(const QSharedPointer<Ticket> &ticket, const int quantity);
+    QVector<QSharedPointer<Deal>> getDealListByClient(const QSharedPointer<User> &client);
 
 private:
 
@@ -69,6 +72,7 @@ private:
     QSharedPointer<CityService> city_service;
     QSharedPointer<HotelService> hotel_service;
     QSharedPointer<TicketService> ticket_service;
+    QSharedPointer<DealService> deal_service;
 
 };
 

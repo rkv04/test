@@ -10,7 +10,7 @@ AddCityWindow::AddCityWindow(QWidget *parent)
     ui->setupUi(this);
     this->setWindowTitle(App::APPLICATION_NAME);
     connect(this->ui->addButton, SIGNAL(clicked(bool)), this, SLOT(onAddButtonClicked()));
-
+    connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
 }
 
 AddCityWindow::~AddCityWindow()

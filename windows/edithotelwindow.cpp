@@ -12,6 +12,7 @@ EditHotelWindow::EditHotelWindow(QWidget *parent)
 {
     ui->setupUi(this);
     connect(this->ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(onSaveButtonClicked()));
+    connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
 }
 
 EditHotelWindow::~EditHotelWindow()

@@ -53,6 +53,7 @@ void AuthorizationWindow::loginButtonClicked() {
         case 0: {
             if (this->client_main_window == nullptr) {
                 this->client_main_window = QSharedPointer<ClientMainWindow>(new ClientMainWindow());
+                connect(this->client_main_window.get(), SIGNAL(logout()), this, SLOT(show()));
             }
             this->client_main_window->show();
             this->close();
@@ -70,11 +71,11 @@ void AuthorizationWindow::loginButtonClicked() {
         case 2: {
             if (this->admin_main_window == nullptr) {
                 this->admin_main_window = QSharedPointer<AdminMainWindow>(new AdminMainWindow());
+                connect(this->admin_main_window.get(), SIGNAL(logout()), this, SLOT(show()));
             }
             this->admin_main_window->show();
             this->close();
             break;
         }
-
     }
 }

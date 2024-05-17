@@ -28,6 +28,9 @@ private slots:
 signals:
     void logout();
 
+private slots:
+    void onLogoutButtonClicked();
+
 private:
     Ui::ClientMainWindow *ui;
 

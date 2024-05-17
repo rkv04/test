@@ -98,6 +98,19 @@
      <string>Личный кабинет</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="logoutButton">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>390</y>
+      <width>131</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Выйти из системы</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

@@ -33,8 +33,8 @@ void Account::handleAppError(const AppError &ex) {
 }
 
 void Account::onCancelButtonClicked() {
+    emit back();
     this->close();
-    emit closed();
 }
 
 void Account::init() {
@@ -44,6 +44,7 @@ void Account::init() {
     this->ui->patronymicEdit->setText(this->client->patronymic);
     this->ui->phoneEdit->setText(this->client->phone);
     this->ui->addressEdit->setText(this->client->address);
+    this->ui->discountLabel->setText(QString::number(this->client->discount) + "%");
 }
 
 void Account::onSaveButtonClicked() {

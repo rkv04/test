@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "tickettablemodel.h"
+#include "dealtablemodel.h"
 
 namespace Ui {
 class ClientTicketsWindow;
@@ -19,12 +19,18 @@ public:
 
     void init();
 
+private slots:
+    void onBackButtonClicked();
+
+signals:
+    void back();
+
 private:
     Ui::ClientTicketsWindow *ui;
 
     void initModels();
     void initUi();
-    QSharedPointer<TicketTableModel> ticket_table_model;
+    QSharedPointer<DealTableModel> deal_table_model;
 };
 
 #endif // CLIENTTICKETSWINDOW_H

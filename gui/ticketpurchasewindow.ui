@@ -486,7 +486,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="cancelButton">
+      <widget class="QPushButton" name="backButton">
        <property name="minimumSize">
         <size>
          <width>150</width>
@@ -494,7 +494,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </size>
        </property>
        <property name="text">
-        <string>Отмена</string>
+        <string>Назад</string>
        </property>
       </widget>
      </item>

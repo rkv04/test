@@ -17,9 +17,9 @@ public:
     void setQuantityById(const int id_ticket, const int quantity);
     QSharedPointer<Ticket> getTicketById(const int id);
     QVector<QSharedPointer<Ticket>> getTicketList();
-    QVector<QSharedPointer<Ticket>> getClientTicketList(const int id_client);
     QVector<QSharedPointer<Ticket>> getTicketsAvailableForPurchase();
     QVector<QSharedPointer<Ticket>> getTicketListByFilter(const QMap<QString, QString> &filter);
+    QVector<QSharedPointer<Ticket>> getTicketListByListIds(const QStringList &ids);
 
 private:
 

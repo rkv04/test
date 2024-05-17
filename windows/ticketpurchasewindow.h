@@ -31,7 +31,7 @@ private slots:
     void setTotalPrice();
 
 signals:
-    void closed();
+    void back();
 
 private:
     Ui::TicketPurchaseWindow *ui;

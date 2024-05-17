@@ -4,6 +4,7 @@
 #include <QMessageBox>
 
 #include "app.h"
+#include "context.h"
 
 TicketPurchaseWindow::TicketPurchaseWindow(QWidget *parent)
     : QDialog(parent)
@@ -16,6 +17,7 @@ TicketPurchaseWindow::TicketPurchaseWindow(QWidget *parent)
     connect(this->ui->dateSwitch, SIGNAL(toggled(bool)), this->ui->departureDateEdit, SLOT(setEnabled(bool)));
     connect(this->ui->countEdit, SIGNAL(textChanged(QString)), this, SLOT(setTotalPrice()));
     connect(this->ui->ticketView, SIGNAL(clicked(QModelIndex)), this, SLOT(setTotalPrice()));
+    connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onCancelButtonClicked()));
 }
 
 TicketPurchaseWindow::~TicketPurchaseWindow()
@@ -146,8 +148,8 @@ void TicketPurchaseWindow::destinationCityBoxChanged() {
 }
 
 void TicketPurchaseWindow::onCancelButtonClicked() {
+    emit back();
     this->close();
-    emit closed();
 }
 
 void TicketPurchaseWindow::setTotalPrice() {
@@ -156,8 +158,9 @@ void TicketPurchaseWindow::setTotalPrice() {
     }
     int selected_row = this->ui->ticketView->selectionModel()->selectedRows().first().row();
     auto ticket = this->ticket_table_model->getTicketByIndexRow(selected_row);
+    int discount = Context::getContext()->discount;
     int count = this->ui->countEdit->text().toInt();
-    int totalPrice = ticket->price * count;
+    int totalPrice = ticket->price * count * (100 - discount) / 100; // TODO
     this->ui->priceLable->setText(QString::number(totalPrice) + " р.");
 }
 

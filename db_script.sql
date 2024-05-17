@@ -58,11 +58,16 @@ CREATE TABLE IF NOT EXISTS Ticket (
 );
 
 
-CREATE TABLE IF NOT EXISTS Client_tickets (
-	id_client INTEGER NOT NULL,
-	id_ticket INTEGER NOT NULL,
-	quantity INTEGER NOT NULL,
-	FOREIGN KEY (id_client) REFERENCES Client (id),
-	FOREIGN KEY (id_ticket) REFERENCES Ticket (id)
+CREATE TABLE IF NOT EXISTS Deal (
+	"id"	INTEGER NOT NULL,
+	"id_ticket"	INTEGER NOT NULL,
+	"id_client"	INTEGER NOT NULL,
+	"quantity"	INTEGER NOT NULL,
+	"date"	TEXT NOT NULL,
+	"discount"	INTEGER NOT NULL,
+	"deal_sum"	INTEGER NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("id_ticket") REFERENCES "Ticket"("id"),
+	FOREIGN KEY("id_client") REFERENCES "Client"("id")
 );
 

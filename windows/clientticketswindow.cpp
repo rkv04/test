@@ -4,13 +4,16 @@
 #include <QMessageBox>
 
 #include "app.h"
+#include "deal.h"
 #include "apperror.h"
+#include "context.h"
 
 ClientTicketsWindow::ClientTicketsWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ClientTicketsWindow)
 {
     ui->setupUi(this);
+    connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
 }
 
 ClientTicketsWindow::~ClientTicketsWindow()
@@ -24,10 +27,11 @@ void ClientTicketsWindow::init() {
 }
 
 void ClientTicketsWindow::initModels() {
-    QVector<QSharedPointer<Ticket>> tickets;
+    QVector<QSharedPointer<Deal>> deals;
+    auto client = Context::getContext();
     App *app = App::getInstance();
     try {
-        tickets = app->getCurrentClientTicketList();
+        deals = app->getDealListByClient(client);
     }
     catch(const AppError &ex) {
         QMessageBox::critical(this, "Tour operator", ex.what());
@@ -36,13 +40,18 @@ void ClientTicketsWindow::initModels() {
         }
         return;
     }
-    this->ticket_table_model = QSharedPointer<TicketTableModel>(new TicketTableModel());
-    this->ticket_table_model->setTicketList(tickets);
+    this->deal_table_model = QSharedPointer<DealTableModel>(new DealTableModel());
+    this->deal_table_model->setDealsList(deals);
 }
 
 void ClientTicketsWindow::initUi() {
-    this->ui->tableView->setModel(this->ticket_table_model.get());
+    this->ui->tableView->setModel(this->deal_table_model.get());
     this->ui->tableView->setSelectionMode(QAbstractItemView::NoSelection);
     this->ui->tableView->resizeColumnsToContents();
     this->ui->tableView->verticalHeader()->stretchLastSection();
+}
+
+void ClientTicketsWindow::onBackButtonClicked() {
+    emit back();
+    this->close();
 }

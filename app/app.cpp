@@ -7,6 +7,7 @@
 #include "context.h"
 #include "log.h"
 
+#include <QDate>
 #include <QMessageBox>
 #include <QCryptographicHash>
 
@@ -334,10 +335,9 @@ QVector<QSharedPointer<Ticket>> App::getTicketListByFilter(const QMap<QString, Q
     }
 }
 
-QVector<QSharedPointer<Ticket>> App::getCurrentClientTicketList() {
-    auto current_client_id = Context::getContext()->id;
+QVector<QSharedPointer<Ticket>> App::getTicketListByListIds(const QStringList &ids) {
     try {
-        return this->ticket_service->getClientTicketList(current_client_id);
+        return this->ticket_service->getTicketListByListIds(ids);
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());
@@ -346,15 +346,31 @@ QVector<QSharedPointer<Ticket>> App::getCurrentClientTicketList() {
 }
 
 void App::buyTicket(const QSharedPointer<Ticket> &purchased_ticket, const int quantity) {
-    int id_client = Context::getContext()->id;
-    QSharedPointer<Ticket> ticket;
+    auto cur_client = Context::getContext();
+    QSharedPointer<Deal> deal = QSharedPointer<Deal>(new Deal());
+    deal->date = QDate::currentDate().toString("dd.MM.yyyy");
+    deal->ticket = purchased_ticket;
+    deal->id_client = cur_client->id;
+    deal->discount = cur_client->discount;
+    deal->quantity = quantity;
+    deal->deal_sum = purchased_ticket->price * quantity * (100 - cur_client->discount) / 100; // TODO
     try {
-        ticket = this->ticket_service->getTicketById(purchased_ticket->id);
+        auto ticket = this->ticket_service->getTicketById(purchased_ticket->id);
         if (ticket->quantity < quantity) {
             throw AppError("Указанное количество путевок превышает имеющееся количество в продаже", false);
         }
-        this->ticket_service->addClientsTicket(purchased_ticket->id, quantity, id_client);
-        this->ticket_service->setQuantityById(purchased_ticket->id, ticket->quantity - quantity);
+        this->deal_service->addDeal(deal);
+        this->ticket_service->setQuantityById(purchased_ticket->id, ticket->quantity - quantity); // TODO
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+QVector<QSharedPointer<Deal>> App::getDealListByClient(const QSharedPointer<User> &client) {
+    try {
+        return this->deal_service->getDealListByIdClient(client->id);
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());
