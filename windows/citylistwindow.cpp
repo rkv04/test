@@ -21,6 +21,7 @@ CityListWindow::CityListWindow(QWidget *parent)
     connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
     connect(this->ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditButtonClicked()));
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
+    this->city_table_model = QSharedPointer<CityTableModel>(new CityTableModel());
 }
 
 void CityListWindow::handleAppError(const AppError &ex) {
@@ -45,7 +46,6 @@ void CityListWindow::initModels() {
         this->handleAppError(ex);
         return;
     }
-    this->city_table_model = QSharedPointer<CityTableModel>(new CityTableModel());
     this->city_table_model->setCityList(city_list);
 }
 

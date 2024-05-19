@@ -1,5 +1,7 @@
 #include "ticket.h"
 
+#include <QDebug>
+
 Ticket::Ticket() {
     this->id = -1;
     this->price = -1;

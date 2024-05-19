@@ -13,6 +13,8 @@ EditHotelWindow::EditHotelWindow(QWidget *parent)
     ui->setupUi(this);
     connect(this->ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(onSaveButtonClicked()));
     connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
+    this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
+    this->category_model = QSharedPointer<HotelCategoryListModel>(new HotelCategoryListModel());
 }
 
 EditHotelWindow::~EditHotelWindow()
@@ -24,7 +26,7 @@ void EditHotelWindow::init() {
     QVector<QSharedPointer<City>> cities;
     App *app = App::getInstance();
     try {
-        cities = app->getCityList();
+        cities = app->getCitiesFromHotels();
     }
     catch(const AppError &ex) {
         QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
@@ -33,11 +35,8 @@ void EditHotelWindow::init() {
         }
         return;
     }
-    this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->city_list_model->setCityList(cities);
     this->ui->cityBox->setModel(city_list_model.get());
-
-    this->category_model = QSharedPointer<HotelCategoryListModel>(new HotelCategoryListModel());
     this->ui->categoryBox->setModel(category_model.get());
 }
 

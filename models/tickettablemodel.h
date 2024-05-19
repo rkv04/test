@@ -20,6 +20,7 @@ public:
     void removeTicketByIndexRow(const int row);
     void updateTicketByIndexRow(const int row, const QSharedPointer<Ticket> &ticket);
     void updateQuantityByIndexRow(const int row, const int quantity);
+    void clearModel();
 
 private:
 

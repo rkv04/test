@@ -18,6 +18,9 @@ HotelsListWindow::HotelsListWindow(QWidget *parent)
     connect(this->ui->editButton, SIGNAL(clicked(bool)), this, SLOT(onEditButtonClicked()));
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
     connect(this->ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditButtonClicked()));
+    this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
+    this->category_model = QSharedPointer<HotelCategoryListModel>(new HotelCategoryListModel());
+    this->hotel_table_model = QSharedPointer<HotelTableModel>(new HotelTableModel());
 }
 
 HotelsListWindow::~HotelsListWindow()
@@ -36,17 +39,14 @@ void HotelsListWindow::initModels() {
     App *app = App::getInstance();
     try {
         hotels = app->getHotelList();
-        cities = app->getCityList();
+        cities = app->getCitiesFromHotels();
     }
     catch(const AppError &ex) {
         this->handleAppError(ex);
         return;
     }
-    this->hotel_table_model = QSharedPointer<HotelTableModel>(new HotelTableModel());
     this->hotel_table_model->setHotelsList(hotels);
-    this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->city_list_model->setCityList(cities);
-    this->category_model = QSharedPointer<HotelCategoryListModel>(new HotelCategoryListModel());
 }
 
 void HotelsListWindow::initUi() {

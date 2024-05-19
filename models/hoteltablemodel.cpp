@@ -33,10 +33,19 @@ QVariant HotelTableModel::data(const QModelIndex &index, int role) const {
 QVariant HotelTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (role == Qt::DisplayRole) {
         if (orientation == Qt::Horizontal) {
-            return this->headers.at(section);
+            switch(section) {
+            case 0:
+                return "Название";
+            case 1:
+                return "Категория";
+            case 2:
+                return "Город";
+            case 3:
+                return "Адрес";
+            }
         }
         if (orientation == Qt::Vertical) {
-            return QString::number(section);
+            return QString::number(section + 1);
         }
     }
     return QVariant();

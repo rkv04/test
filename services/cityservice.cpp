@@ -47,10 +47,26 @@ int CityService::getIdLastAddedCity() {
     query.first();
     return query.value("id").toInt();
 }
-
 QVector<QSharedPointer<City>> CityService::getCityList() {
     QSqlQuery query;
     QString text_query = "SELECT * FROM City WHERE activity_flag = 1 ORDER BY title;";
+    if (!query.exec(text_query)) {
+        throw CriticalDB(query.lastError().text());
+    }
+    return this->getCityListByQuery(query);
+}
+
+QVector<QSharedPointer<City>> CityService::getCityListByListIds(const QVector<int> &ids) {
+    QString filter = "(";
+    for (int i = 0; i < ids.size(); i++) {
+        filter += QString::number(ids.at(i));
+        if (i < ids.size() - 1) {
+            filter += ", ";
+        }
+    }
+    filter += ")";
+    QSqlQuery query;
+    QString text_query = "SELECT * FROM City WHERE id IN " + filter + " ORDER BY title;";
     if (!query.exec(text_query)) {
         throw CriticalDB(query.lastError().text());
     }

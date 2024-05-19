@@ -14,6 +14,8 @@ UsersListWindow::UsersListWindow(QWidget *parent)
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
     connect(this->ui->clientRadio, SIGNAL(toggled(bool)), this, SLOT(clientRadioButtonClicked()));
     connect(this->ui->employeeRadio, SIGNAL(toggled(bool)), this, SLOT(employeeRadioButtonClicked()));
+    this->client_table_model = QSharedPointer<ClientTableModel>(new ClientTableModel());
+    this->employee_table_model = QSharedPointer<EmployeeTableModel>(new EmployeeTableModel());
 }
 
 UsersListWindow::~UsersListWindow()
@@ -48,9 +50,7 @@ void UsersListWindow::initModels() {
         }
         return;
     }
-    this->client_table_model = QSharedPointer<ClientTableModel>(new ClientTableModel());
     this->client_table_model->setClientList(clients);
-    this->employee_table_model = QSharedPointer<EmployeeTableModel>(new EmployeeTableModel());
     this->employee_table_model->setEmployeeList(employees);
 }
 

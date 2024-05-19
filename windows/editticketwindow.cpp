@@ -15,6 +15,8 @@ EditTicketWindow::EditTicketWindow(QWidget *parent)
     connect(this->ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(onSaveButtonClicked()));
     connect(this->ui->destinationCityBox, SIGNAL(currentIndexChanged(int)), this, SLOT(destinationCityBoxChanged()));
     connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
+    this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
+    this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
 }
 
 EditTicketWindow::~EditTicketWindow()
@@ -43,14 +45,6 @@ void EditTicketWindow::init() {
     this->initUi();
 }
 
-void EditTicketWindow::setTicket(const QSharedPointer<Ticket> &ticket) {
-    this->ticket = ticket;
-}
-
-QSharedPointer<Ticket> EditTicketWindow::getUpdatedTicket() {
-    return this->ticket;
-}
-
 void EditTicketWindow::initModels() {
     QVector<QSharedPointer<City>> cities;
     QVector<QSharedPointer<Hotel>> hotels;
@@ -63,12 +57,11 @@ void EditTicketWindow::initModels() {
         this->handleAppError(ex);
         return;
     }
-    this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->city_list_model->setCityList(cities);
     this->city_list_model->addCityIfNotExists(this->ticket->departure_city);
     this->city_list_model->addCityIfNotExists(this->ticket->hotel->city);
-    this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
     this->hotel_list_model->setHotelList(hotels);
+    this->hotel_list_model->addHotelIfNotExists(this->ticket->hotel);
 }
 
 void EditTicketWindow::initUi() {
@@ -90,6 +83,14 @@ void EditTicketWindow::initUi() {
     this->ui->travelTimeEdit->setText(this->ticket->travel_time);
     this->ui->quantityEdit->setText(QString::number(this->ticket->quantity));
     this->ui->priceEdit->setText(QString::number(this->ticket->price));
+}
+
+void EditTicketWindow::setTicket(const QSharedPointer<Ticket> &ticket) {
+    this->ticket = ticket;
+}
+
+QSharedPointer<Ticket> EditTicketWindow::getUpdatedTicket() {
+    return this->ticket;
 }
 
 void EditTicketWindow::onSaveButtonClicked() {
@@ -135,5 +136,7 @@ void EditTicketWindow::destinationCityBoxChanged() {
         return;
     }
     this->hotel_list_model->setHotelList(hotels);
-    this->hotel_list_model->addHotelIfNotExists(this->ticket->hotel);
+    if (destination_city->id == this->ticket->hotel->city->id) {
+        this->hotel_list_model->addHotelIfNotExists(this->ticket->hotel);
+    }
 }

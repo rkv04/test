@@ -8,12 +8,12 @@
 #include "hotelservice.h"
 #include "ticketservice.h"
 #include "dealservice.h"
-
 #include "user.h"
 #include "city.h"
 #include "hotel.h"
 #include "ticket.h"
 #include "deal.h"
+#include "criticaldb.h"
 
 
 class App {
@@ -49,6 +49,7 @@ public:
     QVector<QSharedPointer<Hotel>> getHotelsByCity(const QSharedPointer<City> &city);
     QVector<QSharedPointer<Hotel>> getHotelList();
     QVector<QSharedPointer<Hotel>> getHotelListByFilter(const QMap<QString, QString> &filter);
+    QVector<QSharedPointer<City>> getCitiesFromHotels();
 
     int createTicket(const QSharedPointer<Ticket> &ticket);
     void removeTicket(const QSharedPointer<Ticket> &ticket);
@@ -57,6 +58,10 @@ public:
     QVector<QSharedPointer<Ticket>> getTicketsAvailableForPurchase();
     QVector<QSharedPointer<Ticket>> getTicketListByListIds(const QStringList &ids);
     QVector<QSharedPointer<Ticket>> getTicketListByFilter(const QMap<QString, QString> &filter);
+    QVector<QSharedPointer<City>> getDepartureCitiesFromTickets();
+    QVector<QSharedPointer<City>> getDestinationCitiesFromTickets();
+    QVector<QSharedPointer<Hotel>> getHotelsFromTickets();
+    QVector<QSharedPointer<Hotel>> getHotelsFromTicketsByCity(const QSharedPointer<City> &city);
 
     void buyTicket(const QSharedPointer<Ticket> &ticket, const int quantity);
     QVector<QSharedPointer<Deal>> getDealListByClient(const QSharedPointer<User> &client);
@@ -66,6 +71,8 @@ private:
     App();
     ~App();
     static App *instance;
+
+    void handleAppError(const CriticalDB &ex);
 
     QSharedPointer<User> tryLoginAsClient(const QString &phone, const QString &password);
     QSharedPointer<User> tryLoginAsEmployee(const QString &phone, const QString &password);

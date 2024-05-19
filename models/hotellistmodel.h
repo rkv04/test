@@ -17,9 +17,9 @@ public:
     explicit HotelListModel(QObject *parent = nullptr);
     QVariant data(const QModelIndex &index, int role) const override;
     int rowCount(const QModelIndex &parent) const override;
-
-    void addHotelIfNotExists(const QSharedPointer<Hotel> &hotel);
     void setHotelList(const QVector<QSharedPointer<Hotel>> &hotels);
+    void addHotelIfNotExists(const QSharedPointer<Hotel> &hotel);
+
 private:
     QVector<QSharedPointer<Hotel>> hotels;
 };

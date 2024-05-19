@@ -18,6 +18,10 @@ TicketPurchaseWindow::TicketPurchaseWindow(QWidget *parent)
     connect(this->ui->countEdit, SIGNAL(textChanged(QString)), this, SLOT(setTotalPrice()));
     connect(this->ui->ticketView, SIGNAL(clicked(QModelIndex)), this, SLOT(setTotalPrice()));
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onCancelButtonClicked()));
+    this->ticket_table_model = QSharedPointer<TicketTableModel>(new TicketTableModel());
+    this->departure_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
+    this->destination_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
+    this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
 }
 
 TicketPurchaseWindow::~TicketPurchaseWindow()
@@ -53,29 +57,29 @@ void TicketPurchaseWindow::init() {
 
 void TicketPurchaseWindow::initModels() {
     QVector<QSharedPointer<Ticket>> tickets;
-    QVector<QSharedPointer<City>> cities;
+    QVector<QSharedPointer<City>> departure_cities;
+    QVector<QSharedPointer<City>> destination_cities;
     QVector<QSharedPointer<Hotel>> hotels;
     App *app = App::getInstance();
     try {
         tickets = app->getTicketsAvailableForPurchase();
-        cities = app->getCityList();
-        hotels = app->getHotelList();
+        departure_cities = app->getDepartureCitiesFromTickets();
+        destination_cities = app->getDestinationCitiesFromTickets();
+        hotels = app->getHotelsFromTickets();
     }
     catch(const AppError &ex) {
         this->handleAppError(ex);
         return;
     }
-    this->ticket_table_model = QSharedPointer<TicketTableModel>(new TicketTableModel());
-    this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
-    this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
     this->ticket_table_model->setTicketList(tickets);
-    this->city_list_model->setCityList(cities);
+    this->departure_city_list_model->setCityList(departure_cities);
+    this->destination_city_list_model->setCityList(destination_cities);
     this->hotel_list_model->setHotelList(hotels);
 }
 
 void TicketPurchaseWindow::initUi() {
-    this->ui->departureCityBox->setModel(this->city_list_model.get());
-    this->ui->destinationCityBox->setModel(this->city_list_model.get());
+    this->ui->departureCityBox->setModel(this->departure_city_list_model.get());
+    this->ui->destinationCityBox->setModel(this->destination_city_list_model.get());
     this->ui->hotelBox->setModel(this->hotel_list_model.get());
     this->ui->ticketView->setModel(ticket_table_model.get());
     this->ui->departureDateEdit->setDisplayFormat("MMM/yyyy");
@@ -137,7 +141,7 @@ void TicketPurchaseWindow::destinationCityBoxChanged() {
     QVector<QSharedPointer<Hotel>> hotels;
     App *app = App::getInstance();
     try {
-        hotels = app->getHotelsByCity(destination_city);
+        hotels = app->getHotelsFromTicketsByCity(destination_city);
     }
     catch(const AppError &ex) {
         this->handleAppError(ex);

@@ -14,6 +14,7 @@ ClientTicketsWindow::ClientTicketsWindow(QWidget *parent)
 {
     ui->setupUi(this);
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
+    this->deal_table_model = QSharedPointer<DealTableModel>(new DealTableModel());
 }
 
 ClientTicketsWindow::~ClientTicketsWindow()
@@ -40,7 +41,6 @@ void ClientTicketsWindow::initModels() {
         }
         return;
     }
-    this->deal_table_model = QSharedPointer<DealTableModel>(new DealTableModel());
     this->deal_table_model->setDealsList(deals);
 }
 

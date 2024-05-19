@@ -142,3 +142,42 @@ QVector<QSharedPointer<Hotel>> HotelService::getHotelListByCityId(const int id) 
     }
     return this->getHotelListByQuery(query);
 }
+
+QVector<QSharedPointer<Hotel>> HotelService::getHotelListByListIds(const QVector<int> &ids) {
+    QString filter = "(";
+    for (int i = 0; i < ids.size(); i++) {
+        filter += QString::number(ids.at(i));
+        if (i < ids.size() - 1) {
+            filter += ", ";
+        }
+    }
+    filter += ")";
+    QSqlQuery query;
+    QString text_query = "SELECT Hotel.id,"
+                                "Hotel.title AS 'hotel_title',"
+                                "City.id AS 'id_city',"
+                                "City.title AS 'city_title', "
+                                "City.climate AS 'city_climate', "
+                                "Hotel.address,"
+                                "Hotel.category "
+                            "FROM Hotel "
+                                "JOIN City ON Hotel.id_city = City.id "
+                            "WHERE Hotel.id IN " + filter + " ORDER BY Hotel.title;";
+    if (!query.exec(text_query)) {
+        throw CriticalDB(query.lastError().text());
+    }
+    return this->getHotelListByQuery(query);
+}
+
+QVector<int> HotelService::getCitiesIdsFromHotels() {
+    QSqlQuery query;
+    QString text_query = "SELECT DISTINCT id_city FROM Hotel WHERE activity_flag = 1;";
+    if (!query.exec(text_query)) {
+        throw CriticalDB(query.lastError().text());
+    }
+    QVector<int> cities_ids;
+    while (query.next()) {
+        cities_ids.append(query.value("id_city").toInt());
+    }
+    return cities_ids;
+}

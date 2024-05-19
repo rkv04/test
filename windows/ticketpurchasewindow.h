@@ -43,7 +43,8 @@ private:
     QMap<QString, QString> createFilter();
 
     QSharedPointer<TicketTableModel> ticket_table_model;
-    QSharedPointer<CityListModel> city_list_model;
+    QSharedPointer<CityListModel> departure_city_list_model;
+    QSharedPointer<CityListModel> destination_city_list_model;
     QSharedPointer<HotelListModel> hotel_list_model;
 };
 

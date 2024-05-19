@@ -48,9 +48,8 @@ void CityListModel::addCity(const QSharedPointer<City> &city) {
 }
 
 void CityListModel::addCityIfNotExists(const QSharedPointer<City> &city) {
-    for (int i = 0; i < this->rowCount(QModelIndex()); i++) {
-        QModelIndex index = this->index(i, 0);
-        if (city->id == this->data(index, CityIdRole)) {
+    for (auto &i : this->cities) {
+        if (i->id == city->id) {
             return;
         }
     }

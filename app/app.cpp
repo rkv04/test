@@ -36,6 +36,11 @@ void App::init() {
     DB::init();
 }
 
+void App::handleAppError(const CriticalDB &ex) {
+    Log::write(ex.what());
+    throw AppError(CriticalDB::FATAL_MSG, true);
+}
+
 QSharedPointer<User> App::login(const QString &phone, const QString &password) {
     auto client = this->tryLoginAsClient(phone, password);
     if (client != nullptr) {
@@ -93,7 +98,6 @@ void App::createClient(const QSharedPointer<User> &client) {
         Log::write(ex.what());
         throw AppError(CriticalDB::FATAL_MSG, true);
     }
-
 }
 
 QVector<QSharedPointer<User>> App::getClientsList() {
@@ -362,6 +366,61 @@ QVector<QSharedPointer<Ticket>> App::getTicketListByFilter(const QMap<QString, Q
 QVector<QSharedPointer<Ticket>> App::getTicketListByListIds(const QStringList &ids) {
     try {
         return this->ticket_service->getTicketListByListIds(ids);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+QVector<QSharedPointer<City>> App::getDepartureCitiesFromTickets() {
+    try {
+        QVector<int> city_ids = this->ticket_service->getDepartureCitiesIdsFromTickets();
+        return this->city_service->getCityListByListIds(city_ids);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+QVector<QSharedPointer<City>> App::getDestinationCitiesFromTickets() {
+    try {
+        QVector<int> cities_ids = this->ticket_service->getDestinationCitiesIdsFromTickets();
+        return this->city_service->getCityListByListIds(cities_ids);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+QVector<QSharedPointer<City>> App::getCitiesFromHotels() {
+    try {
+        QVector<int> cities_ids = this->hotel_service->getCitiesIdsFromHotels();
+        return this->city_service->getCityListByListIds(cities_ids);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+QVector<QSharedPointer<Hotel>> App::getHotelsFromTickets() {
+    try {
+        QVector<int> hotel_ids = this->ticket_service->getHotelsIdsFromTickets();
+        return this->hotel_service->getHotelListByListIds(hotel_ids);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
+QVector<QSharedPointer<Hotel>> App::getHotelsFromTicketsByCity(const QSharedPointer<City> &city) {
+    try {
+        QVector<int> hotels_ids = this->ticket_service->getHotelsIdsFromTicketsByIdCity(city->id);
+        return this->hotel_service->getHotelListByListIds(hotels_ids);
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());

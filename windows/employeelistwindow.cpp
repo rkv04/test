@@ -14,6 +14,7 @@ EmployeeListWindow::EmployeeListWindow(QWidget *parent)
     ui->setupUi(this);
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
     connect(this->ui->addButton, SIGNAL(clicked(bool)), this, SLOT(onAddButtonClicked()));
+    this->employee_table_model = QSharedPointer<EmployeeTableModel>(new EmployeeTableModel());
 }
 
 EmployeeListWindow::~EmployeeListWindow()
@@ -44,7 +45,6 @@ void EmployeeListWindow::initModels() {
         this->handleAppError(ex);
         return;
     }
-    this->employee_table_model = QSharedPointer<EmployeeTableModel>(new EmployeeTableModel());
     this->employee_table_model->setEmployeeList(employees);
 }
 

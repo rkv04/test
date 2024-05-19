@@ -21,6 +21,11 @@ public:
     QVector<QSharedPointer<Ticket>> getTicketListByFilter(const QMap<QString, QString> &filter);
     QVector<QSharedPointer<Ticket>> getTicketListByListIds(const QStringList &ids);
 
+    QVector<int> getDepartureCitiesIdsFromTickets();
+    QVector<int> getDestinationCitiesIdsFromTickets();
+    QVector<int> getHotelsIdsFromTickets();
+    QVector<int> getHotelsIdsFromTicketsByIdCity(const int id);
+
 private:
 
     QString textQueryGetAllTickets();

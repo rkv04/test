@@ -84,3 +84,9 @@ void TicketTableModel::updateQuantityByIndexRow(const int row, const int quantit
     this->tickets.at(row)->quantity = quantity;
     emit layoutChanged();
 }
+
+void TicketTableModel::clearModel() {
+    this->beginResetModel();
+    this->tickets.clear();
+    this->endResetModel();
+}

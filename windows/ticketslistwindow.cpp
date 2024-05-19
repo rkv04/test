@@ -23,51 +23,15 @@ TicketsListWindow::TicketsListWindow(QWidget *parent)
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
     connect(this->ui->editTicketButton, SIGNAL(clicked(bool)), this, SLOT(onEditButtonClicked()));
     connect(this->ui->ticketView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditButtonClicked()));
+    this->ticket_table_model = QSharedPointer<TicketTableModel>(new TicketTableModel());
+    this->departure_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
+    this->destination_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
+    this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
 }
 
 TicketsListWindow::~TicketsListWindow()
 {
     delete ui;
-}
-
-void TicketsListWindow::initModels() {
-    QVector<QSharedPointer<Ticket>> tickets;
-    QVector<QSharedPointer<City>> cities;
-    QVector<QSharedPointer<Hotel>> hotels;
-    App *app = App::getInstance();
-    try {
-        tickets = app->getTicketList();
-        cities = app->getCityList();
-        hotels = app->getHotelList();
-    }
-    catch(const AppError &ex) {
-        this->handleAppError(ex);
-        return;
-    }
-    this->ticket_table_model = QSharedPointer<TicketTableModel>(new TicketTableModel());
-    this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
-    this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
-    this->ticket_table_model->setTicketList(tickets);
-    this->city_list_model->setCityList(cities);
-    this->hotel_list_model->setHotelList(hotels);
-}
-
-void TicketsListWindow::initUi() {
-    this->ui->departureCityBox->setModel(this->city_list_model.get());
-    this->ui->destinationCityBox->setModel(this->city_list_model.get());
-    this->ui->hotelBox->setModel(this->hotel_list_model.get());
-    this->ui->ticketView->setModel(ticket_table_model.get());
-    this->ui->departureDateEdit->setDisplayFormat("MMM/yyyy");
-    this->ui->departureDateEdit->setDate(QDate::currentDate());
-    this->ui->departureDateEdit->setEnabled(false);
-    this->ui->departureCityBox->setMaxVisibleItems(10);
-    this->ui->destinationCityBox->setMaxVisibleItems(10);
-    this->ui->hotelBox->setMaxVisibleItems(10);
-    this->ui->ticketView->resizeColumnsToContents();
-    this->ui->ticketView->verticalHeader()->stretchLastSection();
-    this->ui->ticketView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    this->ui->priceEditLower->setPlaceholderText("От ...");
-    this->ui->priceEditUpper->setPlaceholderText("До ...");
 }
 
 void TicketsListWindow::handleAppError(const AppError &ex) {
@@ -95,6 +59,46 @@ void TicketsListWindow::init() {
     this->initUi();
 }
 
+void TicketsListWindow::initModels() {
+    QVector<QSharedPointer<Ticket>> tickets;
+    QVector<QSharedPointer<City>> departure_cities;
+    QVector<QSharedPointer<City>> destination_cities;
+    QVector<QSharedPointer<Hotel>> hotels;
+    App *app = App::getInstance();
+    try {
+        tickets = app->getTicketList();
+        departure_cities = app->getDepartureCitiesFromTickets();
+        destination_cities = app->getDestinationCitiesFromTickets();
+        hotels = app->getHotelsFromTickets();
+    }
+    catch(const AppError &ex) {
+        this->handleAppError(ex);
+        return;
+    }
+    this->ticket_table_model->setTicketList(tickets);
+    this->departure_city_list_model->setCityList(departure_cities);
+    this->destination_city_list_model->setCityList(destination_cities);
+    this->hotel_list_model->setHotelList(hotels);
+}
+
+void TicketsListWindow::initUi() {
+    this->ui->departureCityBox->setModel(this->departure_city_list_model.get());
+    this->ui->destinationCityBox->setModel(this->destination_city_list_model.get());
+    this->ui->hotelBox->setModel(this->hotel_list_model.get());
+    this->ui->ticketView->setModel(ticket_table_model.get());
+    this->ui->departureDateEdit->setDisplayFormat("MMM/yyyy");
+    this->ui->departureDateEdit->setDate(QDate::currentDate());
+    this->ui->departureDateEdit->setEnabled(false);
+    this->ui->departureCityBox->setMaxVisibleItems(10);
+    this->ui->destinationCityBox->setMaxVisibleItems(10);
+    this->ui->hotelBox->setMaxVisibleItems(10);
+    this->ui->ticketView->resizeColumnsToContents();
+    this->ui->ticketView->verticalHeader()->stretchLastSection();
+    this->ui->ticketView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->priceEditLower->setPlaceholderText("От ...");
+    this->ui->priceEditUpper->setPlaceholderText("До ...");
+}
+
 void TicketsListWindow::destinationCityBoxChanged() {
     auto destination_city = this->ui->destinationCityBox->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
     if (destination_city == nullptr) {
@@ -105,7 +109,7 @@ void TicketsListWindow::destinationCityBoxChanged() {
     QVector<QSharedPointer<Hotel>> hotels;
     App *app = App::getInstance();
     try {
-        hotels = app->getHotelsByCity(destination_city);
+        hotels = app->getHotelsFromTicketsByCity(destination_city);
     }
     catch(const AppError &ex) {
         this->handleAppError(ex);
@@ -224,6 +228,7 @@ void TicketsListWindow::showTicketInfo(const QModelIndex &index) {
 
 void TicketsListWindow::onBackButtonClicked() {
     emit showEmployeeMainWindow();
+    this->ticket_table_model->clearModel();
     this->close();
 }
 

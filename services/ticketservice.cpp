@@ -180,6 +180,65 @@ QVector<QSharedPointer<Ticket>> TicketService::getTicketListByFilter(const QMap<
     return this->getTicketListByQuery(query);
 }
 
+QVector<int> TicketService::getDestinationCitiesIdsFromTickets() {
+    QSqlQuery query;
+    QString text_query = "SELECT DISTINCT Hotel.id_city "
+                            "FROM Ticket "
+                                "JOIN Hotel ON Ticket.id_hotel = Hotel.id "
+                            "WHERE Ticket.activity_flag = 1";
+    if (!query.exec(text_query)) {
+        throw CriticalDB(query.lastError().text());
+    }
+    QVector<int> city_ids;
+    while (query.next()) {
+        city_ids.append(query.value("id_city").toInt());
+    }
+    return city_ids;
+}
+
+QVector<int> TicketService::getDepartureCitiesIdsFromTickets() {
+    QSqlQuery query;
+    QString text_query = "SELECT DISTINCT id_departure_city FROM Ticket WHERE activity_flag = 1";
+    if (!query.exec(text_query)) {
+        throw CriticalDB(query.lastError().text());
+    }
+    QVector<int> city_ids;
+    while (query.next()) {
+        city_ids.append(query.value("id_departure_city").toInt());
+    }
+    return city_ids;
+}
+
+QVector<int> TicketService::getHotelsIdsFromTickets() {
+    QSqlQuery query;
+    QString text_query = "SELECT DISTINCT id_hotel FROM Ticket WHERE activity_flag = 1;";
+    if (!query.exec(text_query)) {
+        throw CriticalDB(query.lastError().text());
+    }
+    QVector<int> hotel_ids;
+    while (query.next()) {
+        hotel_ids.append(query.value("id_hotel").toInt());
+    }
+    return hotel_ids;
+}
+
+QVector<int> TicketService::getHotelsIdsFromTicketsByIdCity(const int id) {
+    QSqlQuery query;
+    query.prepare("SELECT DISTINCT id_hotel "
+                        "FROM Ticket "
+                            "JOIN Hotel ON Ticket.id_hotel = Hotel.id "
+                        "WHERE Ticket.activity_flag = 1 AND Hotel.id_city = ?");
+    query.bindValue(0, id);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+    QVector<int> hotels_ids;
+    while (query.next()) {
+        hotels_ids.append(query.value("id_hotel").toInt());
+    }
+    return hotels_ids;
+}
+
 QString TicketService::textQueryGetAllTickets() {
     return QString("SELECT Ticket.id AS 'id_ticket', "
                         "Ticket.price AS 'price', "
