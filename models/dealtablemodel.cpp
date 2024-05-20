@@ -9,7 +9,7 @@ int DealTableModel::rowCount(const QModelIndex &) const {
 }
 
 int DealTableModel::columnCount(const QModelIndex &) const {
-    return 10;
+    return 5;
 }
 
 QVariant DealTableModel::data(const QModelIndex &index, int role) const {
@@ -25,17 +25,7 @@ QVariant DealTableModel::data(const QModelIndex &index, int role) const {
         case 3:
             return this->deals.at(i)->ticket->departure_date;
         case 4:
-            return this->deals.at(i)->ticket->duration;
-        case 5:
-            return this->deals.at(i)->ticket->travel_time;
-        case 6:
             return this->deals.at(i)->quantity;
-        case 7:
-            return QString::number(this->deals.at(i)->deal_sum) + " р.";
-        case 8:
-            return QString::number(this->deals.at(i)->discount) + "%";
-        case 9:
-            return this->deals.at(i)->date;
         }
     }
     return QVariant();
@@ -46,25 +36,15 @@ QVariant DealTableModel::headerData(int section, Qt::Orientation orientation, in
         if (orientation == Qt::Horizontal) {
             switch (section) {
             case 0:
-                return "Город отпр.";
+                return "Город отправления";
             case 1:
-                return "Город назн.";
+                return "Город назначения";
             case 2:
                 return "Отель";
             case 3:
-                return "Дата отпр.";
+                return "Дата отправления";
             case 4:
-                return "Длительность";
-            case 5:
-                return "Время в пути";
-            case 6:
                 return "Количество";
-            case 7:
-                return "Сумма покупки";
-            case 8:
-                return "Скидка";
-            case 9:
-                return "Дата покупки";
             }
         }
         if (orientation == Qt::Vertical) {
@@ -78,4 +58,8 @@ void DealTableModel::setDealsList(const QVector<QSharedPointer<Deal>> &deals) {
     this->beginResetModel();
     this->deals = deals;
     this->endResetModel();
+}
+
+QSharedPointer<Deal> DealTableModel::getDealByIndexRow(const int row) {
+    return this->deals.at(row);
 }

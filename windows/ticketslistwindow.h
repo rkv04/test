@@ -2,6 +2,7 @@
 #define TICKETSLISTWINDOW_H
 
 #include <QDialog>
+#include <QValidator>
 
 #include "tickettablemodel.h"
 #include "citylistmodel.h"
@@ -46,6 +47,7 @@ private:
     bool confirmDelete();
     bool saveAsNewTicket();
 
+    QSharedPointer<QValidator> price_validator;
     QSharedPointer<TicketTableModel> ticket_table_model;
     QSharedPointer<CityListModel> departure_city_list_model;
     QSharedPointer<CityListModel> destination_city_list_model;

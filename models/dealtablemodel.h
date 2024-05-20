@@ -15,6 +15,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
     void setDealsList(const QVector<QSharedPointer<Deal>> &deals);
+    QSharedPointer<Deal> getDealByIndexRow(const int row);
 
 private:
     QVector<QSharedPointer<Deal>> deals;

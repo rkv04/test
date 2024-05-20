@@ -9,6 +9,7 @@ AdminMainWindow::AdminMainWindow(QWidget *parent)
     connect(this->ui->logoutButton, SIGNAL(clicked(bool)), this, SLOT(onLogoutButtonClicked()));
     connect(this->ui->employeeButton, SIGNAL(clicked(bool)), this, SLOT(onEmployeeButtonClicked()));
     connect(this->ui->usersButton, SIGNAL(clicked(bool)), this, SLOT(onUsersButtonClicked()));
+    connect(this->ui->accountButton, SIGNAL(clicked(bool)), this, SLOT(onAccountButtonClicked()));
 }
 
 AdminMainWindow::~AdminMainWindow()
@@ -38,5 +39,15 @@ void AdminMainWindow::onUsersButtonClicked() {
     }
     this->user_list_window->init();
     this->user_list_window->show();
+    this->close();
+}
+
+void AdminMainWindow::onAccountButtonClicked() {
+    if (this->account_window == nullptr) {
+        this->account_window = QSharedPointer<EmployeeAccountWindow>(new EmployeeAccountWindow());
+        connect(this->account_window.get(), SIGNAL(closed()), this, SLOT(show()));
+    }
+    this->account_window->init();
+    this->account_window->show();
     this->close();
 }

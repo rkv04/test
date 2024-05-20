@@ -2,6 +2,8 @@
 #include "ui_ticketslistwindow.h"
 
 #include <QMessageBox>
+#include <QIntValidator>
+#include "limits.h"
 
 #include "app.h"
 #include "apperror.h"
@@ -28,6 +30,7 @@ TicketsListWindow::TicketsListWindow(QWidget *parent)
     this->departure_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->destination_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
+    this->price_validator = QSharedPointer<QIntValidator>(new QIntValidator(0, std::numeric_limits<int>::max()));
 }
 
 TicketsListWindow::~TicketsListWindow()
@@ -98,6 +101,8 @@ void TicketsListWindow::initUi() {
     this->ui->ticketView->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->ui->priceEditLower->setPlaceholderText("От ...");
     this->ui->priceEditUpper->setPlaceholderText("До ...");
+    this->ui->priceEditLower->setValidator(this->price_validator.get());
+    this->ui->priceEditUpper->setValidator(this->price_validator.get());
 }
 
 void TicketsListWindow::destinationCityBoxChanged() {

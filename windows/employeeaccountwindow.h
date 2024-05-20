@@ -2,6 +2,7 @@
 #define EMPLOYEEACCOUNTWINDOW_H
 
 #include <QMainWindow>
+#include <QValidator>
 
 #include "user.h"
 #include "apperror.h"
@@ -30,8 +31,10 @@ private slots:
 
 private:
     Ui::EmployeeAccountWindow *ui;
-
+    bool dataIsValid();
+    bool passwordIsValid();
     void handleAppError(const AppError &ex);
+    QSharedPointer<QValidator> phone_validator;
     QSharedPointer<User> employee;
 };
 

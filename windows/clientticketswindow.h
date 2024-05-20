@@ -21,6 +21,7 @@ public:
 
 private slots:
     void onBackButtonClicked();
+    void onTicketClicked(const QModelIndex &index);
 
 signals:
     void back();

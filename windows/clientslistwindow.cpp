@@ -15,12 +15,13 @@ ClientsListWindow::ClientsListWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle(App::APPLICATION_NAME);
-
     connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
     connect(this->ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(onSaveButtonClicked()));
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
     connect(this->ui->resetFiltersButton, SIGNAL(clicked(bool)), this, SLOT(onResetFiltersButtonClicked()));
     this->client_model = QSharedPointer<ClientTableModel>(new ClientTableModel());
+    QRegularExpression phone_exp("^\\d{11}$");
+    this->phone_validator = QSharedPointer<QRegularExpressionValidator>(new QRegularExpressionValidator(phone_exp));
     this->ui->comboBox->addItem("0%", QVariant(0));
     this->ui->comboBox->addItem("3%", QVariant(3));
     this->ui->comboBox->addItem("5%", QVariant(5));
@@ -57,6 +58,7 @@ void ClientsListWindow::initUi() {
     this->ui->tableView->resizeColumnsToContents();
     this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    this->ui->phoneEdit->setValidator(phone_validator.get());
 }
 
 ClientsListWindow::~ClientsListWindow()

@@ -2,6 +2,7 @@
 #define TICKETPURCHASEWINDOW_H
 
 #include <QDialog>
+#include <QValidator>
 
 #include "apperror.h"
 #include "citylistmodel.h"
@@ -43,6 +44,7 @@ private:
     bool confirmPurchase();
     QMap<QString, QString> createFilter();
 
+    QSharedPointer<QValidator> price_validator;
     QSharedPointer<TicketTableModel> ticket_table_model;
     QSharedPointer<CityListModel> departure_city_list_model;
     QSharedPointer<CityListModel> destination_city_list_model;

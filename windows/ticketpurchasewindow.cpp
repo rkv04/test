@@ -23,6 +23,7 @@ TicketPurchaseWindow::TicketPurchaseWindow(QWidget *parent)
     this->departure_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->destination_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
+    this->price_validator = QSharedPointer<QIntValidator>(new QIntValidator(0, std::numeric_limits<int>::max()));
 }
 
 TicketPurchaseWindow::~TicketPurchaseWindow()
@@ -95,6 +96,8 @@ void TicketPurchaseWindow::initUi() {
     this->ui->ticketView->setSelectionMode(QAbstractItemView::SingleSelection);
     this->ui->priceEditLower->setPlaceholderText("От ...");
     this->ui->priceEditUpper->setPlaceholderText("До ...");
+    this->ui->priceEditLower->setValidator(this->price_validator.get());
+    this->ui->priceEditUpper->setValidator(this->price_validator.get());
 }
 
 void TicketPurchaseWindow::showTicketInfo(const QModelIndex &index) {

@@ -2,6 +2,7 @@
 #define REGISTRATIONWINDOW_H
 
 #include "authorizationwindow.h"
+#include "apperror.h"
 
 #include <QMainWindow>
 #include <QValidator>
@@ -29,10 +30,13 @@ public slots:
     void toLoginWindow();
 
 private:
+
+    bool validateData();
+    void handleAppError(const AppError &ex);
+
     Ui::RegistrationWindow *ui;
-    AuthorizationWindow *author_window;
-    QValidator *phone_validator;
-    QValidator *text_validator;
+    QSharedPointer<QValidator> phone_validator;
+    QSharedPointer<QValidator> text_validator;
 };
 
 #endif // REGISTRATIONWINDOW_H

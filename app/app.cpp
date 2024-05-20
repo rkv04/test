@@ -159,12 +159,12 @@ int App::createEmployee(const QSharedPointer<User> &employee) {
 }
 
 void App::updateEmployee(const QSharedPointer<User> &updated_employee) {
-    QSharedPointer<User> employee = this->user_service->getEmployeeByPhone(employee->phone);
+    QSharedPointer<User> employee = this->user_service->getEmployeeByPhone(updated_employee->phone);
     if (employee != nullptr && updated_employee->id != employee->id) {
         throw AppError("Указанный номер телефона уже занят", false);
     }
     try {
-        this->user_service->updateEmployee(employee);
+        this->user_service->updateEmployee(updated_employee);
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());

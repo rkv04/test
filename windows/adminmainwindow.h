@@ -5,6 +5,7 @@
 
 #include "employeelistwindow.h"
 #include "userslistwindow.h"
+#include "employeeaccountwindow.h"
 
 namespace Ui {
 class AdminMainWindow;
@@ -25,12 +26,14 @@ private slots:
     void onEmployeeButtonClicked();
     void onUsersButtonClicked();
     void onLogoutButtonClicked();
+    void onAccountButtonClicked();
 
 private:
     Ui::AdminMainWindow *ui;
 
     QSharedPointer<EmployeeListWindow> employee_list_window;
     QSharedPointer<UsersListWindow> user_list_window;
+    QSharedPointer<EmployeeAccountWindow> account_window;
 };
 
 #endif // ADMINMAINWINDOW_H

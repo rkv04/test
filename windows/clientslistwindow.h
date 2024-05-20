@@ -1,6 +1,7 @@
 #ifndef CLIENTSLISTWINDOW_H
 #define CLIENTSLISTWINDOW_H
 
+#include <QValidator>
 #include <QMainWindow>
 #include <QSqlQueryModel>
 
@@ -37,6 +38,7 @@ private:
     void handleAppError(const AppError &ex);
     QMap<QString, QString> createFilter();
     QSharedPointer<ClientTableModel> client_model;
+    QSharedPointer<QValidator> phone_validator;
 
 };
 
