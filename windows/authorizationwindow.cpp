@@ -44,10 +44,10 @@ void AuthorizationWindow::loginButtonClicked() {
         user = app->login(phone, password);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         if (ex.isFatal()) {
-            exit(-1);
+            QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         }
+        QMessageBox::warning(this, App::APPLICATION_NAME, ex.what());
         return;
     }
     switch (user->role) {

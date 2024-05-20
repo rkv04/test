@@ -40,7 +40,7 @@ QVariant ClientTableModel::headerData(int section, Qt::Orientation orientation, 
             return this->headers.at(section);
         }
         if (orientation == Qt::Vertical) {
-            return QString::number(section);
+            return QString::number(section + 1);
         }
     }
     return QVariant();

@@ -33,6 +33,7 @@ private slots:
     void onBackButtonClicked();
     void showTicketInfo(const QModelIndex &index);
     void destinationCityBoxChanged();
+    void onResetFiltersButtonClicked();
 
 private:
     Ui::TicketsListWindow *ui;

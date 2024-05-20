@@ -25,7 +25,6 @@ public:
 
 private:
     QVector<QSharedPointer<City>> cities;
-    QStringList headers = {"Название", "Описание климата"};
 };
 
 #endif // CITYTABLEMODEL_H

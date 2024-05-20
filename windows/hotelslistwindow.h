@@ -31,6 +31,7 @@ private slots:
     void onEditButtonClicked();
     void onFindButtonClicked();
     void onBackButtonClicked();
+    void onResetFiltersButtonClicked();
     bool confirmDelete();
 
 signals:

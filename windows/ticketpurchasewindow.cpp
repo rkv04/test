@@ -18,6 +18,7 @@ TicketPurchaseWindow::TicketPurchaseWindow(QWidget *parent)
     connect(this->ui->countEdit, SIGNAL(textChanged(QString)), this, SLOT(setTotalPrice()));
     connect(this->ui->ticketView, SIGNAL(clicked(QModelIndex)), this, SLOT(setTotalPrice()));
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onCancelButtonClicked()));
+    connect(this->ui->resetFiltersButton, SIGNAL(clicked(bool)), this, SLOT(onResetFiltersButtonClicked()));
     this->ticket_table_model = QSharedPointer<TicketTableModel>(new TicketTableModel());
     this->departure_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->destination_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
@@ -129,6 +130,25 @@ QMap<QString, QString> TicketPurchaseWindow::createFilter() {
     filter["priceLower"] = this->ui->priceEditLower->text();
     filter["priceUpper"] = this->ui->priceEditUpper->text();
     return filter;
+}
+
+void TicketPurchaseWindow::onResetFiltersButtonClicked() {
+    this->ui->departureCityBox->setCurrentIndex(0);
+    this->ui->destinationCityBox->setCurrentIndex(0);
+    this->ui->durationBox->setCurrentIndex(0);
+    this->ui->dateSwitch->setChecked(false);
+    this->ui->priceEditLower->clear();
+    this->ui->priceEditUpper->clear();
+    App *app = App::getInstance();
+    QVector<QSharedPointer<Ticket>> tickets;
+    try {
+        tickets = app->getTicketsAvailableForPurchase();
+    }
+    catch(const AppError &ex) {
+        this->handleAppError(ex);
+        return;
+    }
+    this->ticket_table_model->setTicketList(tickets);
 }
 
 void TicketPurchaseWindow::destinationCityBoxChanged() {

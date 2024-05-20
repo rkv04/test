@@ -18,6 +18,7 @@ HotelsListWindow::HotelsListWindow(QWidget *parent)
     connect(this->ui->editButton, SIGNAL(clicked(bool)), this, SLOT(onEditButtonClicked()));
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
     connect(this->ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditButtonClicked()));
+    connect(this->ui->resetFiltersButton, SIGNAL(clicked(bool)), this, SLOT(onResetFiltersButtonClicked()));
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->category_model = QSharedPointer<HotelCategoryListModel>(new HotelCategoryListModel());
     this->hotel_table_model = QSharedPointer<HotelTableModel>(new HotelTableModel());
@@ -165,11 +166,28 @@ void HotelsListWindow::onBackButtonClicked() {
     this->close();
 }
 
+void HotelsListWindow::onResetFiltersButtonClicked() {
+    this->ui->titleEdit->clear();
+    this->ui->cityListBox->setCurrentIndex(0);
+    this->ui->categoryBox->setCurrentIndex(0);
+    App *app = App::getInstance();
+    QVector<QSharedPointer<Hotel>> hotels;
+    try {
+        hotels = app->getHotelList();
+    }
+    catch(const AppError &ex) {
+        this->handleAppError(ex);
+        return;
+    }
+    this->hotel_table_model->setHotelsList(hotels);
+}
+
 QMap<QString, QString> HotelsListWindow::createFilter() {
     QMap<QString, QString> filter;
-    QSharedPointer<City> city = this->ui->cityListBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();
+    QSharedPointer<City> city = this->ui->cityListBox->currentData(Qt::UserRole).value<QSharedPointer<City>>();\
+    int category = this->ui->categoryBox->currentData(HotelCategoryListModel::CategoryRole).toInt();
     filter["title"] = this->ui->titleEdit->text() + "%";
-    filter["category"] = this->ui->categoryBox->currentData(HotelCategoryListModel::CategoryRole).toString();
+    filter["category"] = category == -1 ? QString() : QString::number(category);
     filter["id_city"] = city == nullptr ? QString() : QString::number(city->id);
     return filter;
 }

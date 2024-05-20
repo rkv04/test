@@ -9,16 +9,14 @@ int CityTableModel::rowCount(const QModelIndex &) const {
 }
 
 int CityTableModel::columnCount(const QModelIndex &) const {
-    return 2;
+    return 1;
 }
 
 QVariant CityTableModel::data(const QModelIndex &index, int role) const {
     if (role == Qt::DisplayRole) {
-        switch(index.column()) {
+        switch (index.column()) {
         case 0:
             return this->cities.at(index.row())->title;
-        case 1:
-            return this->cities.at(index.row())->climate;
         }
     }
     return QVariant();
@@ -27,10 +25,13 @@ QVariant CityTableModel::data(const QModelIndex &index, int role) const {
 QVariant CityTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (role == Qt::DisplayRole) {
         if (orientation == Qt::Horizontal) {
-            return this->headers.at(section);
+            switch (section) {
+            case 0:
+                return "Название";
+            }
         }
         if (orientation == Qt::Vertical) {
-            return QString::number(section);
+            return QString::number(section + 1);
         }
     }
     return QVariant();

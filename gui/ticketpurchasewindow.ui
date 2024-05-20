@@ -305,9 +305,16 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
+        <widget class="QPushButton" name="resetFiltersButton">
+         <property name="text">
+          <string>Сбросить фильтры</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="label_8">
          <property name="text">
-          <string>Особенности климата:</string>
+          <string>Особенности климата города назначения:</string>
          </property>
         </widget>
        </item>

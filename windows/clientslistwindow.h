@@ -27,6 +27,7 @@ private slots:
     void onFindButtonClicked();
     void onSaveButtonClicked();
     void onBackButtonClicked();
+    void onResetFiltersButtonClicked();
 
 private:
     Ui::ClientsListWindow *ui;

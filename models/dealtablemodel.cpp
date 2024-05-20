@@ -68,7 +68,7 @@ QVariant DealTableModel::headerData(int section, Qt::Orientation orientation, in
             }
         }
         if (orientation == Qt::Vertical) {
-            return QString::number(section);
+            return QString::number(section + 1);
         }
     }
     return QVariant();

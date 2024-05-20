@@ -23,6 +23,7 @@ TicketsListWindow::TicketsListWindow(QWidget *parent)
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
     connect(this->ui->editTicketButton, SIGNAL(clicked(bool)), this, SLOT(onEditButtonClicked()));
     connect(this->ui->ticketView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditButtonClicked()));
+    connect(this->ui->resetFiltersButton, SIGNAL(clicked(bool)), this, SLOT(onResetFiltersButtonClicked()));
     this->ticket_table_model = QSharedPointer<TicketTableModel>(new TicketTableModel());
     this->departure_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->destination_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
@@ -205,6 +206,25 @@ void TicketsListWindow::onFindButtonClicked() {
     this->ticket_table_model->setTicketList(filtered_tickets);
 }
 
+void TicketsListWindow::onResetFiltersButtonClicked() {
+    this->ui->departureCityBox->setCurrentIndex(0);
+    this->ui->destinationCityBox->setCurrentIndex(0);
+    this->ui->durationBox->setCurrentIndex(0);
+    this->ui->dateSwitch->setChecked(false);
+    this->ui->priceEditLower->clear();
+    this->ui->priceEditUpper->clear();
+    App *app = App::getInstance();
+    QVector<QSharedPointer<Ticket>> tickets;
+    try {
+        tickets = app->getTicketList();
+    }
+    catch(const AppError &ex) {
+        this->handleAppError(ex);
+        return;
+    }
+    this->ticket_table_model->setTicketList(tickets);
+}
+
 QMap<QString, QString> TicketsListWindow::createFilter() {
     QMap<QString, QString> filter;
     auto departure_city = this->ui->departureCityBox->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
@@ -231,4 +251,3 @@ void TicketsListWindow::onBackButtonClicked() {
     this->ticket_table_model->clearModel();
     this->close();
 }
-

@@ -4,11 +4,11 @@ EmployeeTableModel::EmployeeTableModel(QObject *parent)
     : QAbstractTableModel{parent}
 {}
 
-int EmployeeTableModel::rowCount(const QModelIndex &parent) const {
+int EmployeeTableModel::rowCount(const QModelIndex &) const {
     return this->employees.size();
 }
 
-int EmployeeTableModel::columnCount(const QModelIndex &parent) const {
+int EmployeeTableModel::columnCount(const QModelIndex &) const {
     return 5;
 }
 
@@ -48,7 +48,7 @@ QVariant EmployeeTableModel::headerData(int section, Qt::Orientation orientation
             }
         }
         if (orientation == Qt::Vertical) {
-            return QString::number(section);
+            return QString::number(section + 1);
         }
     }
     return QVariant();

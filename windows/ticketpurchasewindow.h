@@ -26,6 +26,7 @@ private slots:
     void onFindButtonClicked();
     void onBuyButtonClicked();
     void onCancelButtonClicked();
+    void onResetFiltersButtonClicked();
     void destinationCityBoxChanged();
     void showTicketInfo(const QModelIndex &index);
     void setTotalPrice();
