@@ -114,6 +114,9 @@
            <property name="text">
             <string>Войти</string>
            </property>
+           <property name="shortcut">
+            <string>Return</string>
+           </property>
           </widget>
          </item>
          <item>

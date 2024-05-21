@@ -49,8 +49,8 @@ void ClientTicketsWindow::initUi() {
     this->ui->tableView->setModel(this->deal_table_model.get());
     this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    this->ui->tableView->horizontalHeader()->stretchLastSection();
     this->ui->tableView->resizeColumnsToContents();
-    this->ui->tableView->verticalHeader()->stretchLastSection();
 }
 
 void ClientTicketsWindow::onBackButtonClicked() {

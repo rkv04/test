@@ -25,7 +25,3 @@ QVariant HotelCategoryListModel::data(const QModelIndex &index, int role) const 
     }
     return QVariant();
 }
-
-// QString HotelCategoryListModel::getCategoryByIndex(const int index) {
-//     return this->categories.at(index).value;
-// }

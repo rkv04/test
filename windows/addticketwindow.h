@@ -5,6 +5,7 @@
 
 #include "citylistmodel.h"
 #include "hotellistmodel.h"
+#include "ticketdurationlistmodel.h"
 #include "ticket.h"
 #include "apperror.h"
 
@@ -33,6 +34,7 @@ private:
 
     QSharedPointer<CityListModel> city_list_model;
     QSharedPointer<HotelListModel> hotel_list_model;
+    QSharedPointer<TicketDurationListModel> duration_list_model;
 
     QSharedPointer<Ticket> created_ticket;
 };

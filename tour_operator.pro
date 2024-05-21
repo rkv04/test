@@ -28,6 +28,7 @@ SOURCES += \
     models/hotelcategorylistmodel.cpp \
     models/hotellistmodel.cpp \
     models/hoteltablemodel.cpp \
+    models/ticketdurationlistmodel.cpp \
     models/tickettablemodel.cpp \
     services/dealservice.cpp \
     services/hotelservice.cpp \
@@ -78,6 +79,7 @@ HEADERS += \
     models/hotelcategorylistmodel.h \
     models/hotellistmodel.h \
     models/hoteltablemodel.h \
+    models/ticketdurationlistmodel.h \
     models/tickettablemodel.h \
     services/dealservice.h \
     services/hotelservice.h \

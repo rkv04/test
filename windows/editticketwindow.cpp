@@ -17,6 +17,7 @@ EditTicketWindow::EditTicketWindow(QWidget *parent)
     connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
+    this->duration_list_model = QSharedPointer<TicketDurationListModel>(new TicketDurationListModel());
 }
 
 EditTicketWindow::~EditTicketWindow()
@@ -68,17 +69,19 @@ void EditTicketWindow::initUi() {
     this->ui->hotelBox->setModel(this->hotel_list_model.get());
     this->ui->departureCityBox->setModel(this->city_list_model.get());
     this->ui->destinationCityBox->setModel(this->city_list_model.get());
+    this->ui->durationBox->setModel(this->duration_list_model.get());
     this->ui->departureCityBox->setMaxVisibleItems(10);
     this->ui->destinationCityBox->setMaxVisibleItems(10);
     this->ui->hotelBox->setMaxVisibleItems(10);
     this->ui->durationBox->setMaxVisibleItems(10);
-    this->ui->durationBox->addItem("14 дней", "14");
     int departure_city_index = this->ui->departureCityBox->findData(this->ticket->departure_city->id, CityListModel::CityIdRole);
     this->ui->departureCityBox->setCurrentIndex(departure_city_index);
     int destination_city_index = this->ui->destinationCityBox->findData(this->ticket->hotel->city->id, CityListModel::CityIdRole);
     this->ui->destinationCityBox->setCurrentIndex(destination_city_index);
     int hotel_index = this->ui->hotelBox->findData(this->ticket->hotel->id, HotelListModel::HotelIdRole);
     this->ui->hotelBox->setCurrentIndex(hotel_index);
+    int duration_index = this->ui->durationBox->findData(this->ticket->duration, TicketDurationListModel::DurationRole);
+    this->ui->durationBox->setCurrentIndex(duration_index);
     this->ui->departureDateEdit->setDate(QDate::fromString(this->ticket->departure_date, "dd.MM.yyyy"));
     this->ui->travelTimeEdit->setText(this->ticket->travel_time);
     this->ui->quantityEdit->setText(QString::number(this->ticket->quantity));
@@ -97,11 +100,11 @@ void EditTicketWindow::onSaveButtonClicked() {
     auto departure_city = this->ui->departureCityBox->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
     auto hotel = this->ui->hotelBox->currentData(HotelListModel::HotelPtrRole).value<QSharedPointer<Hotel>>();
     QString departure_date = this->ui->departureDateEdit->date().toString("dd.MM.yyyy");
-    QString duration = this->ui->durationBox->currentData().toString(); // to do
+    int duration = this->ui->durationBox->currentData(TicketDurationListModel::DurationRole).toInt();
     QString travel_time = this->ui->travelTimeEdit->text();
     QString quantity = this->ui->quantityEdit->text();
     QString price = this->ui->priceEdit->text();
-    if (departure_city == nullptr || hotel == nullptr || departure_date.isEmpty() || duration.isEmpty() ||
+    if (departure_city == nullptr || hotel == nullptr || departure_date.isEmpty() || duration == -1 ||
         travel_time.isEmpty() || quantity.isEmpty() || price.isEmpty())
     {
         QMessageBox::warning(this, App::APPLICATION_NAME, "Необходимо заполнить все поля формы");
@@ -113,7 +116,7 @@ void EditTicketWindow::onSaveButtonClicked() {
     this->ticket->departure_city = departure_city;
     this->ticket->hotel = hotel;
     this->ticket->departure_date = departure_date;
-    this->ticket->duration = duration.toInt();
+    this->ticket->duration = duration;
     this->ticket->travel_time = travel_time;
     this->ticket->quantity = quantity.toInt();
     this->ticket->price = price.toInt();

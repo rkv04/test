@@ -17,8 +17,8 @@ AddTicketWindow::AddTicketWindow(QWidget *parent)
     connect(this->ui->destinationCityBox, SIGNAL(currentIndexChanged(int)), this, SLOT(destinationCityBoxChanged()));
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
+    this->duration_list_model = QSharedPointer<TicketDurationListModel>(new TicketDurationListModel());
     this->ui->dateEdit->setDate(QDate::currentDate());
-    this->ui->durationBox->addItem("14 дней", 14); // to do
 }
 
 AddTicketWindow::~AddTicketWindow()
@@ -46,13 +46,14 @@ void AddTicketWindow::init() {
         return;
     }
     this->city_list_model->setCityList(cities);
-    this->ui->departureCityBox->setModel(city_list_model.get());
-    this->ui->destinationCityBox->setModel(city_list_model.get());
+    this->ui->departureCityBox->setModel(this->city_list_model.get());
+    this->ui->destinationCityBox->setModel(this->city_list_model.get());
     this->ui->departureCityBox->setMaxVisibleItems(10);
     this->ui->destinationCityBox->setMaxVisibleItems(10);
 
-    this->ui->hotelBox->setModel(hotel_list_model.get());
+    this->ui->hotelBox->setModel(this->hotel_list_model.get());
     this->ui->hotelBox->setMaxVisibleItems(10);
+    this->ui->durationBox->setModel(this->duration_list_model.get());
 
 }
 
@@ -78,11 +79,11 @@ void AddTicketWindow::onAddButtonClicked() {
     QSharedPointer<City> departure_city = this->ui->departureCityBox->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
     QSharedPointer<Hotel> hotel = this->ui->hotelBox->currentData(HotelListModel::HotelPtrRole).value<QSharedPointer<Hotel>>();
     QString departure_date = this->ui->dateEdit->date().toString("dd.MM.yyyy");
-    int duration = this->ui->durationBox->currentData().toInt();
+    int duration = this->ui->durationBox->currentData(TicketDurationListModel::DurationRole).toInt();
     QString quantity = this->ui->quantityEdit->text();
     QString price = this->ui->priceEdit->text();
     QString travel_time = this->ui->travelTimeEdit->text();
-    if (departure_city == nullptr || hotel == nullptr || quantity.isEmpty() || price.isEmpty() || travel_time.isEmpty()) {
+    if (departure_city == nullptr || hotel == nullptr || quantity.isEmpty() || price.isEmpty() || travel_time.isEmpty() || duration == -1) {
         QMessageBox::warning(this, App::APPLICATION_NAME, "Необходимо заполнить все поля формы");
         return;
     }

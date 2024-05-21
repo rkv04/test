@@ -7,6 +7,7 @@
 #include "ticket.h"
 #include "citylistmodel.h"
 #include "hotellistmodel.h"
+#include "ticketdurationlistmodel.h"
 
 namespace Ui {
 class EditTicketWindow;
@@ -40,6 +41,7 @@ private:
     QSharedPointer<Ticket> ticket;
     QSharedPointer<CityListModel> city_list_model;
     QSharedPointer<HotelListModel> hotel_list_model;
+    QSharedPointer<TicketDurationListModel> duration_list_model;
 };
 
 #endif // EDITTICKETWINDOW_H

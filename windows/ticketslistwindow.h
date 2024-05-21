@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QValidator>
 
+#include "ticketdurationlistmodel.h"
 #include "tickettablemodel.h"
 #include "citylistmodel.h"
 #include "hotellistmodel.h"
@@ -52,6 +53,7 @@ private:
     QSharedPointer<CityListModel> departure_city_list_model;
     QSharedPointer<CityListModel> destination_city_list_model;
     QSharedPointer<HotelListModel> hotel_list_model;
+    QSharedPointer<TicketDurationListModel> duration_list_model;
 };
 
 #endif // TICKETSLISTWINDOW_H

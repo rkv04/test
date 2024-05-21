@@ -11,6 +11,7 @@ TicketPurchaseWindow::TicketPurchaseWindow(QWidget *parent)
     , ui(new Ui::TicketPurchaseWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(App::APPLICATION_NAME);
     connect(this->ui->ticketView, SIGNAL(clicked(QModelIndex)), this, SLOT(showTicketInfo(QModelIndex)));
     connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
     connect(this->ui->buyButton, SIGNAL(clicked(bool)), this, SLOT(onBuyButtonClicked()));
@@ -23,6 +24,7 @@ TicketPurchaseWindow::TicketPurchaseWindow(QWidget *parent)
     this->departure_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->destination_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
+    this->duration_list_model = QSharedPointer<TicketDurationListModel>(new TicketDurationListModel());
     this->price_validator = QSharedPointer<QIntValidator>(new QIntValidator(0, std::numeric_limits<int>::max()));
 }
 
@@ -83,6 +85,7 @@ void TicketPurchaseWindow::initUi() {
     this->ui->departureCityBox->setModel(this->departure_city_list_model.get());
     this->ui->destinationCityBox->setModel(this->destination_city_list_model.get());
     this->ui->hotelBox->setModel(this->hotel_list_model.get());
+    this->ui->durationBox->setModel(this->duration_list_model.get());
     this->ui->ticketView->setModel(ticket_table_model.get());
     this->ui->departureDateEdit->setDisplayFormat("MMM/yyyy");
     this->ui->departureDateEdit->setDate(QDate::currentDate());
@@ -124,12 +127,13 @@ QMap<QString, QString> TicketPurchaseWindow::createFilter() {
     auto departure_city = this->ui->departureCityBox->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
     auto destination_city = this->ui->destinationCityBox->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
     auto hotel = this->ui->hotelBox->currentData(HotelListModel::HotelPtrRole).value<QSharedPointer<Hotel>>();
+    int duration = this->ui->durationBox->currentData(TicketDurationListModel::DurationRole).toInt();
     bool dateIsOn = this->ui->dateSwitch->isChecked();
     filter["id_departure_city"] = departure_city == nullptr ? QString() : QString::number(departure_city->id);
     filter["id_destination_city"] = destination_city == nullptr ? QString() : QString::number(destination_city->id);
     filter["id_hotel"] = hotel == nullptr ? QString() : QString::number(hotel->id);
     filter["departure_date"] = dateIsOn ? "%" + this->ui->departureDateEdit->date().toString("MM.yyyy") : "%";
-    filter["duration"] = this->ui->durationBox->currentData().toString();
+    filter["duration"] = duration == -1 ? QString() : QString::number(duration);
     filter["priceLower"] = this->ui->priceEditLower->text();
     filter["priceUpper"] = this->ui->priceEditUpper->text();
     return filter;
