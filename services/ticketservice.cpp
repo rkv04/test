@@ -169,6 +169,9 @@ QVector<QSharedPointer<Ticket>> TicketService::getTicketListByFilter(const QMap<
     if (!filter["priceUpper"].isEmpty()) {
         text_query += " AND price <= :priceUpper";
     }
+    if (!filter["quantityIsMoreThen"].isEmpty()) {
+        text_query += " AND quantity > :quantityIsMoreThen";
+    }
     query.prepare(text_query);
     QStringList keys = filter.keys();
     for (auto &key : keys) {

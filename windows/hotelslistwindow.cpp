@@ -89,6 +89,8 @@ void HotelsListWindow::onAddHotelButtonClicked() {
         return;
     }
     this->hotel_table_model->addHotel(hotel);
+    this->city_list_model->addCity(hotel->city);
+    this->ui->tableView->resizeColumnsToContents();
 }
 
 bool HotelsListWindow::confirmDelete() {

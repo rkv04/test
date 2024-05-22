@@ -14,12 +14,17 @@ EmployeeListWindow::EmployeeListWindow(QWidget *parent)
     ui->setupUi(this);
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
     connect(this->ui->addButton, SIGNAL(clicked(bool)), this, SLOT(onAddButtonClicked()));
+    connect(this->ui->deleteButton, SIGNAL(clicked(bool)), this, SLOT(onDeleteButtonClicked()));
     this->employee_table_model = QSharedPointer<EmployeeTableModel>(new EmployeeTableModel());
 }
 
 EmployeeListWindow::~EmployeeListWindow()
 {
     delete ui;
+}
+
+bool EmployeeListWindow::hasSelection() {
+    return this->ui->tableView->selectionModel()->hasSelection();
 }
 
 void EmployeeListWindow::handleAppError(const AppError &ex) {
@@ -33,6 +38,15 @@ void EmployeeListWindow::handleAppError(const AppError &ex) {
 void EmployeeListWindow::init() {
     this->initModels();
     this->initUi();
+}
+
+bool EmployeeListWindow::confirmDelete() {
+    QMessageBox confirm_box;
+    confirm_box.setIcon(QMessageBox::Question);
+    confirm_box.setWindowTitle(App::APPLICATION_NAME);
+    confirm_box.setText("Удалить выбранное?");
+    confirm_box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    return confirm_box.exec() == QMessageBox::Yes;
 }
 
 void EmployeeListWindow::initModels() {
@@ -71,11 +85,32 @@ void EmployeeListWindow::onAddButtonClicked() {
         return;
     }
     this->employee_table_model->addEmployee(employee);
+    this->ui->tableView->resizeColumnsToContents();
     QMessageBox::information(this, App::APPLICATION_NAME, "Сотрудник успешно зарегистрирован");
 }
 
 void EmployeeListWindow::onDeleteButtonClicked() {
-
+    if (!this->hasSelection()) {
+        QMessageBox::warning(this, App::APPLICATION_NAME, "Для удаления необходимо выделить нужные строки");
+        return;
+    }
+    if (!this->confirmDelete()) {
+        return;
+    }
+    QModelIndexList selected_indexes = this->ui->tableView->selectionModel()->selectedRows();
+    std::sort(selected_indexes.begin(), selected_indexes.end(), [](const QModelIndex &l, const QModelIndex &r){return l.row() > r.row();});
+    App *app = App::getInstance();
+    try {
+        for (auto i : selected_indexes) {
+            QSharedPointer<User> employee = this->employee_table_model->getEmployeeByIndexRow(i.row());
+            app->removeEmployee(employee);
+            this->employee_table_model->removeEmployeeByIndexRow(i.row());
+        }
+    }
+    catch(const AppError &ex) {
+        this->handleAppError(ex);
+        return;
+    }
 }
 
 void EmployeeListWindow::onBackButtonClicked() {

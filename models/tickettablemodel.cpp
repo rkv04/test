@@ -40,7 +40,24 @@ QVariant TicketTableModel::data(const QModelIndex &index, int role) const {
 QVariant TicketTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (role == Qt::DisplayRole) {
         if (orientation == Qt::Horizontal) {
-            return this->headers.at(section);
+            switch(section) {
+            case 0:
+                return "Город отпр.";
+            case 1:
+                return "Город назн.";
+            case 2:
+                return "Отель";
+            case 3:
+                return "Дата отпр.";
+            case 4:
+                return "Время в пути";
+            case 5:
+                return "Длительность";
+            case 6:
+                return "Цена";
+            case 7:
+                return "Количество";
+            }
         }
         if (orientation == Qt::Vertical) {
             return QString::number(section + 1);

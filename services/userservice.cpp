@@ -78,7 +78,7 @@ QSharedPointer<User> UserService::getEmployeeByPhone(const QString &phone) {
 
 QVector<QSharedPointer<User>> UserService::getEmployeeList() {
     QSqlQuery query;
-    QString text_query = "SELECT * FROM Employee;";
+    QString text_query = "SELECT * FROM Employee WHERE activity_flag = 1;";
     if (!query.exec(text_query)) {
         throw CriticalDB(query.lastError().text());
     }
@@ -202,6 +202,15 @@ void UserService::updateClient(const QSharedPointer<User> &client) {
     query.bindValue(3, client->phone);
     query.bindValue(4, client->address);
     query.bindValue(5, client->id);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+}
+
+void UserService::removeEmployeeById(const int id) {
+    QSqlQuery query;
+    query.prepare("UPDATE Employee SET activity_flag = 0 WHERE id = ?");
+    query.bindValue(0, id);
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
     }

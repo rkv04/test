@@ -26,8 +26,6 @@ public:
 
 private:
     QVector<QSharedPointer<Hotel>> hotels;
-    const QStringList headers = {"Название", "Категория", "Город", "Адрес"};
-
 };
 
 #endif // HOTELTABLEMODEL_H

@@ -37,7 +37,22 @@ QVariant ClientTableModel::data(const QModelIndex &index, int role) const {
 QVariant ClientTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (role == Qt::DisplayRole) {
         if (orientation == Qt::Horizontal) {
-            return this->headers.at(section);
+            switch(section) {
+            case 0:
+                return "Фамилия";
+            case 1:
+                return "Имя";
+            case 2:
+                return "Отчество";
+            case 3:
+                return "Номер телефона";
+            case 4:
+                return "Адрес";
+            case 5:
+                return "Путёвок куплено";
+            case 6:
+                return "Скидка";
+            }
         }
         if (orientation == Qt::Vertical) {
             return QString::number(section + 1);

@@ -25,6 +25,7 @@ private slots:
 private:
     Ui::AddEmployeeWindow *ui;
 
+    bool validateData();
     QSharedPointer<User> created_employee;
 };
 

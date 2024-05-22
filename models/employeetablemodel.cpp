@@ -54,6 +54,10 @@ QVariant EmployeeTableModel::headerData(int section, Qt::Orientation orientation
     return QVariant();
 }
 
+QSharedPointer<User> EmployeeTableModel::getEmployeeByIndexRow(const int row) {
+    return this->employees.at(row);
+}
+
 void EmployeeTableModel::addEmployee(const QSharedPointer<User> &employee) {
     this->employees.append(employee);
     emit layoutChanged();
@@ -63,4 +67,9 @@ void EmployeeTableModel::setEmployeeList(const QVector<QSharedPointer<User>> &em
     this->beginResetModel();
     this->employees = employees;
     this->endResetModel();
+}
+
+void EmployeeTableModel::removeEmployeeByIndexRow(const int row) {
+    this->employees.remove(row);
+    emit layoutChanged();
 }

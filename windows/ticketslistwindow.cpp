@@ -144,6 +144,9 @@ void TicketsListWindow::onAddTicketButtonClicked() {
         return;
     }
     this->ticket_table_model->addTicket(ticket);
+    this->departure_city_list_model->addCity(ticket->departure_city);
+    this->destination_city_list_model->addCity(ticket->hotel->city);
+    this->ui->ticketView->resizeColumnsToContents();
 }
 
 void TicketsListWindow::onEditButtonClicked() {

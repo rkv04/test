@@ -172,6 +172,16 @@ void App::updateEmployee(const QSharedPointer<User> &updated_employee) {
     }
 }
 
+void App::removeEmployee(const QSharedPointer<User> &employee) {
+    try {
+        this->user_service->removeEmployeeById(employee->id);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
 QVector<QSharedPointer<User>> App::getEmployeeList() {
     try {
         return this->user_service->getEmployeeList();

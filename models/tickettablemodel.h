@@ -23,10 +23,7 @@ public:
     void clearModel();
 
 private:
-
     QVector<QSharedPointer<Ticket>> tickets;
-    const QStringList headers = {"Город отпр.", "Город назн.", "Отель", "Дата отпр.", "Время в пути", "Длительность", "Цена", "Количество"};
-
 };
 
 #endif // TICKETTABLEMODEL_H

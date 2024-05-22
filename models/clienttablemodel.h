@@ -22,9 +22,7 @@ public:
     void refreshDiscountByIndex(const int index, const int discount);
 
 private:
-
     QVector<QSharedPointer<User>> clients;
-    const QStringList headers = {"Фамилия", "Имя", "Отчество", "Номер телефона", "Адрес", "Путёвок куплено", "Скидка"};
 };
 
 #endif // CLIENTTABLEMODEL_H

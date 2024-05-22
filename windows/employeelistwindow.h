@@ -33,6 +33,8 @@ signals:
 private:
     Ui::EmployeeListWindow *ui;
 
+    bool hasSelection();
+    bool confirmDelete();
     void handleAppError(const AppError &ex);
     QSharedPointer<EmployeeTableModel> employee_table_model;
 };

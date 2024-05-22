@@ -34,6 +34,7 @@ public:
 
     int createEmployee(const QSharedPointer<User> &employee);
     void updateEmployee(const QSharedPointer<User> &employee);
+    void removeEmployee(const QSharedPointer<User> &employee);
     QVector<QSharedPointer<User>> getEmployeeList();
     void updateUserPassword(const QSharedPointer<User> &user, const QString &password);
 

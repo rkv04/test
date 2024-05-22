@@ -14,6 +14,8 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
+    QSharedPointer<User> getEmployeeByIndexRow(const int row);
+    void removeEmployeeByIndexRow(const int row);
     void addEmployee(const QSharedPointer<User> &employee);
     void setEmployeeList(const QVector<QSharedPointer<User>> &employees);
 

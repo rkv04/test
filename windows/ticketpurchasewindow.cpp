@@ -20,6 +20,7 @@ TicketPurchaseWindow::TicketPurchaseWindow(QWidget *parent)
     connect(this->ui->ticketView, SIGNAL(clicked(QModelIndex)), this, SLOT(setTotalPrice()));
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onCancelButtonClicked()));
     connect(this->ui->resetFiltersButton, SIGNAL(clicked(bool)), this, SLOT(onResetFiltersButtonClicked()));
+    connect(this->ui->destinationCityBox, SIGNAL(currentIndexChanged(int)), this, SLOT(destinationCityBoxChanged()));
     this->ticket_table_model = QSharedPointer<TicketTableModel>(new TicketTableModel());
     this->departure_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->destination_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
@@ -136,6 +137,7 @@ QMap<QString, QString> TicketPurchaseWindow::createFilter() {
     filter["duration"] = duration == -1 ? QString() : QString::number(duration);
     filter["priceLower"] = this->ui->priceEditLower->text();
     filter["priceUpper"] = this->ui->priceEditUpper->text();
+    filter["quantityIsMoreThen"] = QString::number(0);
     return filter;
 }
 
@@ -196,12 +198,12 @@ void TicketPurchaseWindow::setTotalPrice() {
 }
 
 void TicketPurchaseWindow::onBuyButtonClicked() {
-    if (!this->confirmPurchase()) {
-        return;
-    }
     int quantity = this->ui->countEdit->text().toInt();
     if (!this->hasSelection() || quantity == 0) {
         QMessageBox::warning(this, App::APPLICATION_NAME, "Для покупки необходимо выделить путёвку и указать количество");
+        return;
+    }
+    if (!this->confirmPurchase()) {
         return;
     }
     int selected_row = this->ui->ticketView->selectionModel()->selectedRows().first().row();
