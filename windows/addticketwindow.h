@@ -2,6 +2,7 @@
 #define ADDTICKETWINDOW_H
 
 #include <QDialog>
+#include <QValidator>
 
 #include "citylistmodel.h"
 #include "hotellistmodel.h"
@@ -35,6 +36,7 @@ private:
     QSharedPointer<CityListModel> city_list_model;
     QSharedPointer<HotelListModel> hotel_list_model;
     QSharedPointer<TicketDurationListModel> duration_list_model;
+    QSharedPointer<QValidator> number_validator;
 
     QSharedPointer<Ticket> created_ticket;
 };

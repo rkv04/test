@@ -60,7 +60,11 @@
      <widget class="QLineEdit" name="phoneEdit"/>
     </item>
     <item row="7" column="2">
-     <widget class="QLineEdit" name="repeatPasswordEdit"/>
+     <widget class="QLineEdit" name="repeatPasswordEdit">
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+     </widget>
     </item>
     <item row="7" column="0">
      <widget class="QLineEdit" name="patronymicEdit">
@@ -116,7 +120,11 @@
      </widget>
     </item>
     <item row="4" column="2">
-     <widget class="QLineEdit" name="passwordEdit"/>
+     <widget class="QLineEdit" name="passwordEdit">
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+     </widget>
     </item>
     <item row="6" column="2">
      <widget class="QLabel" name="label_5">

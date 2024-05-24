@@ -9,7 +9,7 @@ class Ticket
 public:
     Ticket();
     int id;
-    int price;
+    unsigned long long price;
     int quantity;
     QString departure_date;
     QSharedPointer<City> departure_city;

@@ -4,11 +4,11 @@ TicketTableModel::TicketTableModel(QObject *parent)
     : QAbstractTableModel{parent}
 {}
 
-int TicketTableModel::rowCount(const QModelIndex &parent) const {
+int TicketTableModel::rowCount(const QModelIndex &) const {
     return this->tickets.size();
 }
 
-int TicketTableModel::columnCount(const QModelIndex &parent) const {
+int TicketTableModel::columnCount(const QModelIndex &) const {
     return 8;
 }
 

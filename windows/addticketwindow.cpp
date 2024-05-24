@@ -17,6 +17,8 @@ AddTicketWindow::AddTicketWindow(QWidget *parent)
     connect(this->ui->destinationCityBox, SIGNAL(currentIndexChanged(int)), this, SLOT(destinationCityBoxChanged()));
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
+    QRegularExpression number_expr("[0-9]*");
+    this->number_validator = QSharedPointer<QValidator>(new QRegularExpressionValidator(number_expr));
     this->duration_list_model = QSharedPointer<TicketDurationListModel>(new TicketDurationListModel());
     this->ui->dateEdit->setDate(QDate::currentDate());
 }
@@ -54,7 +56,8 @@ void AddTicketWindow::init() {
     this->ui->hotelBox->setModel(this->hotel_list_model.get());
     this->ui->hotelBox->setMaxVisibleItems(10);
     this->ui->durationBox->setModel(this->duration_list_model.get());
-
+    this->ui->priceEdit->setValidator(this->number_validator.get());
+    this->ui->quantityEdit->setValidator(this->number_validator.get());
 }
 
 void AddTicketWindow::destinationCityBoxChanged() {

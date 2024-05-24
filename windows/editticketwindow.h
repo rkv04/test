@@ -2,6 +2,7 @@
 #define EDITTICKETWINDOW_H
 
 #include <QDialog>
+#include <QValidator>
 
 #include "apperror.h"
 #include "ticket.h"
@@ -30,18 +31,18 @@ private slots:
     void destinationCityBoxChanged();
 
 private:
+    Ui::EditTicketWindow *ui;
 
     void initModels();
     void initUi();
     void handleAppError(const AppError &ex);
     bool saveAsNewTicket();
 
-    Ui::EditTicketWindow *ui;
-
     QSharedPointer<Ticket> ticket;
     QSharedPointer<CityListModel> city_list_model;
     QSharedPointer<HotelListModel> hotel_list_model;
     QSharedPointer<TicketDurationListModel> duration_list_model;
+    QSharedPointer<QValidator> number_validator;
 };
 
 #endif // EDITTICKETWINDOW_H

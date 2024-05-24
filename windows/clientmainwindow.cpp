@@ -1,11 +1,14 @@
 #include "clientmainwindow.h"
 #include "ui_clientmainwindow.h"
 
+#include "app.h"
+
 ClientMainWindow::ClientMainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ClientMainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(App::APPLICATION_NAME);
     connect(this->ui->accountButton, SIGNAL(clicked(bool)), this, SLOT(onAccountButtonClicked()));
     connect(this->ui->offersButton, SIGNAL(clicked(bool)), this, SLOT(onOffersButtonClicked()));
     connect(this->ui->ticketsButton, SIGNAL(clicked(bool)), this, SLOT(onTicketsButtonClicked()));

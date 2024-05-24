@@ -47,13 +47,13 @@ bool AuthorizationWindow::validateData() {
     QString phone = this->ui->phoneEdit->text();
     QString password = this->ui->passwordEdit->text();
     if (phone.isEmpty() || password.isEmpty()) {
-        QMessageBox::warning(this, App::APPLICATION_NAME, "Нобходимо заполнить все поля");
+        QMessageBox::warning(this, App::APPLICATION_NAME, "Нобходимо заполнить оба поля");
         return false;
     }
-    // if (phone.length() < 11) {
-    //     QMessageBox::warning(this, App::APPLICATION_NAME, "Номер телефона должен иметь длину 11 знаков (включая код страны)");
-    //     return false;
-    // }
+    if (phone.length() < 11) {
+        QMessageBox::warning(this, App::APPLICATION_NAME, "Номер телефона должен иметь длину 11 знаков (включая код страны)");
+        return false;
+    }
     return true;
 }
 

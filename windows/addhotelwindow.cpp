@@ -11,6 +11,7 @@ AddHotelWindow::AddHotelWindow(QWidget *parent)
     , ui(new Ui::AddHotelWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(App::APPLICATION_NAME);
     connect(this->ui->addButton, SIGNAL(clicked(bool)), this, SLOT(onAddButtonClicked()));
     connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
     this->created_hotel = nullptr;

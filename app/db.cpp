@@ -42,7 +42,7 @@ void DB::init() {
     if (query.first()) {
         return;
     }
-    QString phone = "1";
+    QString phone = "11111111111";
     QString password = "1";
     QString hash_password = QCryptographicHash::hash(QString(password).toUtf8(), QCryptographicHash::Sha256).toHex();
     query.prepare("INSERT INTO Employee (phone, hash_password, surname, name, role) VALUES (?, ?, 'Admin', 'Admin', 2);");

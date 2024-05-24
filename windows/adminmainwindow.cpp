@@ -1,11 +1,14 @@
 #include "adminmainwindow.h"
 #include "ui_adminmainwindow.h"
 
+#include "app.h"
+
 AdminMainWindow::AdminMainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::AdminMainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(App::APPLICATION_NAME);
     connect(this->ui->logoutButton, SIGNAL(clicked(bool)), this, SLOT(onLogoutButtonClicked()));
     connect(this->ui->employeeButton, SIGNAL(clicked(bool)), this, SLOT(onEmployeeButtonClicked()));
     connect(this->ui->usersButton, SIGNAL(clicked(bool)), this, SLOT(onUsersButtonClicked()));

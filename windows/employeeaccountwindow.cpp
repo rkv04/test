@@ -12,6 +12,7 @@ EmployeeAccountWindow::EmployeeAccountWindow(QWidget *parent)
     , ui(new Ui::EmployeeAccountWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(App::APPLICATION_NAME);
     connect(this->ui->changePasswordButton, SIGNAL(clicked(bool)), this, SLOT(onChangePasswordButtonClicked()));
     connect(this->ui->saveButton, SIGNAL(clicked(bool)), this, SLOT(onSaveButtonClicked()));
     connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(onCancelButtonClicked()));

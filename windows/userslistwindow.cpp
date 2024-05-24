@@ -11,6 +11,7 @@ UsersListWindow::UsersListWindow(QWidget *parent)
     , ui(new Ui::UsersListWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle(App::APPLICATION_NAME);
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
     connect(this->ui->clientRadio, SIGNAL(toggled(bool)), this, SLOT(clientRadioButtonClicked()));
     connect(this->ui->employeeRadio, SIGNAL(toggled(bool)), this, SLOT(employeeRadioButtonClicked()));

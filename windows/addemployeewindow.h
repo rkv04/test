@@ -2,6 +2,7 @@
 #define ADDEMPLOYEEWINDOW_H
 
 #include <QDialog>
+#include <QValidator>
 
 #include "user.h"
 
@@ -27,6 +28,8 @@ private:
 
     bool validateData();
     QSharedPointer<User> created_employee;
+
+    QSharedPointer<QValidator> phone_validator;
 };
 
 #endif // ADDEMPLOYEEWINDOW_H

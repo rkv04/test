@@ -31,7 +31,8 @@ TicketsListWindow::TicketsListWindow(QWidget *parent)
     this->destination_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
     this->duration_list_model = QSharedPointer<TicketDurationListModel>(new TicketDurationListModel());
-    this->price_validator = QSharedPointer<QIntValidator>(new QIntValidator(0, std::numeric_limits<int>::max()));
+    QRegularExpression price_expr("[0-9]*");
+    this->price_validator = QSharedPointer<QValidator>(new QRegularExpressionValidator(price_expr));
 }
 
 TicketsListWindow::~TicketsListWindow()
