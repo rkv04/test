@@ -33,6 +33,7 @@ void AddEmployeeWindow::onRegistrationButtonClicked() {
     this->created_employee->patronymic = this->ui->patronymicEdit->text();
     this->created_employee->phone = this->ui->phoneEdit->text();
     this->created_employee->password = this->ui->passwordEdit->text();
+    this->created_employee->role = User::Employee;
     QDialog::accept();
 }
 

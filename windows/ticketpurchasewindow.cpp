@@ -2,6 +2,7 @@
 #include "ui_ticketpurchasewindow.h"
 
 #include <QMessageBox>
+#include <QtMath>
 
 #include "app.h"
 #include "context.h"
@@ -16,7 +17,7 @@ TicketPurchaseWindow::TicketPurchaseWindow(QWidget *parent)
     connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
     connect(this->ui->buyButton, SIGNAL(clicked(bool)), this, SLOT(onBuyButtonClicked()));
     connect(this->ui->dateSwitch, SIGNAL(toggled(bool)), this->ui->departureDateEdit, SLOT(setEnabled(bool)));
-    connect(this->ui->countEdit, SIGNAL(textChanged(QString)), this, SLOT(setTotalPrice()));
+    connect(this->ui->quantitySpinBox, SIGNAL(valueChanged(int)), this, SLOT(setTotalPrice()));
     connect(this->ui->ticketView, SIGNAL(clicked(QModelIndex)), this, SLOT(setTotalPrice()));
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onCancelButtonClicked()));
     connect(this->ui->resetFiltersButton, SIGNAL(clicked(bool)), this, SLOT(onResetFiltersButtonClicked()));
@@ -87,7 +88,7 @@ void TicketPurchaseWindow::initUi() {
     this->ui->destinationCityBox->setModel(this->destination_city_list_model.get());
     this->ui->hotelBox->setModel(this->hotel_list_model.get());
     this->ui->durationBox->setModel(this->duration_list_model.get());
-    this->ui->ticketView->setModel(ticket_table_model.get());
+    this->ui->ticketView->setModel(this->ticket_table_model.get());
     this->ui->departureDateEdit->setDisplayFormat("MMM/yyyy");
     this->ui->departureDateEdit->setDate(QDate::currentDate());
     this->ui->departureDateEdit->setEnabled(false);
@@ -102,6 +103,9 @@ void TicketPurchaseWindow::initUi() {
     this->ui->priceEditUpper->setPlaceholderText("До ...");
     this->ui->priceEditLower->setValidator(this->price_validator.get());
     this->ui->priceEditUpper->setValidator(this->price_validator.get());
+    this->ui->quantitySpinBox->setValue(0);
+    this->ui->ticketView->clearFocus();
+    this->ui->priceLable->setText("0 р.");
 }
 
 void TicketPurchaseWindow::showTicketInfo(const QModelIndex &index) {
@@ -133,11 +137,12 @@ QMap<QString, QString> TicketPurchaseWindow::createFilter() {
     filter["id_departure_city"] = departure_city == nullptr ? QString() : QString::number(departure_city->id);
     filter["id_destination_city"] = destination_city == nullptr ? QString() : QString::number(destination_city->id);
     filter["id_hotel"] = hotel == nullptr ? QString() : QString::number(hotel->id);
-    filter["departure_date"] = dateIsOn ? "%" + this->ui->departureDateEdit->date().toString("MM.yyyy") : "%";
+    filter["departure_date"] = dateIsOn ? this->ui->departureDateEdit->date().toString("yyyy-MM") + "%" : "%";
     filter["duration"] = duration == -1 ? QString() : QString::number(duration);
     filter["priceLower"] = this->ui->priceEditLower->text();
     filter["priceUpper"] = this->ui->priceEditUpper->text();
-    filter["quantityIsMoreThen"] = QString::number(0);
+    filter["minQuantity"] = QString::number(1);
+    filter["currentDate"] = QDate::currentDate().toString("yyyy-MM-dd");
     return filter;
 }
 
@@ -192,13 +197,13 @@ void TicketPurchaseWindow::setTotalPrice() {
     int selected_row = this->ui->ticketView->selectionModel()->selectedRows().first().row();
     auto ticket = this->ticket_table_model->getTicketByIndexRow(selected_row);
     int discount = Context::getContext()->discount;
-    int count = this->ui->countEdit->text().toInt();
+    int count = this->ui->quantitySpinBox->value();
     int totalPrice = ticket->price * count * (100 - discount) / 100; // TODO
     this->ui->priceLable->setText(QString::number(totalPrice) + " р.");
 }
 
 void TicketPurchaseWindow::onBuyButtonClicked() {
-    int quantity = this->ui->countEdit->text().toInt();
+    int quantity = this->ui->quantitySpinBox->value();
     if (!this->hasSelection() || quantity == 0) {
         QMessageBox::warning(this, App::APPLICATION_NAME, "Для покупки необходимо выделить путёвку и указать количество");
         return;

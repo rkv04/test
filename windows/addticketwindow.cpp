@@ -20,7 +20,6 @@ AddTicketWindow::AddTicketWindow(QWidget *parent)
     QRegularExpression number_expr("[0-9]*");
     this->number_validator = QSharedPointer<QValidator>(new QRegularExpressionValidator(number_expr));
     this->duration_list_model = QSharedPointer<TicketDurationListModel>(new TicketDurationListModel());
-    this->ui->dateEdit->setDate(QDate::currentDate());
 }
 
 AddTicketWindow::~AddTicketWindow()
@@ -29,10 +28,11 @@ AddTicketWindow::~AddTicketWindow()
 }
 
 void AddTicketWindow::handleAppError(const AppError &ex) {
-    QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
     if (ex.isFatal()) {
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         exit(-1);
     }
+    QMessageBox::warning(this, App::APPLICATION_NAME, ex.what());
 }
 
 void AddTicketWindow::init() {
@@ -58,6 +58,8 @@ void AddTicketWindow::init() {
     this->ui->durationBox->setModel(this->duration_list_model.get());
     this->ui->priceEdit->setValidator(this->number_validator.get());
     this->ui->quantityEdit->setValidator(this->number_validator.get());
+    this->ui->dateEdit->setDate(QDate::currentDate());
+    this->ui->dateEdit->setMinimumDate(QDate::currentDate());
 }
 
 void AddTicketWindow::destinationCityBoxChanged() {
@@ -81,7 +83,7 @@ void AddTicketWindow::destinationCityBoxChanged() {
 void AddTicketWindow::onAddButtonClicked() {
     QSharedPointer<City> departure_city = this->ui->departureCityBox->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
     QSharedPointer<Hotel> hotel = this->ui->hotelBox->currentData(HotelListModel::HotelPtrRole).value<QSharedPointer<Hotel>>();
-    QString departure_date = this->ui->dateEdit->date().toString("dd.MM.yyyy");
+    QDate departure_date = this->ui->dateEdit->date();
     int duration = this->ui->durationBox->currentData(TicketDurationListModel::DurationRole).toInt();
     QString quantity = this->ui->quantityEdit->text();
     QString price = this->ui->priceEdit->text();

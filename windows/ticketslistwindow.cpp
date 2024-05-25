@@ -41,10 +41,11 @@ TicketsListWindow::~TicketsListWindow()
 }
 
 void TicketsListWindow::handleAppError(const AppError &ex) {
-    QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
     if (ex.isFatal()) {
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         exit(-1);
     }
+    QMessageBox::warning(this, App::APPLICATION_NAME, ex.what());
 }
 
 bool TicketsListWindow::hasSelection() {
@@ -246,7 +247,7 @@ QMap<QString, QString> TicketsListWindow::createFilter() {
     filter["id_departure_city"] = departure_city == nullptr ? QString() : QString::number(departure_city->id);
     filter["id_destination_city"] = destination_city == nullptr ? QString() : QString::number(destination_city->id);
     filter["id_hotel"] = hotel == nullptr ? QString() : QString::number(hotel->id);
-    filter["departure_date"] = dateIsOn ? "%" + this->ui->departureDateEdit->date().toString("MM.yyyy") : "%";
+    filter["departure_date"] = dateIsOn ? this->ui->departureDateEdit->date().toString("yyyy-MM") + "%" : "%";
     filter["duration"] = duration == -1 ? QString() : QString::number(duration);
     filter["priceLower"] = this->ui->priceEditLower->text();
     filter["priceUpper"] = this->ui->priceEditUpper->text();

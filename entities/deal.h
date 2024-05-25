@@ -2,6 +2,7 @@
 #define DEAL_H
 
 #include <QSharedPointer>
+#include <QDate>
 
 #include "ticket.h"
 #include "user.h"
@@ -15,7 +16,7 @@ public:
     QSharedPointer<Ticket> ticket;
     int id_client;
     int quantity;
-    QString date;
+    QDate date;
     int discount;
     int deal_sum;
 };

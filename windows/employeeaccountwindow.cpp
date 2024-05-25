@@ -30,10 +30,11 @@ void EmployeeAccountWindow::init() {
 }
 
 void EmployeeAccountWindow::handleAppError(const AppError &ex) {
-    QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
     if (ex.isFatal()) {
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         exit(-1);
     }
+    QMessageBox::warning(this, App::APPLICATION_NAME, ex.what());
 }
 
 EmployeeAccountWindow::~EmployeeAccountWindow()

@@ -8,5 +8,5 @@ Deal::Deal() {
     this->quantity = -1;
     this->discount = -1;
     this->deal_sum = -1;
-    this->date = QString();
+    this->date = QDate();
 }

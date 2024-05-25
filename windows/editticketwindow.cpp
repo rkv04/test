@@ -28,10 +28,11 @@ EditTicketWindow::~EditTicketWindow()
 }
 
 void EditTicketWindow::handleAppError(const AppError &ex) {
-    QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
     if (ex.isFatal()) {
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         exit(-1);
     }
+    QMessageBox::warning(this, App::APPLICATION_NAME, ex.what());
 }
 
 bool EditTicketWindow::saveAsNewTicket() {
@@ -86,7 +87,7 @@ void EditTicketWindow::initUi() {
     this->ui->hotelBox->setCurrentIndex(hotel_index);
     int duration_index = this->ui->durationBox->findData(this->ticket->duration, TicketDurationListModel::DurationRole);
     this->ui->durationBox->setCurrentIndex(duration_index);
-    this->ui->departureDateEdit->setDate(QDate::fromString(this->ticket->departure_date, "dd.MM.yyyy"));
+    this->ui->departureDateEdit->setDate(this->ticket->departure_date);
     this->ui->travelTimeEdit->setText(this->ticket->travel_time);
     this->ui->quantityEdit->setText(QString::number(this->ticket->quantity));
     this->ui->priceEdit->setText(QString::number(this->ticket->price));
@@ -103,12 +104,12 @@ QSharedPointer<Ticket> EditTicketWindow::getUpdatedTicket() {
 void EditTicketWindow::onSaveButtonClicked() {
     auto departure_city = this->ui->departureCityBox->currentData(CityListModel::CityPtrRole).value<QSharedPointer<City>>();
     auto hotel = this->ui->hotelBox->currentData(HotelListModel::HotelPtrRole).value<QSharedPointer<Hotel>>();
-    QString departure_date = this->ui->departureDateEdit->date().toString("dd.MM.yyyy");
+    QDate departure_date = this->ui->departureDateEdit->date();
     int duration = this->ui->durationBox->currentData(TicketDurationListModel::DurationRole).toInt();
     QString travel_time = this->ui->travelTimeEdit->text();
     QString quantity = this->ui->quantityEdit->text();
     QString price = this->ui->priceEdit->text();
-    if (departure_city == nullptr || hotel == nullptr || departure_date.isEmpty() || duration == -1 ||
+    if (departure_city == nullptr || hotel == nullptr || duration == -1 ||
         travel_time.isEmpty() || quantity.isEmpty() || price.isEmpty())
     {
         QMessageBox::warning(this, App::APPLICATION_NAME, "Необходимо заполнить все поля формы");

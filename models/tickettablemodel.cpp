@@ -23,7 +23,7 @@ QVariant TicketTableModel::data(const QModelIndex &index, int role) const {
         case 2:
             return this->tickets.at(row)->hotel->title;
         case 3:
-            return this->tickets.at(row)->departure_date;
+            return this->tickets.at(row)->departure_date.toString("dd.MM.yyyy");
         case 4:
             return this->tickets.at(row)->travel_time;
         case 5:

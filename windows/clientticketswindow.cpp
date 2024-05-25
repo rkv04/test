@@ -37,7 +37,7 @@ void ClientTicketsWindow::initModels() {
         deals = app->getDealListByClient(client);
     }
     catch(const AppError &ex) {
-        QMessageBox::critical(this, "Tour operator", ex.what());
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
         if (ex.isFatal()) {
             exit(-1);
         }
@@ -64,6 +64,6 @@ void ClientTicketsWindow::onTicketClicked(const QModelIndex &index) {
     this->ui->durationEdit->setText(QString::number(deal->ticket->duration));
     this->ui->travelTimeEdit->setText(deal->ticket->travel_time);
     this->ui->discountEdit->setText(QString::number(deal->discount) + "%");
-    this->ui->purchaseDate->setText(deal->date);
+    this->ui->purchaseDate->setText(deal->date.toString("dd.MM.yyyy"));
     this->ui->priceEdit->setText(QString::number(deal->deal_sum) + " руб.");
 }

@@ -3,6 +3,7 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlError>
+#include <QDateTime>
 
 #include "criticaldb.h"
 
@@ -18,7 +19,7 @@ int TicketService::addTicket(const QSharedPointer<Ticket> &ticket) {
     query.bindValue(3, ticket->departure_city->id);
     query.bindValue(4, ticket->duration);
     query.bindValue(5, ticket->travel_time);
-    query.bindValue(6, ticket->departure_date);
+    query.bindValue(6, ticket->departure_date.toString("yyyy-MM-dd"));
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
     }
@@ -45,7 +46,7 @@ void TicketService::updateTicket(const QSharedPointer<Ticket> &ticket) {
     query.bindValue(3, ticket->departure_city->id);
     query.bindValue(4, ticket->duration);
     query.bindValue(5, ticket->travel_time);
-    query.bindValue(6, ticket->departure_date);
+    query.bindValue(6, ticket->departure_date.toString("yyyy-MM-dd"));
     query.bindValue(7, ticket->id);
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
@@ -75,7 +76,7 @@ int TicketService::getIdLastAddedTicket() {
 QSharedPointer<Ticket> TicketService::getTicketById(const int id) {
     QSqlQuery query;
     QString text_query = this->textQueryGetAllTickets();
-    text_query += " AND id_ticket = ?;";
+    text_query += " WHERE Ticket.activity_flag = 1 AND id_ticket = ?;";
 
     query.prepare(text_query);
     query.bindValue(0, id);
@@ -88,7 +89,7 @@ QSharedPointer<Ticket> TicketService::getTicketById(const int id) {
 
 QVector<QSharedPointer<Ticket>> TicketService::getTicketList() {
     QSqlQuery query;
-    QString text_query = this->textQueryGetAllTickets();
+    QString text_query = this->textQueryGetAllTickets() + " WHERE Ticket.activity_flag = 1";
     if (!query.exec(text_query)) {
         throw CriticalDB(query.lastError().text());
     }
@@ -98,7 +99,7 @@ QVector<QSharedPointer<Ticket>> TicketService::getTicketList() {
 QVector<QSharedPointer<Ticket>> TicketService::getTicketsAvailableForPurchase() {
     QSqlQuery query;
     QString text_query = this->textQueryGetAllTickets();
-    text_query += " AND quantity > 0";
+    text_query += " WHERE Ticket.activity_flag = 1 AND quantity > 0 AND departure_date >= date('now')";
     if (!query.exec(text_query)) {
         throw CriticalDB(query.lastError().text());
     }
@@ -108,7 +109,7 @@ QVector<QSharedPointer<Ticket>> TicketService::getTicketsAvailableForPurchase() 
 QVector<QSharedPointer<Ticket>> TicketService::getTicketListByListIds(const QStringList &ids) {
     QString id_filter = "(" + ids.join(",") + ")";
     QSqlQuery query;
-    QString text_query = this->textQueryGetAllTickets() + " AND id_ticket IN " + id_filter;
+    QString text_query = this->textQueryGetAllTickets() + " WHERE id_ticket IN " + id_filter;
     if (!query.exec(text_query)) {
         throw CriticalDB(query.lastError().text());
     }
@@ -134,7 +135,7 @@ QSharedPointer<Ticket> TicketService::createTicketByRow(const QSqlRecord &record
     ticket->quantity = record.value("quantity").toInt();
     ticket->duration = record.value("duration").toInt();
     ticket->travel_time = record.value("travel_time").toString();
-    ticket->departure_date = record.value("departure_date").toString();
+    ticket->departure_date = record.value("departure_date").toDate();
     ticket->departure_city->id = record.value("id_departure_city").toInt();
     ticket->departure_city->title = record.value("city_departure_title").toString();
     ticket->hotel->id = record.value("id_hotel").toInt();
@@ -147,7 +148,7 @@ QSharedPointer<Ticket> TicketService::createTicketByRow(const QSqlRecord &record
 
 QVector<QSharedPointer<Ticket>> TicketService::getTicketListByFilter(const QMap<QString, QString> &filter) {
     QSqlQuery query;
-    QString text_query = this->textQueryGetAllTickets();
+    QString text_query = this->textQueryGetAllTickets() + " WHERE Ticket.activity_flag = 1 ";
     if (!filter["id_departure_city"].isEmpty()) {
         text_query += " AND id_departure_city = :id_departure_city";
     }
@@ -169,8 +170,11 @@ QVector<QSharedPointer<Ticket>> TicketService::getTicketListByFilter(const QMap<
     if (!filter["priceUpper"].isEmpty()) {
         text_query += " AND price <= :priceUpper";
     }
-    if (!filter["quantityIsMoreThen"].isEmpty()) {
-        text_query += " AND quantity > :quantityIsMoreThen";
+    if (!filter["minQuantity"].isEmpty()) {
+        text_query += " AND quantity >= :minQuantity";
+    }
+    if (!filter["currentDate"].isEmpty()) {
+        text_query += " AND departure_date >= :currentDate";
     }
     query.prepare(text_query);
     QStringList keys = filter.keys();
@@ -259,6 +263,5 @@ QString TicketService::textQueryGetAllTickets() {
                     "FROM Ticket "
                         "JOIN Hotel ON Ticket.id_hotel = Hotel.id "
                         "JOIN City C1 ON Ticket.id_departure_city = C1.id "
-                        "JOIN City C2 ON Hotel.id_city = C2.id "
-                   "WHERE Ticket.activity_flag = 1 ");
+                        "JOIN City C2 ON Hotel.id_city = C2.id ");
 }

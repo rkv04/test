@@ -16,7 +16,7 @@ void DealService::addDeal(const QSharedPointer<Deal> &deal) {
     query.bindValue(0, deal->ticket->id);
     query.bindValue(1, deal->id_client);
     query.bindValue(2, deal->quantity);
-    query.bindValue(3, deal->date);
+    query.bindValue(3, deal->date.toString("yyyy-MM-dd"));
     query.bindValue(4, deal->discount);
     query.bindValue(5, deal->deal_sum);
     if (!query.exec()) {
@@ -39,7 +39,7 @@ QVector<QSharedPointer<Deal>> DealService::getDealListByIdClient(const int id) {
     App *app = App::getInstance();
     QVector<QSharedPointer<Ticket>> tickets = app->getTicketListByListIds(ids);
     QMap<int, QSharedPointer<Ticket>> tickets_map;
-    for (auto ticket : tickets) {
+    for (auto &ticket : tickets) {
         tickets_map[ticket->id] = ticket;
     }
     return this->getDealList(query, tickets_map);
@@ -61,7 +61,7 @@ QSharedPointer<Deal> DealService::createDeal(const QSqlRecord &record, const QSh
     deal->id = record.value("id").toInt();
     deal->id_client = record.value("id_client").toInt();
     deal->id_ticket = record.value("id_ticket").toInt();
-    deal->date = record.value("date").toString();
+    deal->date = record.value("date").toDate();
     deal->quantity = record.value("quantity").toInt();
     deal->deal_sum = record.value("deal_sum").toInt();
     deal->discount = record.value("discount").toInt();

@@ -23,7 +23,7 @@ QVariant DealTableModel::data(const QModelIndex &index, int role) const {
         case 2:
             return this->deals.at(i)->ticket->hotel->title;
         case 3:
-            return this->deals.at(i)->ticket->departure_date;
+            return this->deals.at(i)->ticket->departure_date.toString("dd.MM.yyyy");
         case 4:
             return this->deals.at(i)->quantity;
         }

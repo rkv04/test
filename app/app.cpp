@@ -1,3 +1,4 @@
+
 #include "app.h"
 #include "db.h"
 #include "userservice.h"
@@ -136,7 +137,7 @@ void App::updateCLient(const QSharedPointer<User> &updated_client) {
         throw AppError("Указанный номер телефона уже занят", false);
     }
     try {
-        this->user_service->updateClient(client);
+        this->user_service->updateClient(updated_client);
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());
@@ -174,6 +175,9 @@ void App::updateEmployee(const QSharedPointer<User> &updated_employee) {
 
 void App::removeEmployee(const QSharedPointer<User> &employee) {
     try {
+        if (employee->role == User::Admin) {
+            throw AppError("Удаление администратора невозможно", false);
+        }
         this->user_service->removeEmployeeById(employee->id);
     }
     catch(const CriticalDB &ex) {
@@ -441,19 +445,19 @@ QVector<QSharedPointer<Hotel>> App::getHotelsFromTicketsByCity(const QSharedPoin
 void App::buyTicket(const QSharedPointer<Ticket> &purchased_ticket, const int quantity) {
     auto cur_client = Context::getContext();
     QSharedPointer<Deal> deal = QSharedPointer<Deal>(new Deal());
-    deal->date = QDate::currentDate().toString("dd.MM.yyyy");
+    deal->date = QDate::currentDate();
     deal->ticket = purchased_ticket;
     deal->id_client = cur_client->id;
     deal->discount = cur_client->discount;
     deal->quantity = quantity;
-    deal->deal_sum = purchased_ticket->price * quantity * (100 - cur_client->discount) / 100; // TODO
+    deal->deal_sum = purchased_ticket->price * quantity * (100 - cur_client->discount) / 100;
     try {
         auto ticket = this->ticket_service->getTicketById(purchased_ticket->id);
         if (ticket->quantity < quantity) {
             throw AppError("Указанное количество путевок превышает имеющееся количество в продаже", false);
         }
         this->deal_service->addDeal(deal);
-        this->ticket_service->setQuantityById(purchased_ticket->id, ticket->quantity - quantity); // TODO
+        this->ticket_service->setQuantityById(purchased_ticket->id, ticket->quantity - quantity);
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());
