@@ -16,6 +16,8 @@ EmployeeListWindow::EmployeeListWindow(QWidget *parent)
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
     connect(this->ui->addButton, SIGNAL(clicked(bool)), this, SLOT(onAddButtonClicked()));
     connect(this->ui->deleteButton, SIGNAL(clicked(bool)), this, SLOT(onDeleteButtonClicked()));
+    connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
+    connect(this->ui->resetFiltersButton, SIGNAL(clicked(bool)), this, SLOT(onResetFiltersButtonClicked()));
     this->employee_table_model = QSharedPointer<EmployeeTableModel>(new EmployeeTableModel());
 }
 
@@ -117,4 +119,44 @@ void EmployeeListWindow::onDeleteButtonClicked() {
 void EmployeeListWindow::onBackButtonClicked() {
     emit back();
     this->close();
+}
+
+void EmployeeListWindow::onFindButtonClicked() {
+    QMap<QString, QString> filter = this->createFilter();
+    App *app = App::getInstance();
+    QVector<QSharedPointer<User>> employees;
+    try {
+        employees = app->getEmployeeListByFilter(filter);
+    }
+    catch(const AppError &ex) {
+        this->handleAppError(ex);
+        return;
+    }
+    this->employee_table_model->setEmployeeList(employees);
+}
+
+QMap<QString, QString> EmployeeListWindow::createFilter() {
+    QMap<QString, QString> filter;
+    filter["surname"] = this->ui->surnameEdit->text() + "%";
+    filter["name"] = this->ui->nameEdit->text() + "%";
+    filter["patronymic"] = this->ui->patronymicEdit->text() + "%";
+    filter["phone"] = this->ui->phoneEdit->text() + "%";
+    return filter;
+}
+
+void EmployeeListWindow::onResetFiltersButtonClicked() {
+    this->ui->surnameEdit->clear();
+    this->ui->nameEdit->clear();
+    this->ui->patronymicEdit->clear();
+    this->ui->phoneEdit->clear();
+    App *app = App::getInstance();
+    QVector<QSharedPointer<User>> employees;
+    try {
+        employees = app->getEmployeeList();
+    }
+    catch(const AppError &ex) {
+        this->handleAppError(ex);
+        return;
+    }
+    this->employee_table_model->setEmployeeList(employees);
 }

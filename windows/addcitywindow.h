@@ -25,6 +25,8 @@ signals:
 
 private:
     Ui::AddCityWindow *ui;
+
+    bool dataIsValid();
     QSharedPointer<City> created_city;
 };
 

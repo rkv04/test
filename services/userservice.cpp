@@ -84,6 +84,22 @@ QVector<QSharedPointer<User>> UserService::getEmployeeList() {
     return this->getEmployeeListByQuery(query);
 }
 
+QVector<QSharedPointer<User>> UserService::getEmployeeListByFilter(const QMap<QString, QString> &filter) {
+    QSqlQuery query;
+    QString text_query = "SELECT * FROM Employee "
+                         "WHERE activity_flag = 1 AND (surname LIKE ?) AND (name LIKE ?) "
+                         "AND (patronymic LIKE ?) AND (phone LIKE ?)";
+    query.prepare(text_query);
+    query.bindValue(0, filter["surname"]);
+    query.bindValue(1, filter["name"]);
+    query.bindValue(2, filter["patronymic"]);
+    query.bindValue(3, filter["phone"]);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+    return this->getEmployeeListByQuery(query);
+}
+
 QVector<QSharedPointer<User>> UserService::getEmployeeListByQuery(QSqlQuery &query) {
     QVector<QSharedPointer<User>> employees;
     while (query.next()) {
@@ -123,6 +139,16 @@ void UserService::setDiscountById(const int client_id, const int discount) {
     query.prepare("UPDATE Client SET discount = ? WHERE id = ?;");
     query.bindValue(0, discount);
     query.bindValue(1, client_id);
+    if (!query.exec()) {
+        throw CriticalDB(query.lastError().text());
+    }
+}
+
+void UserService::increaseAmountOfPurchaseTicketsById(const int id, const int quantity) {
+    QSqlQuery query;
+    query.prepare("UPDATE Client SET amount_of_purchased_tickets = amount_of_purchased_tickets + ? WHERE id = ?");
+    query.bindValue(0, quantity);
+    query.bindValue(1, id);
     if (!query.exec()) {
         throw CriticalDB(query.lastError().text());
     }

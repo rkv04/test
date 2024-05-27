@@ -1,6 +1,8 @@
 #include "addcitywindow.h"
 #include "ui_addcitywindow.h"
 
+#include <QMessageBox>
+
 #include "app.h"
 
 AddCityWindow::AddCityWindow(QWidget *parent)
@@ -19,6 +21,9 @@ AddCityWindow::~AddCityWindow()
 }
 
 void AddCityWindow::onAddButtonClicked() {
+    if (!dataIsValid()) {
+        return;
+    }
     this->created_city = QSharedPointer<City>(new City());
     created_city->title = this->ui->titleEdit->text();
     created_city->climate = this->ui->climateEdit->toPlainText();
@@ -27,4 +32,14 @@ void AddCityWindow::onAddButtonClicked() {
 
 QSharedPointer<City> AddCityWindow::getCreatedCity() {
     return this->created_city;
+}
+
+bool AddCityWindow::dataIsValid() {
+    QString title = this->ui->titleEdit->text();
+    QString climate = this->ui->climateEdit->toPlainText();
+    if (title.isEmpty() || climate.isEmpty()) {
+        QMessageBox::warning(this, App::APPLICATION_NAME, "Необходимо заполнить оба поля");
+        return false;
+    }
+    return true;
 }

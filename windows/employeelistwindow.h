@@ -26,6 +26,8 @@ private slots:
     void onBackButtonClicked();
     void onAddButtonClicked();
     void onDeleteButtonClicked();
+    void onFindButtonClicked();
+    void onResetFiltersButtonClicked();
 
 signals:
     void back();
@@ -36,6 +38,7 @@ private:
     bool hasSelection();
     bool confirmDelete();
     void handleAppError(const AppError &ex);
+    QMap<QString, QString> createFilter();
     QSharedPointer<EmployeeTableModel> employee_table_model;
 };
 

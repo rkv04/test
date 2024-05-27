@@ -196,6 +196,16 @@ QVector<QSharedPointer<User>> App::getEmployeeList() {
     }
 }
 
+QVector<QSharedPointer<User>> App::getEmployeeListByFilter(const QMap<QString, QString> &filter) {
+    try {
+        return this->user_service->getEmployeeListByFilter(filter);
+    }
+    catch(const CriticalDB &ex) {
+        Log::write(ex.what());
+        throw AppError(CriticalDB::FATAL_MSG, true);
+    }
+}
+
 void App::updateUserPassword(const QSharedPointer<User> &user, const QString &password) {
     const QString hash_password = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
     try {
@@ -443,14 +453,14 @@ QVector<QSharedPointer<Hotel>> App::getHotelsFromTicketsByCity(const QSharedPoin
 }
 
 void App::buyTicket(const QSharedPointer<Ticket> &purchased_ticket, const int quantity) {
-    auto cur_client = Context::getContext();
+    auto current_client = Context::getContext();
     QSharedPointer<Deal> deal = QSharedPointer<Deal>(new Deal());
     deal->date = QDate::currentDate();
     deal->ticket = purchased_ticket;
-    deal->id_client = cur_client->id;
-    deal->discount = cur_client->discount;
+    deal->id_client = current_client->id;
+    deal->discount = current_client->discount;
     deal->quantity = quantity;
-    deal->deal_sum = purchased_ticket->price * quantity * (100 - cur_client->discount) / 100;
+    deal->deal_sum = purchased_ticket->price * quantity * (100 - current_client->discount) / 100;
     try {
         auto ticket = this->ticket_service->getTicketById(purchased_ticket->id);
         if (ticket->quantity < quantity) {
@@ -458,6 +468,7 @@ void App::buyTicket(const QSharedPointer<Ticket> &purchased_ticket, const int qu
         }
         this->deal_service->addDeal(deal);
         this->ticket_service->setQuantityById(purchased_ticket->id, ticket->quantity - quantity);
+        this->user_service->increaseAmountOfPurchaseTicketsById(current_client->id, quantity);
     }
     catch(const CriticalDB &ex) {
         Log::write(ex.what());

@@ -36,7 +36,7 @@ QVector<QSharedPointer<Deal>> DealService::getDealListByIdClient(const int id) {
     while (query.next()) {
         ids.append(query.value("id_ticket").toString());
     }
-    App *app = App::getInstance();
+    auto app = App::getInstance();
     QVector<QSharedPointer<Ticket>> tickets = app->getTicketListByListIds(ids);
     QMap<int, QSharedPointer<Ticket>> tickets_map;
     for (auto &ticket : tickets) {
