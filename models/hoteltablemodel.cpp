@@ -19,8 +19,23 @@ QVariant HotelTableModel::data(const QModelIndex &index, int role) const {
         switch(index.column()) {
         case 0:
             return this->hotels.at(index.row())->title;
-        case 1:
-            return this->hotels.at(index.row())->category;
+        case 1: {
+            switch (this->hotels.at(index.row())->category) {
+                case 0:
+                    return "Без звёзд";
+                case 1:
+                    return "1 звезда";
+                case 2:
+                    return "2 звезды";
+                case 3:
+                    return "3 звезды";
+                case 4:
+                    return "4 звезды";
+                case 5:
+                    return "5 звёзд";
+            }
+            return QVariant();
+        }
         case 2:
             return this->hotels.at(index.row())->city->title;
         case 3:

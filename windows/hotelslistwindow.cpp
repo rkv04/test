@@ -134,8 +134,8 @@ void HotelsListWindow::onEditButtonClicked() {
     int selected_row = this->ui->tableView->selectionModel()->selectedRows().first().row();
     QSharedPointer<Hotel> hotel = this->hotel_table_model->getHotelByIndexRow(selected_row);
     EditHotelWindow edit_hotel_window;
-    edit_hotel_window.init();
     edit_hotel_window.setHotel(hotel);
+    edit_hotel_window.init();
     if (edit_hotel_window.exec() != QDialog::Accepted) {
         return;
     }

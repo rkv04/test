@@ -27,7 +27,7 @@ void EditHotelWindow::init() {
     QVector<QSharedPointer<City>> cities;
     App *app = App::getInstance();
     try {
-        cities = app->getCitiesFromHotels();
+        cities = app->getCityList();
     }
     catch(const AppError &ex) {
         QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
@@ -37,18 +37,19 @@ void EditHotelWindow::init() {
         return;
     }
     this->city_list_model->setCityList(cities);
+    this->city_list_model->addCityIfNotExists(this->hotel->city);
     this->ui->cityBox->setModel(city_list_model.get());
     this->ui->categoryBox->setModel(category_model.get());
-}
-
-void EditHotelWindow::setHotel(const QSharedPointer<Hotel> &hotel) {
-    this->hotel = hotel;
     this->ui->titleEdit->setText(hotel->title);
     this->ui->addressEdit->setText(hotel->address);
     int city_index = this->ui->cityBox->findText(hotel->city->title);
     this->ui->cityBox->setCurrentIndex(city_index);
     int category_index = this->ui->categoryBox->findData(hotel->category, HotelCategoryListModel::CategoryRole);
     this->ui->categoryBox->setCurrentIndex(category_index);
+}
+
+void EditHotelWindow::setHotel(const QSharedPointer<Hotel> &hotel) {
+    this->hotel = hotel;
 }
 
 void EditHotelWindow::onSaveButtonClicked() {

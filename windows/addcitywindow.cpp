@@ -22,6 +22,7 @@ AddCityWindow::~AddCityWindow()
 
 void AddCityWindow::onAddButtonClicked() {
     if (!dataIsValid()) {
+        QMessageBox::warning(this, App::APPLICATION_NAME, "Необходимо заполнить оба поля");
         return;
     }
     this->created_city = QSharedPointer<City>(new City());
@@ -38,7 +39,6 @@ bool AddCityWindow::dataIsValid() {
     QString title = this->ui->titleEdit->text();
     QString climate = this->ui->climateEdit->toPlainText();
     if (title.isEmpty() || climate.isEmpty()) {
-        QMessageBox::warning(this, App::APPLICATION_NAME, "Необходимо заполнить оба поля");
         return false;
     }
     return true;

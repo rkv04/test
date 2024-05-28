@@ -23,6 +23,8 @@ private slots:
 
 private:
     Ui::EditCityWindow *ui;
+
+    bool dataIsValid();
     QSharedPointer<City> city;
 };
 

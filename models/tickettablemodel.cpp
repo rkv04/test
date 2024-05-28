@@ -42,13 +42,13 @@ QVariant TicketTableModel::headerData(int section, Qt::Orientation orientation, 
         if (orientation == Qt::Horizontal) {
             switch(section) {
             case 0:
-                return "Город отпр.";
+                return "Город отправления";
             case 1:
-                return "Город назн.";
+                return "Город назначения";
             case 2:
                 return "Отель";
             case 3:
-                return "Дата отпр.";
+                return "Дата отправления";
             case 4:
                 return "Время в пути";
             case 5:
