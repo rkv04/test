@@ -17,7 +17,6 @@ class AddEmployeeWindow : public QDialog
 public:
     explicit AddEmployeeWindow(QWidget *parent = nullptr);
     ~AddEmployeeWindow();
-
     QSharedPointer<User> getCreatedEmployee();
 
 private slots:

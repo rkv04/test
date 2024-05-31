@@ -33,6 +33,7 @@ void AuthorizationWindow::regButtonClicked() {
         this->registration_window = QSharedPointer<RegistrationWindow>(new RegistrationWindow());
         connect(this->registration_window.get(), SIGNAL(back()), this, SLOT(clearAndShow()));
     }
+    this->registration_window->init();
     this->registration_window->show();
     this->close();
 }

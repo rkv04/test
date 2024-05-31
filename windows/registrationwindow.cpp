@@ -35,6 +35,15 @@ RegistrationWindow::~RegistrationWindow()
     delete ui;
 }
 
+void RegistrationWindow::init() {
+    this->ui->surnameEdit->clear();
+    this->ui->nameEdit->clear();
+    this->ui->patronymicEdit->clear();
+    this->ui->phoneEdit->clear();
+    this->ui->passwordEdit->clear();
+    this->ui->passwordRepeatEdit->clear();
+}
+
 void RegistrationWindow::handleAppError(const AppError &ex) {
     if (ex.isFatal()) {
         QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());

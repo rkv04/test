@@ -21,6 +21,8 @@ public:
     explicit RegistrationWindow(QWidget *parent = nullptr);
     ~RegistrationWindow();
 
+    void init();
+
 signals:
     void successfulRegistration();
     void back();

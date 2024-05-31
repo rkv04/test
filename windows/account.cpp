@@ -48,6 +48,8 @@ void Account::init() {
     this->ui->phoneEdit->setText(this->client->phone);
     this->ui->addressEdit->setText(this->client->address);
     this->ui->discountLabel->setText(QString::number(this->client->discount) + "%");
+    this->ui->passwordEdit->clear();
+    this->ui->repeatPasswordEdit->clear();
 }
 
 void Account::onSaveButtonClicked() {

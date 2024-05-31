@@ -27,6 +27,8 @@ void EmployeeAccountWindow::init() {
     this->ui->nameEdit->setText(this->employee->name);
     this->ui->patronymicEdit->setText(this->employee->patronymic);
     this->ui->phoneEdit->setText(this->employee->phone);
+    this->ui->passwordEdit->clear();
+    this->ui->repeatPasswordEdit->clear();
 }
 
 void EmployeeAccountWindow::handleAppError(const AppError &ex) {
