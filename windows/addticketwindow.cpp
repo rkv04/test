@@ -19,7 +19,21 @@ AddTicketWindow::AddTicketWindow(QWidget *parent)
     this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
     QRegularExpression number_expr("[0-9]*");
     this->number_validator = QSharedPointer<QValidator>(new QRegularExpressionValidator(number_expr));
+    QRegularExpression price_exp("[1-9][0-9]*\\.[0-9]{2}");
+    this->price_validator = QSharedPointer<QValidator>(new QRegularExpressionValidator(price_exp));
     this->duration_list_model = QSharedPointer<TicketDurationListModel>(new TicketDurationListModel());
+    this->ui->priceEdit->setPlaceholderText("Пример: 1000.00");
+    this->ui->departureCityBox->setModel(this->city_list_model.get());
+    this->ui->destinationCityBox->setModel(this->city_list_model.get());
+    this->ui->departureCityBox->setMaxVisibleItems(10);
+    this->ui->destinationCityBox->setMaxVisibleItems(10);
+    this->ui->hotelBox->setModel(this->hotel_list_model.get());
+    this->ui->hotelBox->setMaxVisibleItems(10);
+    this->ui->durationBox->setModel(this->duration_list_model.get());
+    this->ui->priceEdit->setValidator(this->price_validator.get());
+    this->ui->quantityEdit->setValidator(this->number_validator.get());
+    this->ui->dateEdit->setDate(QDate::currentDate());
+    this->ui->dateEdit->setMinimumDate(QDate::currentDate());
 }
 
 AddTicketWindow::~AddTicketWindow()
@@ -48,18 +62,6 @@ void AddTicketWindow::init() {
         return;
     }
     this->city_list_model->setCityList(cities);
-    this->ui->departureCityBox->setModel(this->city_list_model.get());
-    this->ui->destinationCityBox->setModel(this->city_list_model.get());
-    this->ui->departureCityBox->setMaxVisibleItems(10);
-    this->ui->destinationCityBox->setMaxVisibleItems(10);
-
-    this->ui->hotelBox->setModel(this->hotel_list_model.get());
-    this->ui->hotelBox->setMaxVisibleItems(10);
-    this->ui->durationBox->setModel(this->duration_list_model.get());
-    this->ui->priceEdit->setValidator(this->number_validator.get());
-    this->ui->quantityEdit->setValidator(this->number_validator.get());
-    this->ui->dateEdit->setDate(QDate::currentDate());
-    this->ui->dateEdit->setMinimumDate(QDate::currentDate());
 }
 
 void AddTicketWindow::destinationCityBoxChanged() {
@@ -93,7 +95,7 @@ void AddTicketWindow::onAddButtonClicked() {
         return;
     }
     this->created_ticket = QSharedPointer<Ticket>(new Ticket());
-    this->created_ticket->price = price.toInt();
+    this->created_ticket->price = price.toDouble() * 100;
     this->created_ticket->duration = duration;
     this->created_ticket->quantity = quantity.toInt();
     this->created_ticket->travel_time = travel_time;

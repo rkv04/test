@@ -38,8 +38,12 @@ signals:
 
 private:
     Ui::TicketPurchaseWindow *ui;
+
     void initModels();
     void initUi();
+    void setUiSettings();
+    void createAndSetModels();
+
     void handleAppError(const AppError &ex);
     bool hasSelection();
     bool confirmPurchase();

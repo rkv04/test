@@ -29,7 +29,7 @@ QVariant TicketTableModel::data(const QModelIndex &index, int role) const {
         case 5:
             return QString::number(this->tickets.at(row)->duration) + QString(" дн.");
         case 6:
-            return QString::number(this->tickets.at(row)->price) + QString(" руб.");
+            return QString::number(this->tickets.at(row)->price / 100.0, 'f', 2) + QString(" р.");
         case 7:
             return this->tickets.at(row)->quantity;
         }

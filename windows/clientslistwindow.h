@@ -33,7 +33,6 @@ private slots:
 private:
     Ui::ClientsListWindow *ui;
 
-    void initUi();
     void initModels();
     void handleAppError(const AppError &ex);
     QMap<QString, QString> createFilter();

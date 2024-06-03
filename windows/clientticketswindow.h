@@ -29,8 +29,8 @@ signals:
 private:
     Ui::ClientTicketsWindow *ui;
 
-    void initModels();
     void initUi();
+    void initModels();
     QSharedPointer<DealTableModel> deal_table_model;
 };
 

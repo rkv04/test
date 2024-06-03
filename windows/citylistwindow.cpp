@@ -21,8 +21,12 @@ CityListWindow::CityListWindow(QWidget *parent)
     connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
     connect(this->ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditButtonClicked()));
     connect(this->ui->tableView, SIGNAL(clicked(QModelIndex)), this, SLOT(onRowClicked()));
-    connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));\
+    connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
     this->city_table_model = QSharedPointer<CityTableModel>(new CityTableModel());
+    this->ui->tableView->setModel(city_table_model.get());
+    this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    this->ui->tableView->resizeColumnsToContents();
+    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 void CityListWindow::handleAppError(const AppError &ex) {
@@ -35,7 +39,6 @@ void CityListWindow::handleAppError(const AppError &ex) {
 
 void CityListWindow::init() {
     this->initModels();
-    this->initUi();
 }
 
 void CityListWindow::initModels() {
@@ -49,14 +52,6 @@ void CityListWindow::initModels() {
         return;
     }
     this->city_table_model->setCityList(city_list);
-}
-
-void CityListWindow::initUi() {
-    this->ui->tableView->setModel(city_table_model.get());
-    this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
-    this->ui->tableView->resizeColumnsToContents();
-    this->ui->tableView->setWordWrap(true); // TO DO
-    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 CityListWindow::~CityListWindow()

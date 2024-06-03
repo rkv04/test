@@ -17,6 +17,10 @@ AddHotelWindow::AddHotelWindow(QWidget *parent)
     this->created_hotel = nullptr;
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->category_model = QSharedPointer<HotelCategoryListModel>(new HotelCategoryListModel());
+    this->ui->cityList->setModel(city_list_model.get());
+    this->ui->cityList->setMaxVisibleItems(10);
+    this->ui->hotelCategory->setModel(category_model.get());
+    this->ui->hotelCategory->setMaxVisibleItems(10);
 }
 
 AddHotelWindow::~AddHotelWindow()
@@ -38,10 +42,6 @@ void AddHotelWindow::init() {
         return;
     }
     this->city_list_model->setCityList(cities);
-    this->ui->cityList->setModel(city_list_model.get());
-    this->ui->cityList->setMaxVisibleItems(10);
-    this->ui->hotelCategory->setModel(category_model.get());
-    this->ui->hotelCategory->setMaxVisibleItems(10);
 }
 
 void AddHotelWindow::onAddButtonClicked() {

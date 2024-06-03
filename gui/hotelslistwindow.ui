@@ -120,6 +120,9 @@
           <property name="text">
            <string>Найти</string>
           </property>
+          <property name="shortcut">
+           <string>Return</string>
+          </property>
          </widget>
         </item>
        </layout>

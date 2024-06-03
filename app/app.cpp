@@ -460,7 +460,10 @@ void App::buyTicket(const QSharedPointer<Ticket> &purchased_ticket, const int qu
     deal->id_client = current_client->id;
     deal->discount = current_client->discount;
     deal->quantity = quantity;
-    deal->deal_sum = purchased_ticket->price * quantity * (100 - current_client->discount) / 100;
+    int priceWithoutDiscount = purchased_ticket->price * quantity;
+    int discountAmount = ceil(purchased_ticket->price * quantity * current_client->discount / 100);
+    int finalPrice = priceWithoutDiscount - discountAmount;
+    deal->deal_sum = finalPrice;
     try {
         auto ticket = this->ticket_service->getTicketById(purchased_ticket->id);
         if (ticket->quantity < quantity) {

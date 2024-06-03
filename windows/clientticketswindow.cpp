@@ -17,6 +17,10 @@ ClientTicketsWindow::ClientTicketsWindow(QWidget *parent)
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onBackButtonClicked()));
     connect(this->ui->tableView, SIGNAL(clicked(QModelIndex)), this, SLOT(onTicketClicked(QModelIndex)));
     this->deal_table_model = QSharedPointer<DealTableModel>(new DealTableModel());
+    this->ui->tableView->setModel(this->deal_table_model.get());
+    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    this->ui->tableView->horizontalHeader()->stretchLastSection();
 }
 
 ClientTicketsWindow::~ClientTicketsWindow()
@@ -27,6 +31,10 @@ ClientTicketsWindow::~ClientTicketsWindow()
 void ClientTicketsWindow::init() {
     this->initModels();
     this->initUi();
+}
+
+void ClientTicketsWindow::initUi() {
+    this->ui->tableView->resizeColumnsToContents();
 }
 
 void ClientTicketsWindow::initModels() {
@@ -46,14 +54,6 @@ void ClientTicketsWindow::initModels() {
     this->deal_table_model->setDealsList(deals);
 }
 
-void ClientTicketsWindow::initUi() {
-    this->ui->tableView->setModel(this->deal_table_model.get());
-    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    this->ui->tableView->horizontalHeader()->stretchLastSection();
-    this->ui->tableView->resizeColumnsToContents();
-}
-
 void ClientTicketsWindow::onBackButtonClicked() {
     emit back();
     this->close();
@@ -65,5 +65,5 @@ void ClientTicketsWindow::onTicketClicked(const QModelIndex &index) {
     this->ui->travelTimeEdit->setText(deal->ticket->travel_time);
     this->ui->discountEdit->setText(QString::number(deal->discount) + "%");
     this->ui->purchaseDate->setText(deal->date.toString("dd.MM.yyyy"));
-    this->ui->priceEdit->setText(QString::number(deal->deal_sum) + " руб.");
+    this->ui->priceEdit->setText(QString::number(deal->deal_sum / 100.0, 'f', 2) + " руб.");
 }

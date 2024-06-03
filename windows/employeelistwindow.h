@@ -19,8 +19,6 @@ public:
     ~EmployeeListWindow();
 
     void init();
-    void initModels();
-    void initUi();
 
 private slots:
     void onBackButtonClicked();
@@ -35,6 +33,7 @@ signals:
 private:
     Ui::EmployeeListWindow *ui;
 
+    void initModels();
     bool hasSelection();
     bool confirmDelete();
     void handleAppError(const AppError &ex);

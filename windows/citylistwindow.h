@@ -36,7 +36,6 @@ signals:
     void showEmployeeMainWindow();
 
 private:
-    void initUi();
     void initModels();
     bool confirmDelete();
     bool tableHasSelection();

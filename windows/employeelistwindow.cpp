@@ -19,6 +19,10 @@ EmployeeListWindow::EmployeeListWindow(QWidget *parent)
     connect(this->ui->findButton, SIGNAL(clicked(bool)), this, SLOT(onFindButtonClicked()));
     connect(this->ui->resetFiltersButton, SIGNAL(clicked(bool)), this, SLOT(onResetFiltersButtonClicked()));
     this->employee_table_model = QSharedPointer<EmployeeTableModel>(new EmployeeTableModel());
+    this->ui->tableView->setModel(this->employee_table_model.get());
+    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->tableView->resizeColumnsToContents();
+    this->ui->tableView->verticalHeader()->stretchLastSection();
 }
 
 EmployeeListWindow::~EmployeeListWindow()
@@ -40,7 +44,6 @@ void EmployeeListWindow::handleAppError(const AppError &ex) {
 
 void EmployeeListWindow::init() {
     this->initModels();
-    this->initUi();
 }
 
 bool EmployeeListWindow::confirmDelete() {
@@ -63,13 +66,6 @@ void EmployeeListWindow::initModels() {
         return;
     }
     this->employee_table_model->setEmployeeList(employees);
-}
-
-void EmployeeListWindow::initUi() {
-    this->ui->tableView->setModel(this->employee_table_model.get());
-    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    this->ui->tableView->resizeColumnsToContents();
-    this->ui->tableView->verticalHeader()->stretchLastSection();
 }
 
 void EmployeeListWindow::onAddButtonClicked() {

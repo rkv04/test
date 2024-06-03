@@ -42,6 +42,9 @@ private:
 
     void initModels();
     void initUi();
+    void createAndSetModels();
+    void setUiSettings();
+
     void handleAppError(const AppError &ex);
     bool hasSelection();
     QMap<QString, QString> createFilter();

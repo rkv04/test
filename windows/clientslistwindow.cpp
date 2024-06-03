@@ -22,6 +22,11 @@ ClientsListWindow::ClientsListWindow(QWidget *parent)
     this->client_model = QSharedPointer<ClientTableModel>(new ClientTableModel());
     QRegularExpression phone_exp("^\\d{11}$");
     this->phone_validator = QSharedPointer<QRegularExpressionValidator>(new QRegularExpressionValidator(phone_exp));
+    this->ui->tableView->setModel(this->client_model.get());
+    this->ui->tableView->resizeColumnsToContents();
+    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    this->ui->phoneEdit->setValidator(phone_validator.get());
     this->ui->comboBox->addItem("0%", QVariant(0));
     this->ui->comboBox->addItem("3%", QVariant(3));
     this->ui->comboBox->addItem("5%", QVariant(5));
@@ -38,7 +43,6 @@ void ClientsListWindow::handleAppError(const AppError &ex) {
 
 void ClientsListWindow::init() {
     this->initModels();
-    this->initUi();
 }
 
 void ClientsListWindow::initModels() {
@@ -52,14 +56,6 @@ void ClientsListWindow::initModels() {
         return;
     }
     this->client_model->setClientList(clients_list);
-}
-
-void ClientsListWindow::initUi() {
-    this->ui->tableView->setModel(this->client_model.get());
-    this->ui->tableView->resizeColumnsToContents();
-    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    this->ui->phoneEdit->setValidator(phone_validator.get());
 }
 
 ClientsListWindow::~ClientsListWindow()

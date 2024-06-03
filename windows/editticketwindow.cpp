@@ -20,6 +20,19 @@ EditTicketWindow::EditTicketWindow(QWidget *parent)
     this->duration_list_model = QSharedPointer<TicketDurationListModel>(new TicketDurationListModel());
     QRegularExpression number_expr("[0-9]*");
     this->number_validator = QSharedPointer<QValidator>(new QRegularExpressionValidator(number_expr));
+    QRegularExpression price_validator("[1-9][0-9]*\\.[0-9]{2}");
+    this->price_validator = QSharedPointer<QValidator>(new QRegularExpressionValidator(price_validator));
+    this->ui->priceEdit->setPlaceholderText("Пример: 1000.00");
+    this->ui->hotelBox->setModel(this->hotel_list_model.get());
+    this->ui->departureCityBox->setModel(this->city_list_model.get());
+    this->ui->destinationCityBox->setModel(this->city_list_model.get());
+    this->ui->durationBox->setModel(this->duration_list_model.get());
+    this->ui->priceEdit->setValidator(this->price_validator.get());
+    this->ui->quantityEdit->setValidator(this->number_validator.get());
+    this->ui->departureCityBox->setMaxVisibleItems(10);
+    this->ui->destinationCityBox->setMaxVisibleItems(10);
+    this->ui->hotelBox->setMaxVisibleItems(10);
+    this->ui->durationBox->setMaxVisibleItems(10);
 }
 
 EditTicketWindow::~EditTicketWindow()
@@ -69,16 +82,6 @@ void EditTicketWindow::initModels() {
 }
 
 void EditTicketWindow::initUi() {
-    this->ui->hotelBox->setModel(this->hotel_list_model.get());
-    this->ui->departureCityBox->setModel(this->city_list_model.get());
-    this->ui->destinationCityBox->setModel(this->city_list_model.get());
-    this->ui->durationBox->setModel(this->duration_list_model.get());
-    this->ui->priceEdit->setValidator(this->number_validator.get());
-    this->ui->quantityEdit->setValidator(this->number_validator.get());
-    this->ui->departureCityBox->setMaxVisibleItems(10);
-    this->ui->destinationCityBox->setMaxVisibleItems(10);
-    this->ui->hotelBox->setMaxVisibleItems(10);
-    this->ui->durationBox->setMaxVisibleItems(10);
     int departure_city_index = this->ui->departureCityBox->findData(this->ticket->departure_city->id, CityListModel::CityIdRole);
     this->ui->departureCityBox->setCurrentIndex(departure_city_index);
     int destination_city_index = this->ui->destinationCityBox->findData(this->ticket->hotel->city->id, CityListModel::CityIdRole);
@@ -90,7 +93,7 @@ void EditTicketWindow::initUi() {
     this->ui->departureDateEdit->setDate(this->ticket->departure_date);
     this->ui->travelTimeEdit->setText(this->ticket->travel_time);
     this->ui->quantityEdit->setText(QString::number(this->ticket->quantity));
-    this->ui->priceEdit->setText(QString::number(this->ticket->price));
+    this->ui->priceEdit->setText(QString::number(this->ticket->price / 100.0, 'f', 2));
 }
 
 void EditTicketWindow::setTicket(const QSharedPointer<Ticket> &ticket) {
@@ -124,7 +127,7 @@ void EditTicketWindow::onSaveButtonClicked() {
     this->ticket->duration = duration;
     this->ticket->travel_time = travel_time;
     this->ticket->quantity = quantity.toInt();
-    this->ticket->price = price.toInt();
+    this->ticket->price = price.toDouble() * 100;
     QDialog::accept();
 }
 

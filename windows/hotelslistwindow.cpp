@@ -23,6 +23,14 @@ HotelsListWindow::HotelsListWindow(QWidget *parent)
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->category_model = QSharedPointer<HotelCategoryListModel>(new HotelCategoryListModel());
     this->hotel_table_model = QSharedPointer<HotelTableModel>(new HotelTableModel());
+    this->ui->tableView->setModel(hotel_table_model.get());
+    this->ui->cityListBox->setModel(city_list_model.get());
+    this->ui->categoryBox->setModel(category_model.get());
+    this->ui->tableView->resizeColumnsToContents();
+    this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->cityListBox->setMaxVisibleItems(10);
+    this->ui->categoryBox->setMaxVisibleItems(10);
 }
 
 HotelsListWindow::~HotelsListWindow()
@@ -33,6 +41,10 @@ HotelsListWindow::~HotelsListWindow()
 void HotelsListWindow::init() {
     this->initModels();
     this->initUi();
+}
+
+void HotelsListWindow::initUi() {
+    this->ui->tableView->resizeColumnsToContents();
 }
 
 void HotelsListWindow::initModels() {
@@ -49,17 +61,6 @@ void HotelsListWindow::initModels() {
     }
     this->hotel_table_model->setHotelsList(hotels);
     this->city_list_model->setCityList(cities);
-}
-
-void HotelsListWindow::initUi() {
-    this->ui->tableView->setModel(hotel_table_model.get());
-    this->ui->cityListBox->setModel(city_list_model.get());
-    this->ui->categoryBox->setModel(category_model.get());
-    this->ui->tableView->resizeColumnsToContents();
-    this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
-    this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    this->ui->cityListBox->setMaxVisibleItems(10);
-    this->ui->categoryBox->setMaxVisibleItems(10);
 }
 
 void HotelsListWindow::handleAppError(const AppError &ex) {
@@ -148,6 +149,7 @@ void HotelsListWindow::onEditButtonClicked() {
         return;
     }
     this->hotel_table_model->updateHotelByIndexRow(selected_row, hotel);
+    this->ui->tableView->resizeColumnsToContents();
 }
 
 void HotelsListWindow::onFindButtonClicked() {

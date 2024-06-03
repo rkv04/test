@@ -26,18 +26,44 @@ TicketsListWindow::TicketsListWindow(QWidget *parent)
     connect(this->ui->editTicketButton, SIGNAL(clicked(bool)), this, SLOT(onEditButtonClicked()));
     connect(this->ui->ticketView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onEditButtonClicked()));
     connect(this->ui->resetFiltersButton, SIGNAL(clicked(bool)), this, SLOT(onResetFiltersButtonClicked()));
-    this->ticket_table_model = QSharedPointer<TicketTableModel>(new TicketTableModel());
-    this->departure_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
-    this->destination_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
-    this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
-    this->duration_list_model = QSharedPointer<TicketDurationListModel>(new TicketDurationListModel());
     QRegularExpression price_expr("[0-9]*");
     this->price_validator = QSharedPointer<QValidator>(new QRegularExpressionValidator(price_expr));
+
+    this->createAndSetModels();
+    this->setUiSettings();
 }
 
 TicketsListWindow::~TicketsListWindow()
 {
     delete ui;
+}
+
+void TicketsListWindow::setUiSettings() {
+    this->ui->departureDateEdit->setDisplayFormat("MMM/yyyy");
+    this->ui->departureDateEdit->setDate(QDate::currentDate());
+    this->ui->departureDateEdit->setEnabled(false);
+    this->ui->departureCityBox->setMaxVisibleItems(10);
+    this->ui->destinationCityBox->setMaxVisibleItems(10);
+    this->ui->hotelBox->setMaxVisibleItems(10);
+    this->ui->ticketView->verticalHeader()->stretchLastSection();
+    this->ui->ticketView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->priceEditLower->setPlaceholderText("От ...");
+    this->ui->priceEditUpper->setPlaceholderText("До ...");
+    this->ui->priceEditLower->setValidator(this->price_validator.get());
+    this->ui->priceEditUpper->setValidator(this->price_validator.get());
+}
+
+void TicketsListWindow::createAndSetModels() {
+    this->ticket_table_model = QSharedPointer<TicketTableModel>(new TicketTableModel());
+    this->departure_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
+    this->destination_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
+    this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
+    this->duration_list_model = QSharedPointer<TicketDurationListModel>(new TicketDurationListModel());
+    this->ui->departureCityBox->setModel(this->departure_city_list_model.get());
+    this->ui->destinationCityBox->setModel(this->destination_city_list_model.get());
+    this->ui->hotelBox->setModel(this->hotel_list_model.get());
+    this->ui->durationBox->setModel(this->duration_list_model.get());
+    this->ui->ticketView->setModel(ticket_table_model.get());
 }
 
 void TicketsListWindow::handleAppError(const AppError &ex) {
@@ -89,24 +115,7 @@ void TicketsListWindow::initModels() {
 }
 
 void TicketsListWindow::initUi() {
-    this->ui->departureCityBox->setModel(this->departure_city_list_model.get());
-    this->ui->destinationCityBox->setModel(this->destination_city_list_model.get());
-    this->ui->hotelBox->setModel(this->hotel_list_model.get());
-    this->ui->durationBox->setModel(this->duration_list_model.get());
-    this->ui->ticketView->setModel(ticket_table_model.get());
-    this->ui->departureDateEdit->setDisplayFormat("MMM/yyyy");
-    this->ui->departureDateEdit->setDate(QDate::currentDate());
-    this->ui->departureDateEdit->setEnabled(false);
-    this->ui->departureCityBox->setMaxVisibleItems(10);
-    this->ui->destinationCityBox->setMaxVisibleItems(10);
-    this->ui->hotelBox->setMaxVisibleItems(10);
     this->ui->ticketView->resizeColumnsToContents();
-    this->ui->ticketView->verticalHeader()->stretchLastSection();
-    this->ui->ticketView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    this->ui->priceEditLower->setPlaceholderText("От ...");
-    this->ui->priceEditUpper->setPlaceholderText("До ...");
-    this->ui->priceEditLower->setValidator(this->price_validator.get());
-    this->ui->priceEditUpper->setValidator(this->price_validator.get());
 }
 
 void TicketsListWindow::destinationCityBoxChanged() {
@@ -178,6 +187,7 @@ void TicketsListWindow::onEditButtonClicked() {
     catch(const AppError &ex) {
         this->handleAppError(ex);
     }
+    this->ui->ticketView->resizeColumnsToContents();
 }
 
 void TicketsListWindow::onDeleteButtonClicked() {

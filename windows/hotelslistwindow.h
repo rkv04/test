@@ -40,8 +40,8 @@ signals:
 private:
     Ui::HotelsListWindow *ui;
 
-    void initModels();
     void initUi();
+    void initModels();
     void handleAppError(const AppError &ex);
     bool hasSelection();
     QMap<QString, QString> createFilter();

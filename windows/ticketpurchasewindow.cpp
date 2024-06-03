@@ -22,38 +22,15 @@ TicketPurchaseWindow::TicketPurchaseWindow(QWidget *parent)
     connect(this->ui->backButton, SIGNAL(clicked(bool)), this, SLOT(onCancelButtonClicked()));
     connect(this->ui->resetFiltersButton, SIGNAL(clicked(bool)), this, SLOT(onResetFiltersButtonClicked()));
     connect(this->ui->destinationCityBox, SIGNAL(currentIndexChanged(int)), this, SLOT(destinationCityBoxChanged()));
-    this->ticket_table_model = QSharedPointer<TicketTableModel>(new TicketTableModel());
-    this->departure_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
-    this->destination_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
-    this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
-    this->duration_list_model = QSharedPointer<TicketDurationListModel>(new TicketDurationListModel());
     this->price_validator = QSharedPointer<QIntValidator>(new QIntValidator(0, std::numeric_limits<int>::max()));
+
+    this->createAndSetModels();
+    this->setUiSettings();
 }
 
 TicketPurchaseWindow::~TicketPurchaseWindow()
 {
     delete ui;
-}
-
-void TicketPurchaseWindow::handleAppError(const AppError &ex) {
-    if (ex.isFatal()) {
-        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
-        exit(-1);
-    }
-    QMessageBox::warning(this, App::APPLICATION_NAME, ex.what());
-}
-
-bool TicketPurchaseWindow::hasSelection() {
-    return this->ui->ticketView->selectionModel()->hasSelection();
-}
-
-bool TicketPurchaseWindow::confirmPurchase() {
-    QMessageBox confirm_box;
-    confirm_box.setIcon(QMessageBox::Question);
-    confirm_box.setWindowTitle(App::APPLICATION_NAME);
-    confirm_box.setText("Подтвердить покупку?");
-    confirm_box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    return confirm_box.exec() == QMessageBox::Yes;
 }
 
 void TicketPurchaseWindow::init() {
@@ -84,18 +61,19 @@ void TicketPurchaseWindow::initModels() {
 }
 
 void TicketPurchaseWindow::initUi() {
-    this->ui->departureCityBox->setModel(this->departure_city_list_model.get());
-    this->ui->destinationCityBox->setModel(this->destination_city_list_model.get());
-    this->ui->hotelBox->setModel(this->hotel_list_model.get());
-    this->ui->durationBox->setModel(this->duration_list_model.get());
-    this->ui->ticketView->setModel(this->ticket_table_model.get());
-    this->ui->departureDateEdit->setDisplayFormat("MMM/yyyy");
+    this->ui->quantitySpinBox->setValue(0);
+    this->ui->ticketView->clearFocus();
+    this->ui->priceLable->setText("0 р.");
     this->ui->departureDateEdit->setDate(QDate::currentDate());
+    this->ui->ticketView->resizeColumnsToContents();
+}
+
+void TicketPurchaseWindow::setUiSettings() {
     this->ui->departureDateEdit->setEnabled(false);
+    this->ui->departureDateEdit->setDisplayFormat("MMM/yyyy");
     this->ui->departureCityBox->setMaxVisibleItems(10);
     this->ui->destinationCityBox->setMaxVisibleItems(10);
     this->ui->hotelBox->setMaxVisibleItems(10);
-    this->ui->ticketView->resizeColumnsToContents();
     this->ui->ticketView->verticalHeader()->stretchLastSection();
     this->ui->ticketView->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->ui->ticketView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -103,9 +81,40 @@ void TicketPurchaseWindow::initUi() {
     this->ui->priceEditUpper->setPlaceholderText("До ...");
     this->ui->priceEditLower->setValidator(this->price_validator.get());
     this->ui->priceEditUpper->setValidator(this->price_validator.get());
-    this->ui->quantitySpinBox->setValue(0);
-    this->ui->ticketView->clearFocus();
-    this->ui->priceLable->setText("0 р.");
+}
+
+void TicketPurchaseWindow::createAndSetModels() {
+    this->ticket_table_model = QSharedPointer<TicketTableModel>(new TicketTableModel());
+    this->departure_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
+    this->destination_city_list_model = QSharedPointer<CityListModel>(new CityListModel());
+    this->hotel_list_model = QSharedPointer<HotelListModel>(new HotelListModel());
+    this->duration_list_model = QSharedPointer<TicketDurationListModel>(new TicketDurationListModel());
+    this->ui->departureCityBox->setModel(this->departure_city_list_model.get());
+    this->ui->destinationCityBox->setModel(this->destination_city_list_model.get());
+    this->ui->hotelBox->setModel(this->hotel_list_model.get());
+    this->ui->durationBox->setModel(this->duration_list_model.get());
+    this->ui->ticketView->setModel(this->ticket_table_model.get());
+}
+
+void TicketPurchaseWindow::handleAppError(const AppError &ex) {
+    if (ex.isFatal()) {
+        QMessageBox::critical(this, App::APPLICATION_NAME, ex.what());
+        exit(-1);
+    }
+    QMessageBox::warning(this, App::APPLICATION_NAME, ex.what());
+}
+
+bool TicketPurchaseWindow::hasSelection() {
+    return this->ui->ticketView->selectionModel()->hasSelection();
+}
+
+bool TicketPurchaseWindow::confirmPurchase() {
+    QMessageBox confirm_box;
+    confirm_box.setIcon(QMessageBox::Question);
+    confirm_box.setWindowTitle(App::APPLICATION_NAME);
+    confirm_box.setText("Подтвердить покупку?");
+    confirm_box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    return confirm_box.exec() == QMessageBox::Yes;
 }
 
 void TicketPurchaseWindow::showTicketInfo(const QModelIndex &index) {
@@ -198,8 +207,10 @@ void TicketPurchaseWindow::setTotalPrice() {
     auto ticket = this->ticket_table_model->getTicketByIndexRow(selected_row);
     int discount = Context::getContext()->discount;
     int count = this->ui->quantitySpinBox->value();
-    int totalPrice = ticket->price * count * (100 - discount) / 100; // TODO
-    this->ui->priceLable->setText(QString::number(totalPrice) + " р.");
+    double priceWithoutDiscount = ticket->price * count;
+    double discountAmount = ticket->price * count * discount / 100;
+    double finalPriceInRubles = (priceWithoutDiscount - discountAmount) / 100;
+    this->ui->priceLable->setText(QString::number(finalPriceInRubles, 'f', 2) + " р.");
 }
 
 void TicketPurchaseWindow::onBuyButtonClicked() {

@@ -37,6 +37,7 @@ private:
     QSharedPointer<HotelListModel> hotel_list_model;
     QSharedPointer<TicketDurationListModel> duration_list_model;
     QSharedPointer<QValidator> number_validator;
+    QSharedPointer<QValidator> price_validator;
 
     QSharedPointer<Ticket> created_ticket;
 };
