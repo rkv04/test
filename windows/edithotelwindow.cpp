@@ -16,6 +16,8 @@ EditHotelWindow::EditHotelWindow(QWidget *parent)
     connect(this->ui->cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
     this->city_list_model = QSharedPointer<CityListModel>(new CityListModel());
     this->category_model = QSharedPointer<HotelCategoryListModel>(new HotelCategoryListModel());
+    this->ui->cityBox->setModel(city_list_model.get());
+    this->ui->categoryBox->setModel(category_model.get());
 }
 
 EditHotelWindow::~EditHotelWindow()
@@ -38,8 +40,6 @@ void EditHotelWindow::init() {
     }
     this->city_list_model->setCityList(cities);
     this->city_list_model->addCityIfNotExists(this->hotel->city);
-    this->ui->cityBox->setModel(city_list_model.get());
-    this->ui->categoryBox->setModel(category_model.get());
     this->ui->titleEdit->setText(hotel->title);
     this->ui->addressEdit->setText(hotel->address);
     int city_index = this->ui->cityBox->findText(hotel->city->title);

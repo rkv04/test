@@ -23,7 +23,6 @@ ClientsListWindow::ClientsListWindow(QWidget *parent)
     QRegularExpression phone_exp("^\\d{11}$");
     this->phone_validator = QSharedPointer<QRegularExpressionValidator>(new QRegularExpressionValidator(phone_exp));
     this->ui->tableView->setModel(this->client_model.get());
-    this->ui->tableView->resizeColumnsToContents();
     this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     this->ui->phoneEdit->setValidator(phone_validator.get());
@@ -43,6 +42,11 @@ void ClientsListWindow::handleAppError(const AppError &ex) {
 
 void ClientsListWindow::init() {
     this->initModels();
+    this->initUi();
+}
+
+void ClientsListWindow::initUi() {
+    this->ui->tableView->resizeColumnsToContents();
 }
 
 void ClientsListWindow::initModels() {

@@ -34,6 +34,7 @@ private:
     Ui::EmployeeListWindow *ui;
 
     void initModels();
+    void initUi();
     bool hasSelection();
     bool confirmDelete();
     void handleAppError(const AppError &ex);
