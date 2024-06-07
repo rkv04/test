@@ -37,6 +37,7 @@ signals:
 
 private:
     void initModels();
+    void initUi();
     bool confirmDelete();
     bool tableHasSelection();
     void handleAppError(const AppError &ex);

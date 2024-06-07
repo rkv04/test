@@ -25,7 +25,6 @@ CityListWindow::CityListWindow(QWidget *parent)
     this->city_table_model = QSharedPointer<CityTableModel>(new CityTableModel());
     this->ui->tableView->setModel(city_table_model.get());
     this->ui->tableView->horizontalHeader()->setStretchLastSection(true);
-    this->ui->tableView->resizeColumnsToContents();
     this->ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
@@ -39,6 +38,12 @@ void CityListWindow::handleAppError(const AppError &ex) {
 
 void CityListWindow::init() {
     this->initModels();
+    this->initUi();
+}
+
+void CityListWindow::initUi() {
+    this->ui->climateEdit->clear();
+    this->ui->tableView->resizeColumnsToContents();
 }
 
 void CityListWindow::initModels() {

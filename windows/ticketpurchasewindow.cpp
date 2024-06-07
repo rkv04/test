@@ -64,6 +64,7 @@ void TicketPurchaseWindow::initUi() {
     this->ui->quantitySpinBox->setValue(0);
     this->ui->ticketView->clearFocus();
     this->ui->priceLable->setText("0 р.");
+    this->ui->climateEdit->clear();
     this->ui->departureDateEdit->setDate(QDate::currentDate());
     this->ui->ticketView->resizeColumnsToContents();
 }

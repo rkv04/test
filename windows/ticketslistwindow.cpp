@@ -116,6 +116,7 @@ void TicketsListWindow::initModels() {
 
 void TicketsListWindow::initUi() {
     this->ui->ticketView->resizeColumnsToContents();
+    this->ui->climateEdit->clear();
 }
 
 void TicketsListWindow::destinationCityBoxChanged() {

@@ -34,6 +34,11 @@ void ClientTicketsWindow::init() {
 }
 
 void ClientTicketsWindow::initUi() {
+    this->ui->durationEdit->clear();
+    this->ui->travelTimeEdit->clear();
+    this->ui->discountEdit->clear();
+    this->ui->priceEdit->clear();
+    this->ui->purchaseDate->clear();
     this->ui->tableView->resizeColumnsToContents();
 }
 
